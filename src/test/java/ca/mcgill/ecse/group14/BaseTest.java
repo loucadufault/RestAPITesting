@@ -14,6 +14,6 @@ public class BaseTest {
                 when().
                 get(BASE_URL).
                 then().
-                assertThat().statusCode(STATUS_CODE_OK);
+                assertThat().statusCode(STATUS_CODE.OK);
     }
 }
