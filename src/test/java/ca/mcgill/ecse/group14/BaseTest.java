@@ -7,35 +7,25 @@ import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 public class BaseTest {
-    @Test
-    public void test_NumberOfCircuitsFor2017Season_ShouldBe20() {
-
-        given().
-                when().
-                get("http://ergast.com/api/f1/2017/circuits.json").
-                then().
-                assertThat().
-                body("MRData.CircuitTable.Circuits.circuitId",hasSize(20));
-    }
-
     @Before
-    public void startServer() {
+    public void setup() {
         Server.start();
-
-        boolean started = false;
-        while (!started) {
-            try {
-                Server.check();
-                started = true;
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+        Server.check();
     }
 
     @After
-    public void stopServer() throws InterruptedException {
+    public void teardown() throws InterruptedException {
         Server.stop();
         Thread.sleep(500);
+    }
+
+    @Test
+    public void test_ServerIsRunning() {
+
+        given().
+                when().
+                get(Server.BASE_URL).
+                then().
+                assertThat().statusCode(200);
     }
 }
