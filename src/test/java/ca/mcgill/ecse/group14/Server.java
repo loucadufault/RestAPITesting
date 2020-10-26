@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class Server {
-    public static final String BASE_URL = "http://localhost:4567";
     private static Process process;
     private static BufferedReader out;
 
