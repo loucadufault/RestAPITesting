@@ -124,6 +124,23 @@ public class TodosTest {
     }
 
     /**
+     * Test POST http://localhost:4567/todos using malformed JSON payload
+     */
+    @Test
+    public void testPostTodosUsingMalformedJSON() {
+        JSONObject fields = new JSONObject();
+        fields.put("!text123", "titleText");
+
+        given()
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .body(fields.toJSONString())
+                .post(BASE_URL + "/todos")
+                .then().assertThat()
+                .statusCode(STATUS_CODE.BAD_REQUEST);
+    }
+
+    /**
      * Test POST http://localhost:4567/todos using XML payload
      */
     @Test
@@ -265,7 +282,23 @@ public class TodosTest {
                 .delete(BASE_URL + "/todos/" + todoID)
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
-                //.body("todos[0].title", equalTo(""));
+    }
+
+    /**
+     * Test DELETE http://localhost:4567/todos/:id on a deleted to-do (invalid operation)
+     */
+    @Test
+    public void testDeleteDeletedTodosID() {
+        int todoID = createTodoHelper("todoTitleText");
+        given()
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .delete(BASE_URL + "/todos/" + todoID);
+
+        given()
+                .delete(BASE_URL+"/todos/"+todoID)
+                .then().assertThat()
+                .statusCode(STATUS_CODE.NOT_FOUND);
     }
 
     /**
@@ -291,7 +324,6 @@ public class TodosTest {
                 .get(BASE_URL + "/todos/" + todoID + "/categories")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
-                //.body("title", equalTo("todoTitleText"));
     }
 
     /**
@@ -409,7 +441,6 @@ public class TodosTest {
                 .get(BASE_URL + "/todos/" + todoID + "/tasksof")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
-                //.body("title", equalTo("todoTitleText"));
     }
 
     /**
