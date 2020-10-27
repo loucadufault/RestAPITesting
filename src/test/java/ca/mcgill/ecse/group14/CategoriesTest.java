@@ -1,8 +1,6 @@
 package ca.mcgill.ecse.group14;
 import io.restassured.specification.RequestSpecification;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.*;
 import org.json.simple.JSONObject;
 
 import static io.restassured.RestAssured.*;
@@ -11,6 +9,17 @@ import static ca.mcgill.ecse.group14.Resources.*;
 import static ca.mcgill.ecse.group14.TestUtils.*;
 
 public class CategoriesTest {
+    @BeforeClass
+    public static void setup() {
+        Server.start();
+        Server.check();
+    }
+
+    @AfterClass
+    public static void teardown() throws InterruptedException {
+        Server.shutdown();
+        Thread.sleep(500);
+    }
 
     /*
     Test GET /categories

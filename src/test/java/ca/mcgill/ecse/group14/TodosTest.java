@@ -23,6 +23,17 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 
 public class TodosTest {
+    @BeforeClass
+    public static void setup() {
+        Server.start();
+        Server.check();
+    }
+
+    @AfterClass
+    public static void teardown() throws InterruptedException {
+        Server.shutdown();
+        Thread.sleep(500);
+    }
 
     /**
      * Test GET http://localhost:4567/todos

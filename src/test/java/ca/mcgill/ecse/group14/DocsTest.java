@@ -23,15 +23,15 @@ import static org.hamcrest.core.IsEqual.equalTo;
 public class DocsTest {
     private static final String EXPECTED = "API Documentation";
 
-    @Before
-    public void setup() {
+    @BeforeClass
+    public static void setup() {
         Server.start();
         Server.check();
     }
 
-    @After
-    public void teardown() throws InterruptedException {
-        Server.stop();
+    @AfterClass
+    public static void teardown() throws InterruptedException {
+        Server.shutdown();
         Thread.sleep(500);
     }
 

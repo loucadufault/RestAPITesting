@@ -19,10 +19,16 @@ import static io.restassured.RestAssured.*;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 public class ShutDownTest {
-    @Before
-    public void setup() {
+    @BeforeClass
+    public static void setup() {
         Server.start();
         Server.check();
+    }
+
+    @AfterClass
+    public static void teardown() throws InterruptedException {
+        Server.shutdown();
+        Thread.sleep(500);
     }
 
     @Test

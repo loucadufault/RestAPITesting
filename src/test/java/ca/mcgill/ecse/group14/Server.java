@@ -22,6 +22,11 @@ public class Server {
 
         final InputStream in = process.getInputStream();
         out = new BufferedReader(new InputStreamReader(in));
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void stop() {
