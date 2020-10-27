@@ -5,13 +5,23 @@ import io.restassured.http.ContentType;
 import io.restassured.response.*;
 import io.restassured.specification.RequestSpecification;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.List;
 
 import static ca.mcgill.ecse.group14.Resources.*;
 
 import static ca.mcgill.ecse.group14.TestUtils.*;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 public class ProjectsTest {
     private static String DEFAULT_TITLE = "";
@@ -382,6 +392,27 @@ public class ProjectsTest {
         return buildJSONRequestWithJSONResponse().when().get().then().assertThat().extract().response().path("projects.size()");
     }
 
+    @Test
+    public void test_GetProject_CommandLineQuery() {
+        deleteAllProjects();
+        String title = "test";
+        int id = createProjectHelper(title);
+
+        String command = "curl " + BASE_URL + "/projects/" + id;
+        try {
+            Process process = Runtime.getRuntime().exec(command);
+
+            final InputStream in = process.getInputStream();
+            final BufferedReader out = new BufferedReader(new InputStreamReader(in));
+
+            JSONParser parser = new JSONParser();
+            JSONObject json = (JSONObject) parser.parse(out.readLine());
+            assertTrue(json.toJSONString().contains("\"title\":\"test\""));
+        } catch (IOException | ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
     ////////////////////////////////////////////////////////////////////////////////
     // DELETE
     ////////////////////////////////////////////////////////////////////////////////
@@ -418,4 +449,6 @@ public class ProjectsTest {
             deleteProject(Integer.parseInt(buildJSONRequestWithJSONResponse().when().get().then().assertThat().extract().response().path("projects[0].id")));
         }
     }
+
+
 }
