@@ -16,7 +16,7 @@ public class TestRunner {
 
     @AfterClass
     public static void teardown() throws InterruptedException {
-        Server.stop();
+        Server.shutdown();
         Thread.sleep(500);
     }
 }

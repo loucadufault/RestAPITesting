@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import static ca.mcgill.ecse.group14.Resources.*;
+
 public class Server {
     private static Process process;
     private static BufferedReader out;
@@ -24,6 +26,15 @@ public class Server {
 
     public static void stop() {
         process.destroy();
+    }
+
+    public static void shutdown() {
+        try {
+            Runtime.getRuntime().exec("curl " + BASE_URL + "/shutdown");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        stop();
     }
 
     public static int check() {

@@ -14,6 +14,7 @@ import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 public class ProjectsTest {
+    private static String DEFAULT_TITLE = "";
     private static boolean DEFAULT_COMPLETED = false;
     private static boolean DEFAULT_ACTIVE = false;
     private static String DEFAULT_DESCRIPTION = "";
@@ -29,16 +30,107 @@ public class ProjectsTest {
     ////////////////////////////////////////////////////////////////////////////////
 
     @Test
-    public void test_CreateProject_ValidValues() {
+    public void test_CreateProject_XML() {
         String title = "test title";
+        String description = "test description";
 
-        JSONObject requestParams = new JSONObject();
-        requestParams.put("title", title);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        stringBuilder.append("<project>");
+            stringBuilder.append("<title>" + title + "</title>");
+            stringBuilder.append("<description>" + description + "</description>");
+        stringBuilder.append("</project>");
 
-        Response response = given().body(requestParams.toJSONString()).when().post();
+        given().header("Content-Type", "application/xml").header("Accept", "application/json").body(stringBuilder.toString())
+                .when().post()
+                .then().assertThat().statusCode(STATUS_CODE.CREATED).body(
+                        "title", equalTo(title),
+                "description", equalTo(description),
+                "active", equalTo(String.valueOf(DEFAULT_ACTIVE)),
+                "completed", equalTo(String.valueOf(DEFAULT_COMPLETED)));
+    }
+
+    @Test
+    public void test_CreateProject_XMLButJSONHeader() {
+        String title = "test title";
+        String description = "test description";
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        stringBuilder.append("<project>");
+        stringBuilder.append("<title>" + title + "</title>");
+        stringBuilder.append("<description>" + description + "</description>");
+        stringBuilder.append("</project>");
+
+        given().header("Content-Type", "application/json").header("Accept", "application/json").body(stringBuilder.toString())
+                .when().post()
+                .then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
+    }
+
+    @Test
+    public void test_CreateProject_MalformedJSON() {
+        String title = "test title";
+        String description = "test description";
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("title", title);
+        requestBody.put("description", description);
+
+        String malformedJSONString = requestBody.toJSONString().replaceFirst(":", "");
+        malformedJSONString =
+                malformedJSONString.substring(0, 10) +
+                ": \" : garbled\"{{" +
+                malformedJSONString.substring(10).replaceFirst("\"", "'");
+        buildJSONRequest().body(malformedJSONString).when().post().then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
+    }
+
+    @Test
+    public void test_CreateProject_ValidTitle() {
+        String title = "test";
+
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("title", title);
+
+        Response response = given().body(requestBody.toJSONString()).when().post();
 
         assertHasDefaultValues(response);
         assertHasTitle(response, title);
+    }
+
+    @Test
+    public void test_CreateProject_ValidDescription() {
+        String description = "test";
+
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("description", description);
+
+        buildJSONRequestWithJSONResponse().body(requestBody.toJSONString())
+                .when().post()
+                .then().assertThat().statusCode(STATUS_CODE.CREATED).body(
+                "title", equalTo(DEFAULT_TITLE),
+                "completed", equalTo(String.valueOf(DEFAULT_COMPLETED)),
+                "active", equalTo(String.valueOf(DEFAULT_ACTIVE)),
+                "description", equalTo(description));
+    }
+
+    @Test
+    public void test_CreateProject_ValidAllValues() {
+        String title = "test title";
+        String description = "test description";
+        boolean active = false;
+        boolean completed = true;
+
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("title", title);
+        requestBody.put("description", description);
+        requestBody.put("active", active);
+        requestBody.put("completed", completed);
+
+        buildJSONRequestWithJSONResponse().body(requestBody.toJSONString())
+                .when().post()
+                .then().assertThat().statusCode(STATUS_CODE.CREATED).body("title", equalTo(title),
+                "completed", equalTo(String.valueOf(completed)),
+                "active", equalTo(String.valueOf(active)),
+                "description", equalTo(description));
     }
 
     @Test
@@ -52,10 +144,10 @@ public class ProjectsTest {
     public void test_CreateProject_EmptyTitle() {
         String title = "";
 
-        JSONObject requestParams = new JSONObject();
-        requestParams.put("title", title);
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("title", title);
 
-        Response response = buildJSONRequest().body(requestParams.toJSONString()).when().post();
+        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post();
         response.then().assertThat().statusCode(STATUS_CODE.CREATED);
         assertHasDefaultValues(response);
         assertHasTitle(response, title);
@@ -65,10 +157,10 @@ public class ProjectsTest {
     public void test_CreateProject_EmptyDescription() {
         String description = "";
 
-        JSONObject requestParams = new JSONObject();
-        requestParams.put("description", description);
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("description", description);
 
-        Response response = buildJSONRequest().body(requestParams.toJSONString()).when().post();
+        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post();
         response.then().assertThat().statusCode(STATUS_CODE.CREATED);
         assertHasDefaultValues(response);
         response.then().assertThat().body("title", equalTo(String.valueOf(description)));
@@ -81,22 +173,20 @@ public class ProjectsTest {
     public void test_CreateProject_FloatTitle() {
         float title = 4.0f;
 
-        JSONObject requestParams = new JSONObject();
-        requestParams.put("title", title);
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("title", title);
 
-        Response response = buildJSONRequest().body(requestParams.toJSONString()).when().post();
-        response.then().assertThat().statusCode(STATUS_CODE.CREATED);
-        assertHasDefaultValues(response);
-        assertHasTitle(response, String.valueOf(title));
+        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post();
+        response.then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
     }
 
     @Test
     public void test_CreateProject_StringCompleted() {
         String completed = "true";
 
-        JSONObject requestParams = new JSONObject();
-        requestParams.put("completed", completed);
-        Response response = buildJSONRequest().body(requestParams.toJSONString()).when().post();
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("completed", completed);
+        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post();
         response.then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
         assertHasErrorMessage(response, "Failed Validation: completed should be BOOLEAN");
     }
@@ -105,9 +195,9 @@ public class ProjectsTest {
     public void test_CreateProject_StringActive() {
         String active = "true";
 
-        JSONObject requestParams = new JSONObject();
-        requestParams.put("active", active);
-        Response response = buildJSONRequest().body(requestParams.toJSONString()).when().post();
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("active", active);
+        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post();
         response.then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
         assertHasErrorMessage(response, "Failed Validation: active should be BOOLEAN");
     }
@@ -117,10 +207,10 @@ public class ProjectsTest {
         String completed = "true";
         String active = "true";
 
-        JSONObject requestParams = new JSONObject();
-        requestParams.put("active", active);
-        requestParams.put("completed", completed);
-        Response response = buildJSONRequest().body(requestParams.toJSONString()).when().post();
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("active", active);
+        requestBody.put("completed", completed);
+        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post();
         response.then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
         assertHasErrorMessage(response, "Failed Validation: active should be BOOLEAN, completed should be BOOLEAN");
     }
@@ -128,19 +218,65 @@ public class ProjectsTest {
     @Test
     public void test_CreateProject_ValidId() {
         int id = 25;
-        JSONObject requestParams = new JSONObject();
-        requestParams.put("id", id);
-        Response response = buildJSONRequest().body(requestParams.toJSONString()).when().post();
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("id", id);
+        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post();
         response.then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
         assertHasErrorMessage(response, "Invalid Creation: Failed Validation: Not allowed to create with id");
     }
 
     @Test
+    public void test_AmendProject_ValidIdAsRequestParam() {
+        String title = "old";
+        int id = createProjectHelper(title);
+
+        Response response = getProjectById(id);
+        response.then().assertThat().statusCode(STATUS_CODE.OK).body(
+                "projects[0].title", equalTo(title));
+
+        String newTitle = "new";
+        String description = "test description";
+
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("title", newTitle);
+        requestBody.put("description", description);
+
+        buildJSONRequestWithJSONResponse().body(requestBody.toJSONString())
+                .when().post("/" + id)
+                .then().assertThat()
+                .statusCode(STATUS_CODE.OK).body(
+                        "title", equalTo(newTitle),
+                "description", equalTo(description));
+    }
+
+    @Test
+    public void test_AmendProject_NonexistentIdAsRequestParam() {
+        String title = "old";
+        int id = createProjectHelper(title);
+
+        Response response = getProjectById(id);
+        response.then().assertThat().statusCode(STATUS_CODE.OK).body(
+                "projects[0].title", equalTo(title));
+
+        String newTitle = "new";
+        String description = "test description";
+
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("title", newTitle);
+        requestBody.put("description", description);
+
+        buildJSONRequestWithJSONResponse().body(requestBody.toJSONString())
+                .when().post("/" + NON_EXISTENT_ID)
+                .then().assertThat()
+                .statusCode(STATUS_CODE.NOT_FOUND);
+    }
+
+    @Test
     public void test_CreateProject_InvalidId() {
         int id = -25;
-        JSONObject requestParams = new JSONObject();
-        requestParams.put("id", id);
-        Response response = buildJSONRequest().body(requestParams.toJSONString()).when().post();
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("id", id);
+        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post();
         response.then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
         assertHasErrorMessage(response, "Invalid Creation: Failed Validation: Not allowed to create with id");
     }
@@ -194,6 +330,17 @@ public class ProjectsTest {
         response.then().assertThat().body("projects[0].title", equalTo(title));
     }
 
+    @Test
+    public void test_GetProject_ValidIdAsXMLPayload() {
+        String title = "test";
+        int id = createProjectHelper(title);
+
+        String response = given().header("Content-Type", "application/json").header("Accept", "application/xml")
+                .when().get("/" + id).asString();
+
+        assert response.contains("<title>" + title + "</title>");
+    }
+
     /**
      * Bug
      */
@@ -203,7 +350,7 @@ public class ProjectsTest {
         int id = -1;
 
         Response response = getProjectById(id);
-        response.then().assertThat().statusCode(STATUS_CODE.NOT_FOUND);
+        response.then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
     }
 
     /**
@@ -215,7 +362,7 @@ public class ProjectsTest {
         String id = "invalid id";
 
         Response response = buildJSONRequestWithJSONResponse().when().get("/" + id);
-        response.then().assertThat().statusCode(STATUS_CODE.NOT_FOUND);
+        response.then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
     }
 
     @Test
@@ -271,8 +418,4 @@ public class ProjectsTest {
             deleteProject(Integer.parseInt(buildJSONRequestWithJSONResponse().when().get().then().assertThat().extract().response().path("projects[0].id")));
         }
     }
-
-    ////////////////////////////////////////////////////////////////////////////////
-    // Utils
-    ////////////////////////////////////////////////////////////////////////////////
 }
