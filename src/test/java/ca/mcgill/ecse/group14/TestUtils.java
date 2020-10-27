@@ -34,7 +34,7 @@ public class TestUtils {
         return Integer.parseInt((String) response.jsonPath().get("id"));
     }
 
-    public static int createProject(String title) {
+    public static int createProjectHelper(String title) {
         JSONObject requestParams = new JSONObject();
         requestParams.put("title", title);
 

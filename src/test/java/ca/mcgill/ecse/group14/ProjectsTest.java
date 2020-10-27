@@ -113,11 +113,11 @@ public class ProjectsTest {
 
         String title1 = "test 1";
         String title2 = "test 2";
-        createProject(title1);
-        createProject(title2);
+        createProjectHelper(title1);
+        createProjectHelper(title2);
 
         Response response = buildJSONRequestWithJSONResponse().when().get();
-        response.then().assertThat().statusCode(STATUS_CODE.OK).body("projects.size()", equalTo(2) , "projects.title", hasItems(title1, title2));
+        response.then().assertThat().statusCode(STATUS_CODE.OK).body("projects.size()", equalTo(3) , "projects.title", hasItems(title1, title2));
     }
 
     private static int getNumberOfProjects() {
@@ -125,7 +125,7 @@ public class ProjectsTest {
     }
 
     ////////////////////////////////////////////////////////////////////////////////
-    // GET
+    // DELETE
     ////////////////////////////////////////////////////////////////////////////////
 
     private Response deleteProject(int id) {
@@ -137,7 +137,7 @@ public class ProjectsTest {
             deleteProject(Integer.parseInt(buildJSONRequestWithJSONResponse().when().get().then().assertThat().extract().response().path("projects[0].id")));
         }
     }
-    
+
     ////////////////////////////////////////////////////////////////////////////////
     // Utils
     ////////////////////////////////////////////////////////////////////////////////
