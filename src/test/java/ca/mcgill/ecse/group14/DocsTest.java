@@ -64,8 +64,8 @@ public class DocsTest {
                 .contentType(ContentType.HTML)
                 .extract()
                 .response();
-        XmlPath htmlpath = new XmlPath(HTML, r.getBody().asString());
-        Assert.assertEquals(htmlpath.getString("html.head.title"), EXPECTED);
+        XmlPath path = new XmlPath(HTML, r.getBody().asString());
+        Assert.assertEquals(path.getString("html.head.title"), EXPECTED);
     }
 
 }

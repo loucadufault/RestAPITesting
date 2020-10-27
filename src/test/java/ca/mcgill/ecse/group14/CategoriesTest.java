@@ -11,17 +11,7 @@ import static ca.mcgill.ecse.group14.Resources.*;
 import static ca.mcgill.ecse.group14.TestUtils.*;
 
 public class CategoriesTest {
-    @Before
-    public void setup() {
-        Server.start();
-        Server.check();
-    }
 
-    @After
-    public void teardown() throws InterruptedException {
-        Server.stop();
-        Thread.sleep(500);
-    }
     /*
     Test GET /categories
      */
@@ -54,7 +44,7 @@ public class CategoriesTest {
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept","application/json")
-                .get(BASE_URL+"/categories/10")
+                .get(BASE_URL+"/categories/ABC")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -305,7 +295,7 @@ public class CategoriesTest {
      */
     @Test
     public void testPostCategoryRelatedToTodoWithValidID(){
-        int todoID = createProjectHelper("Project1");
+        int todoID = createTodoHelper("Project1");
         int catID = createCategoryHelper("Category1");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
@@ -314,7 +304,7 @@ public class CategoriesTest {
                 .header("Content-Type", "application/json")
                 .header("Accept","application/json")
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects")
+                .post(BASE_URL+"/categories/"+catID+"/todos")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.CREATED);
     }
@@ -454,11 +444,11 @@ public class CategoriesTest {
                 .header("Content-Type", "application/json")
                 .header("Accept","application/json")
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects");
+                .post(BASE_URL+"/categories/"+String.valueOf(catID)+"/todos");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept","application/json")
-                .head(BASE_URL+"/categories/ABC/projects")
+                .head(BASE_URL+"/categories/ABC/todos")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -693,11 +683,11 @@ public class CategoriesTest {
                 .header("Content-Type", "application/json")
                 .header("Accept","application/json")
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects");
+                .post(BASE_URL+"/categories/"+catID+"/todos");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept","application/json")
-                .delete(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects/"+String.valueOf(todoID))
+                .delete(BASE_URL+"/categories/"+catID+"/todos/"+todoID)
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
     }
@@ -774,7 +764,7 @@ public class CategoriesTest {
      * Test POST /categories using XML payload
      */
     @Test
-    public void testPostTodosUsingXML() {
+    public void testPostCategoriesUsingXML() {
         StringBuilder payload = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         payload.append("<todo>").append("<title>" + "titleText" + "</title>").append("</todo>");
 
@@ -785,5 +775,22 @@ public class CategoriesTest {
                 .post(BASE_URL+"/categories")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.CREATED);
+    }
+
+    /**
+     * Test POST /categories using malformedXML payload
+     */
+    @Test
+    public void testPostCategoriesUsingMalformedXML() {
+        StringBuilder payload = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        payload.append("<todo>").append("<title>>" + "titleText" + "<</title>").append("</todo>");
+
+        given()
+                .header("Content-Type", "application/xml")
+                .header("Accept", "application/xml")
+                .body(payload.toString()).when()
+                .post(BASE_URL+"/categories")
+                .then().assertThat()
+                .statusCode(STATUS_CODE.BAD_REQUEST);
     }
 }
