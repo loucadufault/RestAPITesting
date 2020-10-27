@@ -34,12 +34,14 @@ public class TestUtils {
         return Integer.parseInt((String) response.jsonPath().get("id"));
     }
 
-    public static int createProjectHelper(String title) {
-        JSONObject fields = new JSONObject();
-        fields.put("title", title);
+    public static int createProject(String title) {
+        JSONObject requestParams = new JSONObject();
+        requestParams.put("title", title);
 
         RequestSpecification request = RestAssured.given();
-        request.body(fields.toJSONString());
+        request.header("Content-Type", "application/json");
+        request.header("Accept", "application/json");
+        request.body(requestParams.toJSONString());
 
         Response response = request.post(BASE_URL+"/projects");
         return Integer.parseInt((String) response.jsonPath().get("id"));
@@ -54,5 +56,13 @@ public class TestUtils {
 
         Response response = request.post(BASE_URL+"/categories");
         return Integer.parseInt((String) response.jsonPath().get("id"));
+    }
+
+    public static RequestSpecification buildJSONRequest() {
+        return given().header("Content-Type", "application/json");
+    }
+
+    public static RequestSpecification buildJSONRequestWithJSONResponse() {
+        return buildJSONRequest().header("Accept", "application/json");
     }
 }
