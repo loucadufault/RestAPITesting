@@ -124,6 +124,23 @@ public class TodosTest {
     }
 
     /**
+     * Test POST http://localhost:4567/todos using malformed JSON payload
+     */
+    @Test
+    public void testPostTodosUsingMalformedJSON() {
+        JSONObject fields = new JSONObject();
+        fields.put("!text123", "titleText");
+
+        given()
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .body(fields.toJSONString())
+                .post(BASE_URL + "/todos")
+                .then().assertThat()
+                .statusCode(STATUS_CODE.BAD_REQUEST);
+    }
+
+    /**
      * Test POST http://localhost:4567/todos using XML payload
      */
     @Test
