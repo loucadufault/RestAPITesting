@@ -31,7 +31,7 @@ public class TodosTest {
 
     @AfterClass
     public static void teardown() throws InterruptedException {
-        Server.shutdown();
+        Server.stop();
         Thread.sleep(500);
     }
 
