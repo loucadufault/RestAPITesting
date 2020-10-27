@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import static io.restassured.RestAssured.get;
 
 import static ca.mcgill.ecse.group14.Resources.*;
 
@@ -55,6 +56,21 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        try {
+            Thread.sleep(200);
+            while (true) {
+                try {
+                    get(BASE_URL);
+                    return 0;
+                } catch (Exception e){
+                    Thread.sleep(200);
+                }
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         return 1;
     }
 }
