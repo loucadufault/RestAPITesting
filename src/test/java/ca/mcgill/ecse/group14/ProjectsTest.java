@@ -1,15 +1,15 @@
 package ca.mcgill.ecse.group14;
 
 import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import io.restassured.response.*;
 import io.restassured.specification.RequestSpecification;
 import org.json.simple.JSONObject;
 import org.junit.Test;
 
-import static  ca.mcgill.ecse.group14.TestUtils.*;
 import static ca.mcgill.ecse.group14.Resources.*;
-import static ca.mcgill.ecse.group14.TestUtils.assertGETStatusCode;
 
+import static ca.mcgill.ecse.group14.TestUtils.*;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
@@ -79,34 +79,8 @@ public class ProjectsTest {
         requestParams.put("active", active);
         Response response = buildJSONRequest().body(requestParams.toJSONString()).when().post();
         response.then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
-        assertHasErrorMessage(response, "Failed Validation: completed should be BOOLEAN");
+        assertHasErrorMessage(response, "Failed Validation: active should be BOOLEAN");
     }
-
-    ////////////////////////////////////////////////////////////////////////////////
-    // GET
-    ////////////////////////////////////////////////////////////////////////////////
-
-    @Test
-    public void test_GetAllProjects_StatusCodeOK() {
-        assertGETStatusCode(BASE_URL + "/projects", STATUS_CODE.OK);
-    }
-
-    @Test
-    public void test_GetAllProjects_NewProjects() {
-        String title1 = "test 1";
-        String title2 = "test 2";
-        createProject(title1);
-        createProject(title2);
-
-        Response response = buildJSONRequestWithJSONResponse().when().get()
-                .then().assertThat().statusCode(STATUS_CODE.OK).extract().response();
-    }
-
-
-
-    ////////////////////////////////////////////////////////////////////////////////
-    // Utils
-    ////////////////////////////////////////////////////////////////////////////////
 
     private void assertHasDefaultValues(Response response) {
         response.then().assertThat().body(
@@ -122,4 +96,49 @@ public class ProjectsTest {
     private void assertHasErrorMessage(Response response, String errorMessage) {
         response.then().assertThat().body("errorMessages[0]", equalTo(errorMessage));
     }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // GET
+    ////////////////////////////////////////////////////////////////////////////////
+
+    @Test
+    public void test_GetAllProjects_StatusCodeOK() {
+        buildJSONRequestWithJSONResponse().when().get().then().assertThat().statusCode(STATUS_CODE.OK).contentType(ContentType.JSON);
+    }
+
+    @Test
+    public void test_GetAllProjects_NewProjects() {
+
+        deleteAllProjects();
+
+        String title1 = "test 1";
+        String title2 = "test 2";
+        createProject(title1);
+        createProject(title2);
+
+        Response response = buildJSONRequestWithJSONResponse().when().get();
+        response.then().assertThat().statusCode(STATUS_CODE.OK).body("projects.size()", equalTo(2) , "projects.title", hasItems(title1, title2));
+    }
+
+    private static int getNumberOfProjects() {
+        return buildJSONRequestWithJSONResponse().when().get().then().assertThat().extract().response().path("projects.size()");
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+    // GET
+    ////////////////////////////////////////////////////////////////////////////////
+
+    private Response deleteProject(int id) {
+        return buildJSONRequestWithJSONResponse().when().delete("/" + id);
+    }
+
+    private void deleteAllProjects() {
+        while (getNumberOfProjects() != 0) {
+            deleteProject(Integer.parseInt(buildJSONRequestWithJSONResponse().when().get().then().assertThat().extract().response().path("projects[0].id")));
+        }
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////////
+    // Utils
+    ////////////////////////////////////////////////////////////////////////////////
 }
