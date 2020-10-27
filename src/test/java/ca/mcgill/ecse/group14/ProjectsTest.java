@@ -3,18 +3,17 @@ package ca.mcgill.ecse.group14;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.*;
-import io.restassured.specification.RequestSpecification;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
 
 import static ca.mcgill.ecse.group14.Resources.*;
 
@@ -38,6 +37,18 @@ public class ProjectsTest {
     ////////////////////////////////////////////////////////////////////////////////
     // POST
     ////////////////////////////////////////////////////////////////////////////////
+
+    @BeforeClass
+    public static void setup() {
+        Server.start();
+        Server.check();
+    }
+
+    @AfterClass
+    public static void teardown() throws InterruptedException {
+        Server.shutdown();
+        Thread.sleep(500);
+    }
 
     @Test
     public void test_CreateProject_XML() {
