@@ -8,9 +8,9 @@ import static io.restassured.RestAssured.*;
 import io.restassured.response.*;
 import io.restassured.specification.RequestSpecification;
 
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -23,18 +23,6 @@ import static org.hamcrest.core.IsEqual.equalTo;
 
 
 public class TodosTest {
-
-    @Before
-    public void setup() {
-        Server.start();
-        Server.check();
-    }
-
-    @After
-    public void teardown() throws InterruptedException {
-        Server.stop();
-        Thread.sleep(500);
-    }
 
     /**
      * Test GET http://localhost:4567/todos
