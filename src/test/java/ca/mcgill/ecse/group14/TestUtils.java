@@ -23,7 +23,7 @@ public class TestUtils {
         assertResponseStatusCode(head(url), statusCode);
     }
 
-    public static int createTodoHelper(String title) throws Exception {
+    public static int createTodoHelper(String title) {
         JSONObject fields = new JSONObject();
         fields.put("title", title);
 
@@ -34,7 +34,7 @@ public class TestUtils {
         return Integer.parseInt((String) response.jsonPath().get("id"));
     }
 
-    public static int createProjectHelper(String title) throws Exception {
+    public static int createProjectHelper(String title) {
         JSONObject fields = new JSONObject();
         fields.put("title", title);
 
@@ -45,7 +45,7 @@ public class TestUtils {
         return Integer.parseInt((String) response.jsonPath().get("id"));
     }
 
-    public static int createCategoryHelper(String title) throws Exception {
+    public static int createCategoryHelper(String title) {
         JSONObject fields = new JSONObject();
         fields.put("title", title);
 
