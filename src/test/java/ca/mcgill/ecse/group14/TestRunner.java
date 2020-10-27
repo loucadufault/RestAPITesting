@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({BaseTest.class, TodosTest.class, ProjectsTest.class})
+@Suite.SuiteClasses({BaseTest.class, TodosTest.class, ProjectsTest.class, CategoriesTest.class, DocsTest.class, ShutDownTest.class})
 public class TestRunner {
     @BeforeClass
     public static void setup() {
