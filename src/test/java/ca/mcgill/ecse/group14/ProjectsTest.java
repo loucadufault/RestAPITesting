@@ -281,6 +281,40 @@ public class ProjectsTest {
         assertHasErrorMessage(response, "Invalid Creation: Failed Validation: Not allowed to create with id");
     }
 
+    @Test
+    public void test_CreateProjectTaskRelationship() {
+        int todoID = createTodoHelper("todoTitleText");
+        int projID = createProjectHelper("projTitleText");
+
+        JSONObject fields = new JSONObject();
+        fields.put("id", String.valueOf(todoID));
+
+        given()
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .body(fields.toJSONString())
+                .post(BASE_URL + "/projects/" + projID + "/tasks")
+                .then().assertThat()
+                .statusCode(STATUS_CODE.CREATED);
+    }
+
+    @Test
+    public void test_CreateProjectCategoryRelationship() {
+        int catID = createCategoryHelper("catTitleText");
+        int projID = createProjectHelper("projTitleText");
+
+        JSONObject fields = new JSONObject();
+        fields.put("id", String.valueOf(catID));
+
+        given()
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .body(fields.toJSONString())
+                .post(BASE_URL + "/projects/" + projID + "/categories")
+                .then().assertThat()
+                .statusCode(STATUS_CODE.CREATED);
+    }
+
     private void assertHasDefaultValues(Response response) {
         response.then().assertThat().body(
                 "completed", equalTo(String.valueOf(DEFAULT_COMPLETED)),
@@ -374,6 +408,46 @@ public class ProjectsTest {
         response.then().assertThat().statusCode(STATUS_CODE.NOT_FOUND);
     }
 
+    @Test
+    public void test_GetProjectTaskRelationship(){
+        int todoID = createTodoHelper("todoTitleText");
+        int projID = createCategoryHelper("projTitleText");
+
+        JSONObject fields = new JSONObject();
+        fields.put("id", String.valueOf(todoID));
+
+        given()
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .body(fields.toJSONString())
+                .post(BASE_URL + "/projects/" + projID + "/tasks");
+
+        given()
+                .get(BASE_URL + "/projects/" + projID + "/tasks")
+                .then().assertThat()
+                .statusCode(STATUS_CODE.OK);
+    }
+
+    @Test
+    public void test_GetProjectCategoryRelationship() {
+        int projID = createProjectHelper("projTitleText");
+        int catID = createCategoryHelper("catTitleText");
+
+        JSONObject fields = new JSONObject();
+        fields.put("id", String.valueOf(catID));
+
+        given()
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .body(fields.toJSONString())
+                .post(BASE_URL + "/projects/" + projID + "/categories");
+
+        given()
+                .get(BASE_URL + "/projects/" + projID + "/categories")
+                .then().assertThat()
+                .statusCode(STATUS_CODE.OK);
+    }
+
     private static Response getProjectById(int id) {
         return buildJSONRequestWithJSONResponse().when().get("/" + id);
     }
@@ -407,6 +481,46 @@ public class ProjectsTest {
         createProjectHelper("test");
         int id = NON_EXISTENT_ID;
         buildJSONRequestWithJSONResponse().when().delete("/" + id).then().assertThat().statusCode(STATUS_CODE.NOT_FOUND);
+    }
+
+    @Test
+    public void test_DeleteProjectTaskRelationship(){
+        int todoID = createTodoHelper("todoTitleText");
+        int projID = createProjectHelper("projTitleText");
+
+        JSONObject fields = new JSONObject();
+        fields.put("id", String.valueOf(todoID));
+
+        given()
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .body(fields.toJSONString())
+                .post(BASE_URL + "/projects/" + projID + "/tasks");
+
+        given()
+                .delete(BASE_URL + "/projects/" + projID + "/tasks/" + todoID)
+                .then().assertThat()
+                .statusCode(STATUS_CODE.OK);
+    }
+
+    @Test
+    public void test_DeleteProjectCategoryRelationship(){
+        int catID = createCategoryHelper("catTitleText");
+        int projID = createProjectHelper("projTitleText");
+
+        JSONObject fields = new JSONObject();
+        fields.put("id", String.valueOf(catID));
+
+        given()
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .body(fields.toJSONString())
+                .post(BASE_URL + "/projects/" + projID + "/categories");
+
+        given()
+                .delete(BASE_URL + "/projects/" + projID + "/categories/" + catID)
+                .then().assertThat()
+                .statusCode(STATUS_CODE.OK);
     }
 
     private Response deleteProject(int id) {
