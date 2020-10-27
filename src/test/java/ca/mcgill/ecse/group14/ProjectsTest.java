@@ -18,6 +18,8 @@ public class ProjectsTest {
     private static boolean DEFAULT_ACTIVE = false;
     private static String DEFAULT_DESCRIPTION = "";
 
+    private static int NON_EXISTENT_ID = 99999;
+
     public ProjectsTest() {
         RestAssured.baseURI = BASE_URL + "/projects";
     }
@@ -34,7 +36,6 @@ public class ProjectsTest {
         requestParams.put("title", title);
 
         Response response = given().body(requestParams.toJSONString()).when().post();
-//        System.out.println(when().post().asString());
 
         assertHasDefaultValues(response);
         assertHasTitle(response, title);
@@ -48,7 +49,36 @@ public class ProjectsTest {
     }
 
     @Test
-    public void test_CreateProject_IntegerTitle() {
+    public void test_CreateProject_EmptyTitle() {
+        String title = "";
+
+        JSONObject requestParams = new JSONObject();
+        requestParams.put("title", title);
+
+        Response response = buildJSONRequest().body(requestParams.toJSONString()).when().post();
+        response.then().assertThat().statusCode(STATUS_CODE.CREATED);
+        assertHasDefaultValues(response);
+        assertHasTitle(response, title);
+    }
+
+    @Test
+    public void test_CreateProject_EmptyDescription() {
+        String description = "";
+
+        JSONObject requestParams = new JSONObject();
+        requestParams.put("description", description);
+
+        Response response = buildJSONRequest().body(requestParams.toJSONString()).when().post();
+        response.then().assertThat().statusCode(STATUS_CODE.CREATED);
+        assertHasDefaultValues(response);
+        response.then().assertThat().body("title", equalTo(String.valueOf(description)));
+    }
+
+    /**
+     * Bug
+     */
+    @Test
+    public void test_CreateProject_FloatTitle() {
         float title = 4.0f;
 
         JSONObject requestParams = new JSONObject();
@@ -82,6 +112,39 @@ public class ProjectsTest {
         assertHasErrorMessage(response, "Failed Validation: active should be BOOLEAN");
     }
 
+    @Test
+    public void test_CreateProject_StringActiveAndCompleted() {
+        String completed = "true";
+        String active = "true";
+
+        JSONObject requestParams = new JSONObject();
+        requestParams.put("active", active);
+        requestParams.put("completed", completed);
+        Response response = buildJSONRequest().body(requestParams.toJSONString()).when().post();
+        response.then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
+        assertHasErrorMessage(response, "Failed Validation: active should be BOOLEAN, completed should be BOOLEAN");
+    }
+
+    @Test
+    public void test_CreateProject_ValidId() {
+        int id = 25;
+        JSONObject requestParams = new JSONObject();
+        requestParams.put("id", id);
+        Response response = buildJSONRequest().body(requestParams.toJSONString()).when().post();
+        response.then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
+        assertHasErrorMessage(response, "Invalid Creation: Failed Validation: Not allowed to create with id");
+    }
+
+    @Test
+    public void test_CreateProject_InvalidId() {
+        int id = -25;
+        JSONObject requestParams = new JSONObject();
+        requestParams.put("id", id);
+        Response response = buildJSONRequest().body(requestParams.toJSONString()).when().post();
+        response.then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
+        assertHasErrorMessage(response, "Invalid Creation: Failed Validation: Not allowed to create with id");
+    }
+
     private void assertHasDefaultValues(Response response) {
         response.then().assertThat().body(
                 "completed", equalTo(String.valueOf(DEFAULT_COMPLETED)),
@@ -108,7 +171,6 @@ public class ProjectsTest {
 
     @Test
     public void test_GetAllProjects_NewProjects() {
-
         deleteAllProjects();
 
         String title1 = "test 1";
@@ -117,7 +179,56 @@ public class ProjectsTest {
         createProjectHelper(title2);
 
         Response response = buildJSONRequestWithJSONResponse().when().get();
-        response.then().assertThat().statusCode(STATUS_CODE.OK).body("projects.size()", equalTo(3) , "projects.title", hasItems(title1, title2));
+        response.then()
+                .assertThat().statusCode(STATUS_CODE.OK)
+                .body("projects.size()", equalTo(2),
+                        "projects.title", hasItems(title1, title2));
+    }
+
+    @Test
+    public void test_GetProject_ValidId() {
+        String title = "test";
+        int id = createProjectHelper(title);
+
+        Response response = getProjectById(id);
+        response.then().assertThat().body("projects[0].title", equalTo(title));
+    }
+
+    /**
+     * Bug
+     */
+    @Test
+    public void test_GetProject_NegativeIntegerId() {
+        createProjectHelper("test");
+        int id = -1;
+
+        Response response = getProjectById(id);
+        response.then().assertThat().statusCode(STATUS_CODE.NOT_FOUND);
+    }
+
+    /**
+     * Bug
+     */
+    @Test
+    public void test_GetProject_StringId() {
+        System.out.println("hello" + createProjectHelper("test"));
+        String id = "invalid id";
+
+        Response response = buildJSONRequestWithJSONResponse().when().get("/" + id);
+        response.then().assertThat().statusCode(STATUS_CODE.NOT_FOUND);
+    }
+
+    @Test
+    public void test_GetProject_ValidNonexistentId() {
+        System.out.println("hello" + createProjectHelper("test"));
+        int id = NON_EXISTENT_ID;
+
+        Response response = getProjectById(id);
+        response.then().assertThat().statusCode(STATUS_CODE.NOT_FOUND);
+    }
+
+    private static Response getProjectById(int id) {
+        return buildJSONRequestWithJSONResponse().when().get("/" + id);
     }
 
     private static int getNumberOfProjects() {
@@ -127,6 +238,29 @@ public class ProjectsTest {
     ////////////////////////////////////////////////////////////////////////////////
     // DELETE
     ////////////////////////////////////////////////////////////////////////////////
+
+    @Test
+    public void test_Delete_RootPath() {
+        int id = createProjectHelper("test");
+
+        Response response = buildJSONRequestWithJSONResponse().when().delete();
+        response.then().assertThat().statusCode(STATUS_CODE.NOT_ALLOWED);
+    }
+
+    @Test
+    public void test_DeleteProject_ExistingId() {
+        int id = createProjectHelper("test");
+
+        buildJSONRequestWithJSONResponse().when().delete("/" + id).then().assertThat().statusCode(STATUS_CODE.OK);
+        getProjectById(id).then().assertThat().statusCode(STATUS_CODE.NOT_FOUND);
+    }
+
+    @Test
+    public void test_DeleteProject_NonexistentId() {
+        createProjectHelper("test");
+        int id = NON_EXISTENT_ID;
+        buildJSONRequestWithJSONResponse().when().delete("/" + id).then().assertThat().statusCode(STATUS_CODE.NOT_FOUND);
+    }
 
     private Response deleteProject(int id) {
         return buildJSONRequestWithJSONResponse().when().delete("/" + id);
