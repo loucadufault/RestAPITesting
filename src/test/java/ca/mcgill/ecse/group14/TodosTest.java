@@ -397,7 +397,7 @@ public class TodosTest {
     @Test
     public void testGetTodosTasksofWithValidID() {
         int todoID = createTodoHelper("todoTitleText");
-        int projID = createCategoryHelper("projTitleText");
+        int projID = createProjectHelper("projTitleText");
 
         JSONObject fields = new JSONObject();
         fields.put("id", String.valueOf(projID));
