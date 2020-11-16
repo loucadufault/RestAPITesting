@@ -1,4 +1,4 @@
-package ca.mcgill.ecse.group14;
+package ca.mcgill.ecse.group14.unit;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;

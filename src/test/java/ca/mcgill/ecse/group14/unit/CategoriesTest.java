@@ -1,12 +1,11 @@
-package ca.mcgill.ecse.group14;
-import io.restassured.specification.RequestSpecification;
+package ca.mcgill.ecse.group14.unit;
 import org.junit.*;
 import org.json.simple.JSONObject;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.core.IsEqual.*;
-import static ca.mcgill.ecse.group14.Resources.*;
-import static ca.mcgill.ecse.group14.TestUtils.*;
+import static ca.mcgill.ecse.group14.unit.Resources.*;
+import static ca.mcgill.ecse.group14.unit.TestUtils.*;
 
 public class CategoriesTest {
     @BeforeClass

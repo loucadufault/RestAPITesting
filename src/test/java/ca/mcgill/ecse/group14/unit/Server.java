@@ -1,4 +1,4 @@
-package ca.mcgill.ecse.group14;
+package ca.mcgill.ecse.group14.unit;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import static io.restassured.RestAssured.get;
 
-import static ca.mcgill.ecse.group14.Resources.*;
+import static ca.mcgill.ecse.group14.unit.Resources.*;
 
 public class Server {
     private static Process process;

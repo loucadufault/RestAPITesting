@@ -1,4 +1,4 @@
-package ca.mcgill.ecse.group14;
+package ca.mcgill.ecse.group14.unit;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -15,9 +15,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import static ca.mcgill.ecse.group14.Resources.*;
+import static ca.mcgill.ecse.group14.unit.Resources.*;
 
-import static ca.mcgill.ecse.group14.TestUtils.*;
+import static ca.mcgill.ecse.group14.unit.TestUtils.*;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;

@@ -1,21 +1,13 @@
-package ca.mcgill.ecse.group14;
+package ca.mcgill.ecse.group14.unit;
 
-import static ca.mcgill.ecse.group14.Resources.*;
-import static ca.mcgill.ecse.group14.TestUtils.*;
+import static ca.mcgill.ecse.group14.unit.Resources.*;
+import static ca.mcgill.ecse.group14.unit.TestUtils.*;
 
 import static io.restassured.RestAssured.*;
 
-import io.restassured.response.*;
-import io.restassured.specification.RequestSpecification;
-
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import org.json.simple.JSONObject;
 

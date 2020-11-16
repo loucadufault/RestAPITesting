@@ -1,4 +1,4 @@
-package ca.mcgill.ecse.group14;
+package ca.mcgill.ecse.group14.unit;
 
 public class Resources {
     public static final String PORT = "4567";

@@ -1,23 +1,18 @@
-package ca.mcgill.ecse.group14;
+package ca.mcgill.ecse.group14.unit;
 
 import io.restassured.http.ContentType;
 import org.junit.*;
 
-import static ca.mcgill.ecse.group14.Resources.*;
+import static ca.mcgill.ecse.group14.unit.Resources.*;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import io.restassured.path.xml.XmlPath;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
+
 import static io.restassured.path.xml.XmlPath.CompatibilityMode.HTML;
 
 import static io.restassured.RestAssured.*;
-import static org.hamcrest.core.IsEqual.equalTo;
-
 
 
 public class DocsTest {
