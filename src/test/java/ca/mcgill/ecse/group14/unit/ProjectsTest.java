@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import static ca.mcgill.ecse.group14.unit.Resources.*;
+import static ca.mcgill.ecse.group14.Resources.*;
 
 import static ca.mcgill.ecse.group14.unit.TestUtils.*;
 import static io.restassured.RestAssured.*;

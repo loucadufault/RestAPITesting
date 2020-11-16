@@ -4,7 +4,7 @@ import org.json.simple.JSONObject;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.core.IsEqual.*;
-import static ca.mcgill.ecse.group14.unit.Resources.*;
+import static ca.mcgill.ecse.group14.Resources.*;
 import static ca.mcgill.ecse.group14.unit.TestUtils.*;
 
 public class CategoriesTest {

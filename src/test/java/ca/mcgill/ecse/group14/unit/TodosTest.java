@@ -1,6 +1,6 @@
 package ca.mcgill.ecse.group14.unit;
 
-import static ca.mcgill.ecse.group14.unit.Resources.*;
+import static ca.mcgill.ecse.group14.Resources.*;
 import static ca.mcgill.ecse.group14.unit.TestUtils.*;
 
 import static io.restassured.RestAssured.*;

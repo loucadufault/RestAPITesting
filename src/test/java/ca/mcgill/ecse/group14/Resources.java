@@ -1,10 +1,10 @@
-package ca.mcgill.ecse.group14.unit;
+package ca.mcgill.ecse.group14;
 
 public class Resources {
     public static final String PORT = "4567";
     public static final String BASE_URL = "http://localhost:" + PORT;
 
-    static class STATUS_CODE {
+    public static class STATUS_CODE {
         public static final int OK = 200;
         public static final int CREATED = 201;
         public static final int BAD_REQUEST = 400;

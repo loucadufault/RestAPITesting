@@ -1,5 +1,6 @@
 package ca.mcgill.ecse.group14.unit;
 
+import ca.mcgill.ecse.group14.BaseTest;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;

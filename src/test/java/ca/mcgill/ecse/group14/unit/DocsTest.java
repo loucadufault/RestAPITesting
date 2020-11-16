@@ -3,7 +3,7 @@ package ca.mcgill.ecse.group14.unit;
 import io.restassured.http.ContentType;
 import org.junit.*;
 
-import static ca.mcgill.ecse.group14.unit.Resources.*;
+import static ca.mcgill.ecse.group14.Resources.*;
 
 import org.junit.Test;
 

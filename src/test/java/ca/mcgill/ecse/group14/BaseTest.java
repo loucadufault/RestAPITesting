@@ -1,10 +1,10 @@
-package ca.mcgill.ecse.group14.unit;
+package ca.mcgill.ecse.group14;
 
 import org.junit.*;
 
 import static io.restassured.RestAssured.*;
 
-import static ca.mcgill.ecse.group14.unit.Resources.*;
+import static ca.mcgill.ecse.group14.Resources.*;
 
 public class BaseTest {
     @Test
