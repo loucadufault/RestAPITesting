@@ -7,6 +7,7 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
 
 import java.util.Arrays;
 import java.util.List;
@@ -127,20 +128,6 @@ public class Utils {
 
     public static int countProjects() {
         return count("projects");
-    }
-
-    public static int getTasksofProject(String projectTitle) {
-        /*int id = getFirstId(projectTitle, "projects");
-        JSONObject requestBody = new JSONObject();
-
-        buildJSONRequest().get(Resources.BASE_URL+"/projects/" + id + "/tasks").getBody().as(JSONArray);
-        return Unirest.get("/projects/" + id + "/tasks").asJson().getBody().getObject().getJSONArray("todos");
-
-         */
-    }
-
-    public static int countTasksofProject() {
-        return count("tasks");
     }
 
 
