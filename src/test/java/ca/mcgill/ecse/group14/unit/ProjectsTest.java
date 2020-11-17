@@ -1,5 +1,6 @@
 package ca.mcgill.ecse.group14.unit;
 
+import ca.mcgill.ecse.group14.Utils;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.*;
@@ -15,7 +16,7 @@ import java.io.InputStreamReader;
 
 import static ca.mcgill.ecse.group14.Resources.*;
 
-import static ca.mcgill.ecse.group14.unit.Utils.*;
+import static ca.mcgill.ecse.group14.Utils.*;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -235,7 +236,7 @@ public class ProjectsTest extends BaseTest {
     @Test
     public void test_AmendProject_ValidIdAsRequestParam() {
         String title = "old";
-        int id = createProjectHelper(title);
+        int id = createProject(title);
 
         Response response = getProjectById(id);
         response.then().assertThat().statusCode(STATUS_CODE.OK).body(
@@ -259,7 +260,7 @@ public class ProjectsTest extends BaseTest {
     @Test
     public void test_AmendProject_NonexistentIdAsRequestParam() {
         String title = "old";
-        int id = createProjectHelper(title);
+        int id = createProject(title);
 
         Response response = getProjectById(id);
         response.then().assertThat().statusCode(STATUS_CODE.OK).body(
@@ -290,8 +291,8 @@ public class ProjectsTest extends BaseTest {
 
     @Test
     public void test_CreateProjectTaskRelationship() {
-        int todoID = createTodoHelper("todoTitleText");
-        int projID = createProjectHelper("projTitleText");
+        int todoID = createTodo("todoTitleText");
+        int projID = createProject("projTitleText");
 
         JSONObject fields = new JSONObject();
         fields.put("id", String.valueOf(todoID));
@@ -307,8 +308,8 @@ public class ProjectsTest extends BaseTest {
 
     @Test
     public void test_CreateProjectCategoryRelationship() {
-        int catID = createCategoryHelper("catTitleText");
-        int projID = createProjectHelper("projTitleText");
+        int catID = createCategory("catTitleText");
+        int projID = createProject("projTitleText");
 
         JSONObject fields = new JSONObject();
         fields.put("id", String.valueOf(catID));
@@ -352,8 +353,8 @@ public class ProjectsTest extends BaseTest {
 
         String title1 = "test 1";
         String title2 = "test 2";
-        createProjectHelper(title1);
-        createProjectHelper(title2);
+        createProject(title1);
+        createProject(title2);
 
         Response response = buildJSONRequestWithJSONResponse().when().get();
         response.then()
@@ -365,7 +366,7 @@ public class ProjectsTest extends BaseTest {
     @Test
     public void test_GetProject_ValidId() {
         String title = "test";
-        int id = createProjectHelper(title);
+        int id = createProject(title);
 
         Response response = getProjectById(id);
         response.then().assertThat().body("projects[0].title", equalTo(title));
@@ -374,7 +375,7 @@ public class ProjectsTest extends BaseTest {
     @Test
     public void test_GetProject_ValidIdAsXMLPayload() {
         String title = "test";
-        int id = createProjectHelper(title);
+        int id = createProject(title);
 
         String response = given().header("Content-Type", "application/json").header("Accept", "application/xml")
                 .when().get("/" + id).asString();
@@ -387,7 +388,7 @@ public class ProjectsTest extends BaseTest {
      */
     @Test
     public void test_GetProject_NegativeIntegerId() {
-        createProjectHelper("test");
+        createProject("test");
         int id = -1;
 
         Response response = getProjectById(id);
@@ -399,7 +400,7 @@ public class ProjectsTest extends BaseTest {
      */
     @Test
     public void test_GetProject_StringId() {
-        System.out.println("hello" + createProjectHelper("test"));
+        System.out.println("hello" + createProject("test"));
         String id = "invalid id";
 
         Response response = buildJSONRequestWithJSONResponse().when().get("/" + id);
@@ -408,7 +409,7 @@ public class ProjectsTest extends BaseTest {
 
     @Test
     public void test_GetProject_ValidNonexistentId() {
-        System.out.println("hello" + createProjectHelper("test"));
+        System.out.println("hello" + createProject("test"));
         int id = NON_EXISTENT_ID;
 
         Response response = getProjectById(id);
@@ -417,8 +418,8 @@ public class ProjectsTest extends BaseTest {
 
     @Test
     public void test_GetProjectTaskRelationship(){
-        int todoID = createTodoHelper("todoTitleText");
-        int projID = createCategoryHelper("projTitleText");
+        int todoID = createTodo("todoTitleText");
+        int projID = createCategory("projTitleText");
 
         JSONObject fields = new JSONObject();
         fields.put("id", String.valueOf(todoID));
@@ -437,8 +438,8 @@ public class ProjectsTest extends BaseTest {
 
     @Test
     public void test_GetProjectCategoryRelationship() {
-        int projID = createProjectHelper("projTitleText");
-        int catID = createCategoryHelper("catTitleText");
+        int projID = createProject("projTitleText");
+        int catID = createCategory("catTitleText");
 
         JSONObject fields = new JSONObject();
         fields.put("id", String.valueOf(catID));
@@ -467,7 +468,7 @@ public class ProjectsTest extends BaseTest {
     public void test_GetProject_CommandLineQuery() {
         deleteAllProjects();
         String title = "test";
-        int id = createProjectHelper(title);
+        int id = createProject(title);
 
         String command = "curl " + BASE_URL + "/projects/" + id;
         try {
@@ -490,7 +491,7 @@ public class ProjectsTest extends BaseTest {
 
     @Test
     public void test_Delete_RootPath() {
-        int id = createProjectHelper("test");
+        int id = createProject("test");
 
         Response response = buildJSONRequestWithJSONResponse().when().delete();
         response.then().assertThat().statusCode(STATUS_CODE.NOT_ALLOWED);
@@ -498,7 +499,7 @@ public class ProjectsTest extends BaseTest {
 
     @Test
     public void test_DeleteProject_ExistingId() {
-        int id = createProjectHelper("test");
+        int id = createProject("test");
 
         buildJSONRequestWithJSONResponse().when().delete("/" + id).then().assertThat().statusCode(STATUS_CODE.OK);
         getProjectById(id).then().assertThat().statusCode(STATUS_CODE.NOT_FOUND);
@@ -506,15 +507,15 @@ public class ProjectsTest extends BaseTest {
 
     @Test
     public void test_DeleteProject_NonexistentId() {
-        createProjectHelper("test");
+        createProject("test");
         int id = NON_EXISTENT_ID;
         buildJSONRequestWithJSONResponse().when().delete("/" + id).then().assertThat().statusCode(STATUS_CODE.NOT_FOUND);
     }
 
     @Test
     public void test_DeleteProjectTaskRelationship(){
-        int todoID = createTodoHelper("todoTitleText");
-        int projID = createProjectHelper("projTitleText");
+        int todoID = createTodo("todoTitleText");
+        int projID = createProject("projTitleText");
 
         JSONObject fields = new JSONObject();
         fields.put("id", String.valueOf(todoID));
@@ -533,8 +534,8 @@ public class ProjectsTest extends BaseTest {
 
     @Test
     public void test_DeleteProjectCategoryRelationship(){
-        int catID = createCategoryHelper("catTitleText");
-        int projID = createProjectHelper("projTitleText");
+        int catID = createCategory("catTitleText");
+        int projID = createProject("projTitleText");
 
         JSONObject fields = new JSONObject();
         fields.put("id", String.valueOf(catID));
@@ -551,13 +552,9 @@ public class ProjectsTest extends BaseTest {
                 .statusCode(STATUS_CODE.OK);
     }
 
-    private Response deleteProject(int id) {
-        return buildJSONRequestWithJSONResponse().when().delete("/" + id);
-    }
-
     private void deleteAllProjects() {
         while (getNumberOfProjects() != 0) {
-            deleteProject(Integer.parseInt(buildJSONRequestWithJSONResponse().when().get().then().assertThat().extract().response().path("projects[0].id")));
+            Utils.deleteProject(Integer.parseInt(buildJSONRequestWithJSONResponse().when().get().then().assertThat().extract().response().path("projects[0].id")));
         }
     }
 

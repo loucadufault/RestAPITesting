@@ -1,11 +1,12 @@
 package ca.mcgill.ecse.group14.unit;
+import ca.mcgill.ecse.group14.Utils;
 import org.junit.*;
 import org.json.simple.JSONObject;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.core.IsEqual.*;
 import static ca.mcgill.ecse.group14.Resources.*;
-import static ca.mcgill.ecse.group14.unit.Utils.*;
+import static ca.mcgill.ecse.group14.Utils.*;
 
 public class CategoriesTest extends BaseTest {
     /*
@@ -21,7 +22,7 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testGetCategoryWithValidID(){
-        int catID = createCategoryHelper("catEx");
+        int catID = createCategory("catEx");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept","application/json")
@@ -36,7 +37,7 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testGetCategoryWithInvalidID(){
-        int catID = createCategoryHelper("catEx");
+        int catID = createCategory("catEx");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept","application/json")
@@ -50,8 +51,8 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testGetProjectsOfCategoryWithValidID(){
-        int catID = createCategoryHelper("catEx");
-        int projID = createProjectHelper("projEx");
+        int catID = createCategory("catEx");
+        int projID = createProject("projEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(projID));
 
@@ -72,8 +73,8 @@ public class CategoriesTest extends BaseTest {
     */
     @Test
     public void testGetProjectsOfCategoryWithInvalidID(){
-        int catID = createCategoryHelper("catEx");
-        int projID = createProjectHelper("projEx");
+        int catID = createCategory("catEx");
+        int projID = createProject("projEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(projID));
 
@@ -94,8 +95,8 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testGetTodosOfCategoryWithValidID(){
-        int catID = createCategoryHelper("catEx");
-        int todoID = createTodoHelper("todoEx");
+        int catID = createCategory("catEx");
+        int todoID = createTodo("todoEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
@@ -117,8 +118,8 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testGetTodosOfCategoryWithInvalidID(){
-        int catID = createCategoryHelper("catEx");
-        int todoID = createTodoHelper("todoEx");
+        int catID = createCategory("catEx");
+        int todoID = createTodo("todoEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
@@ -214,7 +215,7 @@ public class CategoriesTest extends BaseTest {
         JSONObject body = new JSONObject();
         body.put("title",title);
         body.put("description",description);
-        int categoryID = createCategoryHelper("categoryTest");
+        int categoryID = createCategory("categoryTest");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept","application/json")
@@ -238,7 +239,7 @@ public class CategoriesTest extends BaseTest {
         body.put("title",title);
         body.put("description",description);
 
-        int categoryID = createCategoryHelper("categoryTest");
+        int categoryID = createCategory("categoryTest");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept","application/json")
@@ -253,8 +254,8 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testPostCategoryRelatedToProjectWithValidID(){
-        int projID = createProjectHelper("Project1");
-        int catID = createCategoryHelper("Category1");
+        int projID = createProject("Project1");
+        int catID = createCategory("Category1");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(projID));
 
@@ -272,8 +273,8 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testPostCategoryRelatedToProjectWithInvalidID(){
-        int projID = createProjectHelper("Project1");
-        int catID = createCategoryHelper("Category1");
+        int projID = createProject("Project1");
+        int catID = createCategory("Category1");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(projID));
 
@@ -291,8 +292,8 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testPostCategoryRelatedToTodoWithValidID(){
-        int todoID = createTodoHelper("Project1");
-        int catID = createCategoryHelper("Category1");
+        int todoID = createTodo("Project1");
+        int catID = createCategory("Category1");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
@@ -310,8 +311,8 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testPostCategoryRelatedToTodoWithInvalidID(){
-        int todoID = createProjectHelper("Project1");
-        int catID = createCategoryHelper("Category1");
+        int todoID = createProject("Project1");
+        int catID = createCategory("Category1");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
@@ -337,7 +338,7 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testHeadCategoriesWithValidID(){
-        int catID = createCategoryHelper("catEx");
+        int catID = createCategory("catEx");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept","application/json")
@@ -350,7 +351,7 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testHeadCategoriesWithInvalidID(){
-        int catID = createCategoryHelper("catEx");
+        int catID = createCategory("catEx");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept","application/json")
@@ -363,8 +364,8 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testHeadProjectsOfCategoryWithValidID(){
-        int catID = createCategoryHelper("catEx");
-        int projID = createProjectHelper("projEx");
+        int catID = createCategory("catEx");
+        int projID = createProject("projEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(projID));
 
@@ -385,8 +386,8 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testHeadProjectsOfCategoryWithInvalidID(){
-        int catID = createCategoryHelper("catEx");
-        int projID = createProjectHelper("projEx");
+        int catID = createCategory("catEx");
+        int projID = createProject("projEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(projID));
 
@@ -408,8 +409,8 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testHeadTodosOfCategoryWithValidID(){
-        int catID = createCategoryHelper("catEx");
-        int todoID = createTodoHelper("todoEx");
+        int catID = createCategory("catEx");
+        int todoID = createTodo("todoEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
@@ -431,8 +432,8 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testHeadTodosOfCategoryWithInvalidID(){
-        int catID = createCategoryHelper("catEx");
-        int todoID = createTodoHelper("todoEx");
+        int catID = createCategory("catEx");
+        int todoID = createTodo("todoEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
@@ -460,7 +461,7 @@ public class CategoriesTest extends BaseTest {
         body.put("title",title);
         body.put("description",description);
 
-        int catID = createCategoryHelper("initial");
+        int catID = createCategory("initial");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept","application/json")
@@ -483,7 +484,7 @@ public class CategoriesTest extends BaseTest {
         body.put("title",title);
         body.put("description",description);
 
-        int catID = createCategoryHelper("initial");
+        int catID = createCategory("initial");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept","application/json")
@@ -502,7 +503,7 @@ public class CategoriesTest extends BaseTest {
         JSONObject body = new JSONObject();
         body.put("title",title);
 
-        int catID = createCategoryHelper("initial");
+        int catID = createCategory("initial");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept","application/json")
@@ -522,7 +523,7 @@ public class CategoriesTest extends BaseTest {
         JSONObject body = new JSONObject();
         body.put("description",description);
 
-        int catID = createCategoryHelper("initial");
+        int catID = createCategory("initial");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept","application/json")
@@ -537,7 +538,7 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testPutCategoryWithValidIDAndTitleDescription(){
-        int catID = createCategoryHelper("initial");
+        int catID = createCategory("initial");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept","application/json")
@@ -551,7 +552,7 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testDeleteCategoryWithValidID(){
-        int catID = createCategoryHelper("initial");
+        int catID = createCategory("initial");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept","application/json")
@@ -565,7 +566,7 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testDeleteCategoryWithInvalidID(){
-        int catID = createCategoryHelper("initial");
+        int catID = createCategory("initial");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept","application/json")
@@ -579,8 +580,8 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testDeleteCategoryProjectRelationshipValidIDs(){
-        int catID = createCategoryHelper("catEx");
-        int projID = createProjectHelper("projEx");
+        int catID = createCategory("catEx");
+        int projID = createProject("projEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(projID));
 
@@ -601,8 +602,8 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testDeleteCategoryProjectRelationshipValidCatIDandInvalidProjID(){
-        int catID = createCategoryHelper("catEx");
-        int projID = createProjectHelper("projEx");
+        int catID = createCategory("catEx");
+        int projID = createProject("projEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(projID));
 
@@ -624,8 +625,8 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testDeleteCategoryProjectRelationshipInvalidCatIDandValidProjID(){
-        int catID = createCategoryHelper("catEx");
-        int projID = createProjectHelper("projEx");
+        int catID = createCategory("catEx");
+        int projID = createProject("projEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(projID));
 
@@ -647,8 +648,8 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testDeleteCategoryProjectRelationshipInValidIDs(){
-        int catID = createCategoryHelper("catEx");
-        int projID = createProjectHelper("projEx");
+        int catID = createCategory("catEx");
+        int projID = createProject("projEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(projID));
 
@@ -670,8 +671,8 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testDeleteCategoryTodoRelationshipValidIDs(){
-        int catID = createCategoryHelper("catEx");
-        int todoID = createTodoHelper("todoEx");
+        int catID = createCategory("catEx");
+        int todoID = createTodo("todoEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
@@ -692,8 +693,8 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testDeleteCategoryTodoRelationshipValidCatIDandInvalidTodoID(){
-        int catID = createCategoryHelper("catEx");
-        int todoID = createTodoHelper("todoEx");
+        int catID = createCategory("catEx");
+        int todoID = createTodo("todoEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
@@ -715,8 +716,8 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testDeleteCategoryTodoRelationshipInvalidCatIDandValidTodoID(){
-        int catID = createCategoryHelper("catEx");
-        int todoID = createTodoHelper("todoEx");
+        int catID = createCategory("catEx");
+        int todoID = createTodo("todoEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
@@ -738,8 +739,8 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testDeleteCategoryTodoRelationshipInValidIDs(){
-        int catID = createCategoryHelper("catEx");
-        int todoID = createProjectHelper("todoEx");
+        int catID = createCategory("catEx");
+        int todoID = createProject("todoEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
