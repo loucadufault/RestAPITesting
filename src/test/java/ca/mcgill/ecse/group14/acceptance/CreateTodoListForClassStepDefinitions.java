@@ -10,6 +10,8 @@ import io.cucumber.java.en.Then;
 
 import io.restassured.response.Response;
 import org.json.simple.JSONObject;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 
 import java.util.List;
@@ -20,16 +22,6 @@ import static org.junit.Assert.*;
 
 @RunWith(Cucumber.class)
 public class CreateTodoListForClassStepDefinitions extends BaseStepDefinitions {
-    @Before
-    public static void before() {
-        setup();
-    }
-
-    @After
-    public static void after() throws InterruptedException {
-        teardown();
-    }
-
     @Given("there does not exist a project with title {string} in the system")
     public void there_does_not_exist_a_project_with_title_in_the_system(String title) {
         Utils.removeProject(title);
@@ -77,6 +69,7 @@ public class CreateTodoListForClassStepDefinitions extends BaseStepDefinitions {
     public void the_project_with_title_and_description_and_completed_status_and_active_status_shall_be_created_in_the_system(String title, String description, String completed, String active) {
         Response response = Utils.buildJSONRequestWithJSONResponse().when().get(BASE_URL + "/projects");
         List<Map<String, String>> projects = response.jsonPath().getList("projects");
+        System.out.println(completed);
         for (Map<String, String> project : projects) {
             System.out.println("'"+ project.get("completed")+ "'");
             if (project.get("title").equals(title) && project.get("description").equals(description) && project.get("completed").equals(completed) && project.get("active").equals(active)) {
