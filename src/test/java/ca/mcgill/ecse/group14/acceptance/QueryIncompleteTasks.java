@@ -8,7 +8,7 @@ import io.cucumber.junit.Cucumber;
 import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
-public class QueryIncompleteTasks {
+public class QueryIncompleteTasks extends BaseStepDefinitions{
     @Given("there exists a project with title <string> in the system")
     public void there_exists_a_project_with_title_string_in_the_system() {
         // Write code here that turns the phrase above into concrete actions
