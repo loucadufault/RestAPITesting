@@ -1,36 +1,32 @@
 package ca.mcgill.ecse.group14.acceptance;
 
+import ca.mcgill.ecse.group14.Utils;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.junit.Cucumber;
-import io.cucumber.junit.CucumberOptions;
 import io.cucumber.java.en.Then;
+
 import org.junit.runner.RunWith;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith(Cucumber.class)
 public class CreateTodoListForClassStepDefinitions {
     @Given("there does not exist a project with title {string} in the system")
-    public void there_does_not_exist_a_project_with_title_in_the_system(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    public void there_does_not_exist_a_project_with_title_in_the_system(String title) {
+        Utils.removeProject(title);
     }
 
+    int numberOfProjects;
     @When("the user attempts to create a new project with title {string} and description {string} and completed status {string} and active status {string}")
-    public void the_user_attempts_to_create_a_new_project_with_title_and_description_and_completed_status_and_active_status(String string, String string2, String string3, String string4) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-
-    @Then("the project with title {string} and description {string} and completed status <completedStatus> and active status <activeStatus> shall be created in the system")
-    public void the_project_with_title_and_description_and_completed_status_completed_status_and_active_status_active_status_shall_be_created_in_the_system(String string, String string2) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    public void the_user_attempts_to_create_a_new_project_with_title_and_description_and_completed_status_and_active_status(String title, String description, String completed, String active) {
+        numberOfProjects = Utils.countProjects();
+        Utils.createProject(title, description, completed, active);
     }
 
     @Then("there shall be one more project in the system")
     public void there_shall_be_one_more_project_in_the_system() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+        assertEquals(numberOfProjects + 1, Utils.countProjects());
     }
 
     @Given("there does not exist a project with title COMP {int} in the system")

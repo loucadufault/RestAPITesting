@@ -32,35 +32,43 @@ public class Utils {
         JSONObject fields = new JSONObject();
         fields.put("title", title);
 
-        RequestSpecification request = RestAssured.given();
-        request.body(fields.toJSONString());
+        RequestSpecification request = buildJSONRequestWithJSONResponse().body(fields.toJSONString());
 
         Response response = request.post(BASE_URL+"/todos");
-        return Integer.parseInt((String) response.jsonPath().get("id"));
+        return Integer.parseInt(response.jsonPath().get("id"));
     }
 
     public static int createProject(String title) {
         JSONObject requestParams = new JSONObject();
         requestParams.put("title", title);
 
-        RequestSpecification request = RestAssured.given();
-        request.header("Content-Type", "application/json");
-        request.header("Accept", "application/json");
-        request.body(requestParams.toJSONString());
+        RequestSpecification request = buildJSONRequestWithJSONResponse().body(requestParams.toJSONString());
 
         Response response = request.post(BASE_URL+"/projects");
-        return Integer.parseInt((String) response.jsonPath().get("id"));
+        return Integer.parseInt(response.jsonPath().get("id"));
+    }
+
+    public static int createProject(String title, String description, String completed, String active) {
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("title", title);
+        requestBody.put("description", description);
+        requestBody.put("completedStatus", completed);
+        requestBody.put("activeStatus", active);
+
+        RequestSpecification request = Utils.buildJSONRequestWithJSONResponse().body(requestBody.toJSONString());
+
+        Response response = request.post(BASE_URL + "/projects");
+        return Integer.parseInt(response.jsonPath().get("id"));
     }
 
     public static int createCategory(String title) {
         JSONObject fields = new JSONObject();
         fields.put("title", title);
 
-        RequestSpecification request = RestAssured.given();
-        request.body(fields.toJSONString());
+        RequestSpecification request = buildJSONRequestWithJSONResponse().body(fields.toJSONString());
 
         Response response = request.post(BASE_URL+"/categories");
-        return Integer.parseInt((String) response.jsonPath().get("id"));
+        return Integer.parseInt(response.jsonPath().get("id"));
     }
 
     public static RequestSpecification buildJSONRequest() {
@@ -71,9 +79,8 @@ public class Utils {
         return buildJSONRequest().header("Accept", "application/json");
     }
 
-    public static int getFirstId(String title, String endpoint) {
+    private static int getFirstId(String title, String endpoint) {
         Response response = buildJSONRequestWithJSONResponse().when().get(BASE_URL + "/" + endpoint);
-        JsonPath json = response.jsonPath();
         List<Map<String, String>> things = response.jsonPath().getList(endpoint);
         for (Map<String, String> thing : things) {
             if (thing.get("title").equals(title)) {
@@ -81,6 +88,12 @@ public class Utils {
             }
         }
         return -1;
+    }
+
+    private static int count(String endpoint) {
+        Response response = buildJSONRequestWithJSONResponse().when().get(BASE_URL + "/" + endpoint);
+        List<Map<String, String>> things = response.jsonPath().getList(endpoint);
+        return things.size();
     }
 
     private static boolean exists(String title, String endpoint) {
@@ -91,7 +104,7 @@ public class Utils {
         deleteProject(getFirstId(title, endpoint));
     }
 
-    public static Response delete(int id, String endpoint) {
+    private static Response delete(int id, String endpoint) {
         return buildJSONRequestWithJSONResponse().when().delete(BASE_URL + endpoint + "/" + id);
     }
 
@@ -103,14 +116,36 @@ public class Utils {
         remove(title, "projects");
     }
 
+    public static int countProjects() {
+        return count("projects");
+    }
+
     public static boolean existsProject(String title) {
         return exists(title, "projects");
+    }
+
+    public static void deleteTodo(int id) {
+        delete(id, "todos");
     }
 
     public static void removeTodo(String title) {
         remove(title, "todos");
     }
 
-    public static boolean existsTodo(String title) {return true;}
+    public static boolean existsTodo(String title) {
+        return exists(title, "todos");
+    }
+
+    public static void deleteCategory(int id) {
+        delete(id, "categories");
+    }
+
+    public static void removeCategory(String title) {
+        remove(title, "categories");
+    }
+
+    public static void existsCategory(String title) {
+        exists(title, "categories");
+    }
 
 }
