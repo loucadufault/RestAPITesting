@@ -109,8 +109,8 @@ public class RemoveTodoListForClassStepDefinitions extends BaseStepDefinitions {
         assertTrue(!Utils.existsTodo(title));
     }
 
-    @Then("there shall be one less task in the system")
-    public void there_shall_be_less_task_in_the_system() {
-        assertEquals(taskCount - 1, Utils.countTodos());
-    }
+//    @Then("there shall be one less task in the system")
+//    public void there_shall_be_less_task_in_the_system() {
+//        assertEquals(taskCount - 1, Utils.countTodos());
+//    }
 }

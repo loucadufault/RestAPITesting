@@ -17,10 +17,11 @@ public class Server {
 
     public static void boot() {
         start();
-        if (waitUntilReady() + check() != 0) {
+        if (waitUntilReady() + ping() != 0) {
             System.out.println("Failed to boot");
             shutdown();
         }
+        waitUntilReady();
     }
 
     public static void start() {
@@ -97,6 +98,9 @@ public class Server {
         }
     }
 
+    /**
+     * @deprecated
+     */
     public static int check() {
         System.out.print("Checking server...");
 
@@ -112,7 +116,6 @@ public class Server {
                 System.out.println(line);
                 if (line != null && line.contains("Running on 4567")) {
                     status = ServerStatus.RUNNING;
-                    System.out.println("   running.");
                     return 0;
                 }
             }

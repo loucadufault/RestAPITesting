@@ -16,12 +16,14 @@ public class BaseStepDefinitions {
 
     static void setup() {
         RestAssured.baseURI = Resources.BASE_URL;
+        if (Server.ping() == 0) {
+            return;
+        }
         Server.start();
         Server.waitUntilReady();
     }
 
     static void teardown() throws InterruptedException {
         Utils.clearData();
-        Server.shutdown();
     }
 }

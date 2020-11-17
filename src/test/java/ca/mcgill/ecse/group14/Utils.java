@@ -88,6 +88,7 @@ public class Utils {
     public static int getFirstId(String title, String endpoint) {
         Response response = buildJSONRequestWithJSONResponse().when().get(BASE_URL + "/" + endpoint);
         List<Map<String, String>> things = response.jsonPath().getList(endpoint);
+        System.out.println(things);
         for (Map<String, String> thing : things) {
             if (thing.get("title").equals(title)) {
                 return Integer.parseInt(thing.get("id"));

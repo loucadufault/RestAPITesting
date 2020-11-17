@@ -26,7 +26,7 @@ Feature: Remove todo list for class
     Then the project with title "<title>" shall be removed from the system
     Then there shall be one less project in the system
     Then the task with title "<taskTitle>" shall be removed from the system
-    Then there shall be one less task in the system
+    Then there shall be the same number of projects in the system
 
     Examples:
       | projectTitle | taskTitle | taskDoneStatus | taskDescription |

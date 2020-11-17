@@ -25,6 +25,6 @@ public class CommonStepDefinitions extends BaseStepDefinitions {
 
     @Given("the Todo Manager Rest API server is running")
     public void the_todo_manager_rest_api_server_is_running() {
-        assertEquals(0, Server.check());
+        assertEquals(0, Server.ping());
     }
 }
