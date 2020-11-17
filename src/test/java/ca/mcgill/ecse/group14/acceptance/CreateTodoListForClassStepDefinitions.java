@@ -48,16 +48,18 @@ public class CreateTodoListForClassStepDefinitions extends BaseStepDefinitions {
 
     @When("the user attempts to create a new project without specifying any fields")
     public void the_user_attempts_to_create_a_new_project_without_specifying_any_fields() {
+        counter = Utils.countProjects();
         Utils.createProject();
     }
 
     @When("the user attempts to create a new project with title {string} and id {string}")
     public void the_user_attempts_to_create_a_new_project_with_title_and_id(String title, String id) {
+        counter = Utils.countProjects();
         JSONObject requestBody = new JSONObject();
         requestBody.put("title", title);
         requestBody.put("id", Integer.parseInt(id));
 
-        Utils.buildJSONRequestWithJSONResponse().body(requestBody.toJSONString()).post(BASE_URL + "/projects");
+        Utils.buildJSONRequestWithJSONResponse().body(requestBody.toJSONString()).post(BASE_URL + "/projects").asString();
     }
 
     @Then("the project with title {string} and id {string} shall not be created in the system")
@@ -76,6 +78,7 @@ public class CreateTodoListForClassStepDefinitions extends BaseStepDefinitions {
         Response response = Utils.buildJSONRequestWithJSONResponse().when().get(BASE_URL + "/projects");
         List<Map<String, String>> projects = response.jsonPath().getList("projects");
         for (Map<String, String> project : projects) {
+            System.out.println("'"+ project.get("completed")+ "'");
             if (project.get("title").equals(title) && project.get("description").equals(description) && project.get("completed").equals(completed) && project.get("active").equals(active)) {
                 return;
             }
