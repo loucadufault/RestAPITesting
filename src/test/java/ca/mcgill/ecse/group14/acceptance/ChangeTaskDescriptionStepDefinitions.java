@@ -8,7 +8,7 @@ import io.cucumber.junit.Cucumber;
 import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
-public class ChangeTaskDescriptionStepDefinition {
+public class ChangeTaskDescriptionStepDefinitions {
 
     @Given("^the todo manager rest API is running$")
     public void the_todo_manager_rest_api_is_running() throws Throwable {
