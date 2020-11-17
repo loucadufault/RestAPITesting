@@ -48,12 +48,18 @@ public class Utils {
         return Integer.parseInt(response.jsonPath().get("id"));
     }
 
+    public static int createProject() {
+        RequestSpecification request = Utils.buildJSONRequestWithJSONResponse();
+        Response response = request.post(BASE_URL + "/projects");
+        return Integer.parseInt(response.jsonPath().get("id"));
+    }
+
     public static int createProject(String title, String description, String completed, String active) {
         JSONObject requestBody = new JSONObject();
         requestBody.put("title", title);
         requestBody.put("description", description);
-        requestBody.put("completedStatus", completed);
-        requestBody.put("activeStatus", active);
+        requestBody.put("completed", Boolean.valueOf(completed));
+        requestBody.put("active", Boolean.valueOf(active));
 
         RequestSpecification request = Utils.buildJSONRequestWithJSONResponse().body(requestBody.toJSONString());
 
@@ -79,7 +85,7 @@ public class Utils {
         return buildJSONRequest().header("Accept", "application/json");
     }
 
-    private static int getFirstId(String title, String endpoint) {
+    public static int getFirstId(String title, String endpoint) {
         Response response = buildJSONRequestWithJSONResponse().when().get(BASE_URL + "/" + endpoint);
         List<Map<String, String>> things = response.jsonPath().getList(endpoint);
         for (Map<String, String> thing : things) {
@@ -94,6 +100,10 @@ public class Utils {
         Response response = buildJSONRequestWithJSONResponse().when().get(BASE_URL + "/" + endpoint);
         List<Map<String, String>> things = response.jsonPath().getList(endpoint);
         return things.size();
+    }
+
+    private static boolean exists(int id, String endpoint) {
+        return buildJSONRequestWithJSONResponse().when().get(BASE_URL + "/" + endpoint + "/" + String.valueOf(id)).getStatusCode() != STATUS_CODE.NOT_FOUND;
     }
 
     private static boolean exists(String title, String endpoint) {
@@ -118,6 +128,10 @@ public class Utils {
 
     public static int countProjects() {
         return count("projects");
+    }
+
+    public static boolean existsProject(int id) {
+        return exists(id, "projects");
     }
 
     public static boolean existsProject(String title) {
@@ -147,5 +161,4 @@ public class Utils {
     public static void existsCategory(String title) {
         exists(title, "categories");
     }
-
 }
