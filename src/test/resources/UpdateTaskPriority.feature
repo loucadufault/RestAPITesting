@@ -40,6 +40,6 @@ Feature:
 		Then the todo <title> will be assigned priority <priority>
         
         Examples:
-      		|title | priority |
-            |Requirements | LOW |
-			|Quality Assurance | MEDIUM |
+          |title | priority |
+          |Requirements | LOW |
+          |Quality Assurance | MEDIUM |
