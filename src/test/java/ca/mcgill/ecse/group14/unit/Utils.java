@@ -1,4 +1,4 @@
-package ca.mcgill.ecse.group14;
+package ca.mcgill.ecse.group14.unit;
 
 import static ca.mcgill.ecse.group14.Resources.*;
 
@@ -10,7 +10,7 @@ import org.json.simple.JSONObject;
 import static io.restassured.RestAssured.*;
 import static org.junit.Assert.assertEquals;
 
-public class TestUtils {
+public class Utils {
     public static void assertResponseStatusCode(Response response, int statusCode) {
         assertEquals(statusCode, response.getStatusCode());
     }

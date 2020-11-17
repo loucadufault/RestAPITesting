@@ -1,13 +1,10 @@
 package ca.mcgill.ecse.group14.unit;
 
 import static ca.mcgill.ecse.group14.Resources.*;
-import static ca.mcgill.ecse.group14.TestUtils.*;
+import static ca.mcgill.ecse.group14.unit.Utils.*;
 
 import static io.restassured.RestAssured.*;
 
-import ca.mcgill.ecse.group14.Server;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import org.json.simple.JSONObject;

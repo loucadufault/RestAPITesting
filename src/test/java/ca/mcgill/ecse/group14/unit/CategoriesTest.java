@@ -1,13 +1,11 @@
 package ca.mcgill.ecse.group14.unit;
-import ca.mcgill.ecse.group14.Server;
-import ca.mcgill.ecse.group14.TestUtils;
 import org.junit.*;
 import org.json.simple.JSONObject;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.core.IsEqual.*;
 import static ca.mcgill.ecse.group14.Resources.*;
-import static ca.mcgill.ecse.group14.TestUtils.*;
+import static ca.mcgill.ecse.group14.unit.Utils.*;
 
 public class CategoriesTest extends BaseTest {
     /*
@@ -15,7 +13,7 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testGetCategories() {
-        TestUtils.assertGETStatusCode(BASE_URL + "/categories", STATUS_CODE.OK);
+        Utils.assertGETStatusCode(BASE_URL + "/categories", STATUS_CODE.OK);
     }
 
     /*

@@ -1,14 +1,11 @@
 package ca.mcgill.ecse.group14.unit;
 
-import ca.mcgill.ecse.group14.Server;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.*;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -18,7 +15,7 @@ import java.io.InputStreamReader;
 
 import static ca.mcgill.ecse.group14.Resources.*;
 
-import static ca.mcgill.ecse.group14.TestUtils.*;
+import static ca.mcgill.ecse.group14.unit.Utils.*;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
