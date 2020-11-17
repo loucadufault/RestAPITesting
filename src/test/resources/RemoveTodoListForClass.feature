@@ -6,27 +6,27 @@ Feature: Remove todo list for class
   Background:
     Given the Todo Manager Rest API server is running
 
-  Scenario Outline: Normal Flow - Remove a class (i.e. project) with no related tasks (a.k.a. todos)
+  Scenario Outline: Normal Flow - Remove a class (i.e. project) with no related tasks
     Given there exists a project with title "<title>" in the system
     Given the project with title "<title>" has no related tasks
     When the user attempts to delete the project with title "<title>"
     Then the project with title "<title>" shall be removed from the system
     Then there shall be one less project in the system
-    Then the the number of tasks in the system shall remain the same
+    Then there shall be the same number of todos in the system
 
     Examples:
       | title    |
       | ECSE 429 |
       | COMP 251 |
 
-  Scenario Outline: Alternate flow - Remove a class (a.k.a. project) with a related task (a.k.a. todo)
+  Scenario Outline: Alternate flow - Remove a class (a.k.a. project) with a related task
     Given there exists a project with title "<projectTitle>" in the system
     Given the project with title "<projectTitle>" has the related task with title "<taskTitle>" and done status "<taskDoneStatus>" and description "<taskDescription>"
     When the user attempts to remove the project with title "<projectTitle>"
     Then the project with title "<projectTitle>" shall be removed from the system
     Then there shall be one less project in the system
-    Then the task with title "<taskTitle>" shall be removed from the system
-    Then there shall be the same number of projects in the system
+    Then the todo with title "<taskTitle>" shall not be removed from the system
+    Then there shall be the same number of todos in the system
 
     Examples:
       | projectTitle | taskTitle | taskDoneStatus | taskDescription |
@@ -38,6 +38,7 @@ Feature: Remove todo list for class
     When the user attempts to remove the project with title "<title>"
     Then the system shall report the error code "<errorCode>"
     Then there shall be the same number of projects in the system
+    Then there shall be the same number of todos in the system
 
     Examples:
       | title    | errorCode |

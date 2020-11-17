@@ -22,13 +22,6 @@ import static org.junit.Assert.*;
 
 @RunWith(Cucumber.class)
 public class RemoveTaskStepDefinitions extends BaseStepDefinitions{
-
-    /*@Given("I am a student")
-    public void i_am_a_student() {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }*/
-
     @Given("the following projects exist in the system")
     public void the_following_projects_exist_in_the_system(io.cucumber.datatable.DataTable dataTable) {
         List<List<String>> rows = dataTable.asLists(String.class);
@@ -62,23 +55,13 @@ public class RemoveTaskStepDefinitions extends BaseStepDefinitions{
 
     @When("the user attempts to remove todo with title {string} from the system")
     public void the_user_attempts_to_remove_todo_with_title_from_the_system(String title) {
-        Response response = Utils.buildJSONRequestWithJSONResponse().when().get(BASE_URL + "/todos");
-        List<Map<String, String>> things = response.jsonPath().getList("todos");
-        counter = things.size();
+        todoCount = Utils.countTodos();
         Utils.removeTodo(title);
     }
 
     @Then("todo with title {string} shall be removed from the system")
     public void todo_with_title_shall_be_removed_from_the_system(String title) {
         assertFalse(Utils.existsTodo(title));
-    }
-
-    @Then("there shall be {int} less todo in the system")
-    public void there_shall_be_less_todo_in_the_system(Integer int1) {
-        Response response = Utils.buildJSONRequestWithJSONResponse().when().get(BASE_URL + "/todos");
-        List<Map<String, String>> things = response.jsonPath().getList("todos");
-        int newCounter = things.size();
-        assertEquals(counter-1, newCounter);
     }
 
     @Given("the todo with title {string} is assigned to a project with title {string}")
@@ -101,9 +84,7 @@ public class RemoveTaskStepDefinitions extends BaseStepDefinitions{
 
     @When("the user attempts to remove the todo with title {string} from the project with title {string}")
     public void the_user_attempts_to_remove_the_todo_with_title_from_the_project_with_title(String todoTitle, String projTitle) {
-        Response response = Utils.buildJSONRequestWithJSONResponse().when().get(BASE_URL + "/todos");
-        List<Map<String, String>> things = response.jsonPath().getList("todos");
-        counter = things.size();
+        todoCount = Utils.countTodos();
         int todoID = Utils.getFirstId(todoTitle, "todos");
         int projID = Utils.getFirstId(projTitle, "projects");
         Utils.buildJSONRequestWithJSONResponse().when().delete(BASE_URL + "/projects/" + projID + "/tasks/" + todoID);
@@ -124,10 +105,12 @@ public class RemoveTaskStepDefinitions extends BaseStepDefinitions{
 
     @Then("there shall be the same number of todos in the system")
     public void there_shall_be_the_same_number_of_todos_in_the_system() {
-        Response response = Utils.buildJSONRequestWithJSONResponse().when().get(BASE_URL + "/todos");
-        List<Map<String, String>> things = response.jsonPath().getList("todos");
-        int newCount = things.size();
-        assertEquals(counter,newCount);
+        assertEquals(todoCount,Utils.countTodos());
+    }
+
+    @Then("there shall be one less todo in the system")
+    public void there_shall_be_one_less_todo_in_the_system() {
+        assertEquals(todoCount - 1,Utils.countTodos());
     }
 
 }

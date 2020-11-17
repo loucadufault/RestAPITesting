@@ -11,7 +11,7 @@ import org.junit.runner.RunWith;
 public class UpdateTaskPriorityStepDefinitions {
     @When("the user attempts to update the priority to priority {string} of the todo with title {string}")
     public void the_user_attempts_to_update_the_priority_to_priority_of_the_todo_with_title(String priority, String todoTitle) {
-        the_user_attempts_to_assign_priority_to_todo(priority,todoTitle);
+//        the_user_attempts_to_assign_priority_to_todo(priority,todoTitle);
     }
 
     @Then("the todo with title {string} has priority {string}")
