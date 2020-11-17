@@ -5,7 +5,7 @@ Feature: Remove task
 
   Background:
     Given the Todo Manager Rest API server is running
-    And I am a student
+    #And I am a student
     And the following projects exist in the system
       | projectTitle |
       | ecse429      |
@@ -19,7 +19,7 @@ Feature: Remove task
       | projectC  |
       | projectD  |
 
-  Scenario Outline: Normal flow - Remove existent task
+  Scenario Outline: Normal Flow - Remove existent task
     Given there exists a todo with title "<todoTitle>" in the system
     When the user attempts to remove todo with title "<todoTitle>" from the system
     Then todo with title "<todoTitle>" shall be removed from the system
@@ -33,16 +33,15 @@ Feature: Remove task
   Scenario Outline: Alternate Flow - Remove existent task from a given course
     Given there exists a todo with title "<todoTitle>" in the system
     And the todo with title "<todoTitle>" is assigned to a project with title "<projectTitle>"
-    When I request to remove the todo with title "<todoTitle>" from the project with title "<projectTitle>"
-    Then todo with title "<todoTitle>" shall be removed from the system
-    Then there shall be 1 less todo in the system
+    When the user attempts to remove the todo with title "<todoTitle>" from the project with title "<projectTitle>"
+    Then todo with title "<todoTitle>" shall no longer be associated with the project with title "<projectTitle>"
 
     Examples:
       | projectTitle | todoTitle |
       | ecse429      | projectB  |
       | comp251      | projectD  |
 
-  Scenario Outline: Error flow - Remove nonexistent task
+  Scenario Outline: Error Flow - Remove nonexistent task
     Given there does not exist a todo with title "<todoTitle>" in the system
     Given there exists a project with title "<projectTitle>" in the system
     When the user attempts to remove the todo with title "<todoTitle>" from the project with title "<projectTitle>"

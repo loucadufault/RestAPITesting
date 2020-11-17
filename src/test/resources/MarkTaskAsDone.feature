@@ -14,30 +14,30 @@ Feature: Mark a task as done
 
   Scenario Outline: Normal flow - Mark uncompleted task as done
     Given there exists a todo with title "<title>" and done status "<doneStatus>" in the system
-    When user attempts to set done status to "<doneStatus>" for the todo with title "<title>"
-    Then the todo with title "<title>" shall have done status "<doneStatus>"
+    When the user attempts to set done status to "<newDoneStatus>" for the todo with title "<title>"
+    Then the todo with title "<title>" shall have done status "<newDoneStatus>"
     Examples:
 
-      | title       | doneStatus |
-      | assignmentA | false      |
-      | project     | false      |
+      | title       | doneStatus | newDoneStatus |
+      | assignmentA | false      | true          |
+      | project     | false      | true          |
 
   Scenario Outline: Alternate flow - Mark completed task as done
     Given there exists a todo with title "<title>" and done status "<doneStatus>" in the system
-    When the user attempts to set done status to "<doneStatus>" for the todo with title "<title>"
-    Then todo with title "<title>" shall have done status "<doneStatus>"
+    When the user attempts to set done status to "<newDoneStatus>" for the todo with title "<title>"
+    Then the todo with title "<title>" shall have done status "<newDoneStatus>"
     Examples:
 
-      | title       | doneStatus |
-      | assignmentB | true       |
-      | midterm     | true       |
+      | title       | doneStatus | newDoneStatus |
+      | assignmentB | true       | true          |
+      | midterm     | true       | true          |
 
   Scenario Outline: Error flow - Mark nonexistent task as done
     Given there does not exist a todo with title "<title>" in the system
-    When the user attempts to set done status to "<doneStatus>" for the todo with title "<title>"
+    When the user attempts to set done status to "<newDoneStatus>" for the todo with title "<title>"
     Then the system shall report the error code "<errorCode>"
     Examples:
 
-      | title       | errorCode |
-      | assignmentC | 404       |
-      | final       | 404       |
+      | title       | errorCode | newDoneStatus |
+      | assignmentC | 404       | true          |
+      | final       | 404       | true          |
