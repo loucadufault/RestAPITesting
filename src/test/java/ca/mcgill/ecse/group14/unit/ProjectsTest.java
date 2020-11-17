@@ -1,5 +1,6 @@
 package ca.mcgill.ecse.group14.unit;
 
+import ca.mcgill.ecse.group14.Server;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.*;
@@ -17,12 +18,12 @@ import java.io.InputStreamReader;
 
 import static ca.mcgill.ecse.group14.Resources.*;
 
-import static ca.mcgill.ecse.group14.unit.TestUtils.*;
+import static ca.mcgill.ecse.group14.TestUtils.*;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
-public class ProjectsTest {
+public class ProjectsTest extends BaseTest {
     private static String DEFAULT_TITLE = "";
     private static boolean DEFAULT_COMPLETED = false;
     private static boolean DEFAULT_ACTIVE = false;
@@ -37,18 +38,6 @@ public class ProjectsTest {
     ////////////////////////////////////////////////////////////////////////////////
     // POST
     ////////////////////////////////////////////////////////////////////////////////
-
-    @BeforeClass
-    public static void setup() {
-        Server.start();
-        Server.check();
-    }
-
-    @AfterClass
-    public static void teardown() throws InterruptedException {
-        Server.stop();
-        Thread.sleep(500);
-    }
 
     @Test
     public void test_CreateProject_XML() {

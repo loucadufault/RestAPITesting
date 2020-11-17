@@ -1,5 +1,6 @@
 package ca.mcgill.ecse.group14.unit;
 
+import ca.mcgill.ecse.group14.Server;
 import io.restassured.http.ContentType;
 import org.junit.*;
 
@@ -15,20 +16,8 @@ import static io.restassured.path.xml.XmlPath.CompatibilityMode.HTML;
 import static io.restassured.RestAssured.*;
 
 
-public class DocsTest {
+public class DocsTest extends BaseTest {
     private static final String EXPECTED = "API Documentation";
-
-    @BeforeClass
-    public static void setup() {
-        Server.start();
-        Server.check();
-    }
-
-    @AfterClass
-    public static void teardown() throws InterruptedException {
-        Server.stop();
-        Thread.sleep(500);
-    }
 
     /*
     Test /docs loads the documentation
