@@ -1,10 +1,11 @@
 package ca.mcgill.ecse.group14.unit;
 
 import static ca.mcgill.ecse.group14.Resources.*;
-import static ca.mcgill.ecse.group14.unit.TestUtils.*;
+import static ca.mcgill.ecse.group14.TestUtils.*;
 
 import static io.restassured.RestAssured.*;
 
+import ca.mcgill.ecse.group14.Server;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -14,19 +15,7 @@ import org.json.simple.JSONObject;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 
-public class TodosTest {
-    @BeforeClass
-    public static void setup() {
-        Server.start();
-        Server.check();
-    }
-
-    @AfterClass
-    public static void teardown() throws InterruptedException {
-        Server.stop();
-        Thread.sleep(500);
-    }
-
+public class TodosTest extends BaseTest {
     /**
      * Test GET http://localhost:4567/todos
      */

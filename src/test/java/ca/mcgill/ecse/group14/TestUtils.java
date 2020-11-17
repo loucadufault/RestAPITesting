@@ -1,4 +1,4 @@
-package ca.mcgill.ecse.group14.unit;
+package ca.mcgill.ecse.group14;
 
 import static ca.mcgill.ecse.group14.Resources.*;
 

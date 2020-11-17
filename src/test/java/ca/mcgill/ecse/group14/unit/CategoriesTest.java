@@ -1,25 +1,15 @@
 package ca.mcgill.ecse.group14.unit;
+import ca.mcgill.ecse.group14.Server;
+import ca.mcgill.ecse.group14.TestUtils;
 import org.junit.*;
 import org.json.simple.JSONObject;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.core.IsEqual.*;
 import static ca.mcgill.ecse.group14.Resources.*;
-import static ca.mcgill.ecse.group14.unit.TestUtils.*;
+import static ca.mcgill.ecse.group14.TestUtils.*;
 
-public class CategoriesTest {
-    @BeforeClass
-    public static void setup() {
-        Server.start();
-        Server.check();
-    }
-
-    @AfterClass
-    public static void teardown() throws InterruptedException {
-        Server.stop();
-        Thread.sleep(500);
-    }
-
+public class CategoriesTest extends BaseTest {
     /*
     Test GET /categories
      */
