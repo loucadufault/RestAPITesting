@@ -20,9 +20,9 @@ Feature: Remove task
       | projectD  |
 
   Scenario Outline: Normal flow - Remove existent task
-    Given there exists a todo with title <title> in the system
-    When the user attempts to remove todo with title <todoTitle> from the system
-    Then todo with title <todoTitle> shall be removed from the system
+    Given there exists a todo with title "<title>" in the system
+    When the user attempts to remove todo with title "<todoTitle>" from the system
+    Then todo with title "<todoTitle>" shall be removed from the system
     Then there shall be 1 less todo in the system
 
     Examples:
@@ -31,10 +31,10 @@ Feature: Remove task
       | projectC  |
 
   Scenario Outline: Alternate Flow - Remove existent task from a given course
-    Given there exists a todo with title <title> in the system
-    And the todo with title <todoTitle> is assigned to a project with title <projectTitle>
-    When I request to remove the todo with title <todoTitle> from the project with title <projectTitle>
-    Then todo with title <todoTitle> shall be removed from the system
+    Given there exists a todo with title "<title>" in the system
+    And the todo with title "<todoTitle>" is assigned to a project with title "<projectTitle>"
+    When I request to remove the todo with title "<todoTitle>" from the project with title "<projectTitle>"
+    Then todo with title "<todoTitle>" shall be removed from the system
     Then there shall be 1 less todo in the system
 
     Examples:
@@ -43,11 +43,11 @@ Feature: Remove task
       | comp251      | projectD  |
 
   Scenario Outline: Error flow - Remove nonexistent task
-    Given there does not exist a todo with title <todoTitle> in the system
-    Given there exists a project with title <projectTitle> in the system
-    When the user attempts to remove the todo with title <todoTitle> from the project with title <projectTitle>
-    Then the system shall report the error code <errorCode>
-    Then there shall be the same numbeer of todos in the system
+    Given there does not exist a todo with title "<todoTitle>" in the system
+    Given there exists a project with title "<projectTitle>" in the system
+    When the user attempts to remove the todo with title "<todoTitle>" from the project with title "<projectTitle>"
+    Then the system shall report the error code "<errorCode>"
+    Then there shall be the same number of todos in the system
 
     Examples:
 

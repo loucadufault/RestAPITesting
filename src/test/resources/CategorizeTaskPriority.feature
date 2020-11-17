@@ -13,27 +13,27 @@ Feature:
 
 
   Scenario Outline: Normal flow - Assign priority to existing task
-    Given there exists a todo with title <title> in the system
-    When the user attempts to assign priority <priority> to todo <title>
-    Then the todo <title> will be have priority <priority>
+    Given there exists a todo with title "<title>" in the system
+    When the user attempts to assign priority "<priority>" to todo <title>
+    Then the todo <title> will be have priority "<priority>"
     Examples:
       | title             | priority |
       | Requirements      | LOW      |
       | Quality Assurance | MEDIUM   |
 
   Scenario Outline: Alternate flow - Assign priority to existing task with already assigned priority
-    Given there exists a todo with title <title> in the system
-    And the todo <title> is assigned priority <priority1>
-    When the user attempts to assign priority <priority2> to todo <title>
-    Then the priority of todo <title> is updated from <priority1> to <priority2>
+    Given there exists a todo with title "<title>" in the system
+    And the todo <title> is assigned priority "<priority1>"
+    When the user attempts to assign priority "<priority2>" to todo "<title>"
+    Then the priority of todo "<title>" is updated from "<priority1>" to "<priority2>"
     Examples:
       | title             | priority1 | priority2 |
       | Requirements      | LOW       | MEDIUM    |
       | Quality Assurance | MEDIUM    | HIGH      |
 
   Scenario Outline: Error flow - Assign priority to nonexistent task
-    Given there does not exist a todo with title <title> in the system
-    When the user attempts to assign priority <priority> to todo <title>
+    Given there does not exist a todo with title "<title>" in the system
+    When the user attempts to assign priority "<priority>" to todo "<title>"
     Then the system shall report the error code "<errorCode>"
     Examples:
       | title       | priority | errorCode |
