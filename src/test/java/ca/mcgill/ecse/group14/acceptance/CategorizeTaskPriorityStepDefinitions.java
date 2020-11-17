@@ -1,6 +1,9 @@
 package ca.mcgill.ecse.group14.acceptance;
 
+import ca.mcgill.ecse.group14.Utils;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
@@ -11,9 +14,10 @@ import org.json.simple.JSONObject;
 import org.junit.runner.RunWith;
 
 import java.util.List;
+import java.util.Map;
 
-import static ca.mcgill.ecse.group14.Utils.buildJSONRequest;
-import static ca.mcgill.ecse.group14.Utils.getFirstId;
+import static ca.mcgill.ecse.group14.Utils.*;
+import static org.junit.Assert.assertEquals;
 
 @RunWith(Cucumber.class)
 public class CategorizeTaskPriorityStepDefinitions extends BaseStepDefinitions {
@@ -36,6 +40,13 @@ public class CategorizeTaskPriorityStepDefinitions extends BaseStepDefinitions {
     public void the_user_attempts_to_assign_priority_to_todo(String priority, String todoTitle) {
         int priorityId = getFirstId(priority,"categories");
         int todoId = getFirstId(todoTitle, "todos");
+        List<Map<String,String>> prior = buildJSONRequestWithJSONResponse().when()
+                .get("/todos/"+todoId+"/categories").jsonPath().getList("categories");
+        if (prior != null){
+            for (Map<String, String> ity: prior) {
+                deleteCategory(Integer.parseInt(ity.get("id")));
+            }
+        }
         JSONObject requestBody = new JSONObject();
         requestBody.put("id", Integer.valueOf(priorityId));
         Response response = buildJSONRequest().body(requestBody.toJSONString()).post("/todos/"+
@@ -43,37 +54,34 @@ public class CategorizeTaskPriorityStepDefinitions extends BaseStepDefinitions {
     }
 
     @Then("the todo {string} will be have priority {string}")
-    public void the_todo_requirements_will_be_have_priority(String todoTitle, String priority) {
-
+    public void the_todo_will_be_have_priority(String todoTitle, String priority) {
+        int todoID = getFirstId(todoTitle, "todos");
+        List<Map<String,String>> priorList = buildJSONRequestWithJSONResponse().when()
+                .get("/todos/"+todoID+"/categories")
+                .jsonPath()
+                .getList("categories");
+        String prior = priorList.get(0).get("title");
+        assertEquals(priority, prior);
     }
 
-    @When("the user attempts to assign priority {string} to todo Quality Assurance")
-    public void the_user_attempts_to_assign_priority_to_todo_quality_assurance(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-
-    @Then("the todo Quality Assurance will be have priority {string}")
-    public void the_todo_quality_assurance_will_be_have_priority(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-
-    @Given("the todo Requirements is assigned priority {string}")
-    public void the_todo_requirements_is_assigned_priority(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    @Given("the todo {string} is assigned priority {string}")
+    public void the_todo_is_assigned_priority(String todoTitle, String priority) {
+        int priorityId = getFirstId(priority,"categories");
+        int todoId = getFirstId(todoTitle, "todos");
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("id", Integer.valueOf(priorityId));
+        Response response = buildJSONRequest().body(requestBody.toJSONString()).post("/todos/"+
+                todoId+"/categories");
     }
 
     @Then("the priority of todo {string} is updated from {string} to {string}")
-    public void the_priority_of_todo_is_updated_from_to(String string, String string2, String string3) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-
-    @Given("the todo Quality Assurance is assigned priority {string}")
-    public void the_todo_quality_assurance_is_assigned_priority(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    public void the_priority_of_todo_is_updated_from_to(String todoTitle, String priority1, String priority2) {
+        int todoID = getFirstId(todoTitle, "todos");
+        List<Map<String,String>> priorList = buildJSONRequestWithJSONResponse().when()
+                .get("/todos/"+todoID+"/categories")
+                .jsonPath()
+                .getList("categories");
+        String prior = priorList.get(0).get("title");
+        assertEquals(priority2, prior);
     }
 }
