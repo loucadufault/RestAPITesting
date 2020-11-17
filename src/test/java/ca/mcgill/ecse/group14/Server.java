@@ -16,8 +16,10 @@ public class Server {
 
     public static void boot() {
         start();
-        assert waitUntilReady() == 0;
-        assert check() == 0;
+        if (waitUntilReady() + check() != 0) {
+            System.out.println("Failed to boot");
+            shutdown();
+        }
     }
 
     public static void start() {
@@ -39,12 +41,18 @@ public class Server {
         }
         started = true;
         System.out.println("   successful.");
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public static void stop() {
         System.out.print("Stopping server...");
         if (status == ServerStatus.DOWN) {
-            System.out.print("   already down, still stopping...");
+            System.out.print("   already down."); //, still stopping...");
+            return;
         }
         process.destroy();
         status = ServerStatus.DOWN;
@@ -62,16 +70,15 @@ public class Server {
     public static void shutdown() {
         System.out.print("Shutting down server...");
         if (status == ServerStatus.DOWN) {
-            System.out.println("   already down.");
-            return;
+            System.out.println("   already down, still shutdown...");
         }
         try {
             Runtime.getRuntime().exec("curl " + BASE_URL + "/shutdown");
         } catch (IOException e) {
             e.printStackTrace();
         }
-        stop();
         System.out.println("   shutdown.");
+        stop();
     }
 
     private static void silentPing() throws Exception {
@@ -101,6 +108,7 @@ public class Server {
             final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream())); // consume process stdout
             while (true) {
                 String line = bufferedReader.readLine();
+                System.out.println(line);
                 if (line != null && line.contains("Running on 4567")) {
                     status = ServerStatus.RUNNING;
                     System.out.println("   running.");
@@ -117,7 +125,7 @@ public class Server {
 
     public static int waitUntilReady() {
         System.out.print("Waiting for server...");
-        final int MAX_PINGS = 100;
+        final int MAX_PINGS = 10;
         final int SLEEP_MS = 200;
 
         int pings = 0;

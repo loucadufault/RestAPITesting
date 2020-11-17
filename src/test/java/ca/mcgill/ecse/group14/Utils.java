@@ -169,7 +169,7 @@ public class Utils {
     public static int countCategories() { return count("categories"); }
 
     public static void clearData() {
-        post(CLEAR_PATH);
+        post(BASE_URL + "/"+ CLEAR_PATH);
         assertEquals(0, countProjects());
         assertEquals(0, countTodos());
         assertEquals(0, countCategories());
