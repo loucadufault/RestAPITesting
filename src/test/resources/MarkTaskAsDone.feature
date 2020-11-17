@@ -14,7 +14,7 @@ Feature: Mark a task as done
 
   Scenario Outline: Normal flow - Mark uncompleted task as done
     Given there exists a todo with title "<title>" and done status "<doneStatus>" in the system
-    When user attempts to set done status to "<doneStatus>" for the todo with title "<title>"
+    When the user attempts to set done status to "<doneStatus>" for the todo with title "<title>"
     Then the todo with title "<title>" shall have done status "<doneStatus>"
     Examples:
 
@@ -25,7 +25,7 @@ Feature: Mark a task as done
   Scenario Outline: Alternate flow - Mark completed task as done
     Given there exists a todo with title "<title>" and done status "<doneStatus>" in the system
     When the user attempts to set done status to "<doneStatus>" for the todo with title "<title>"
-    Then todo with title "<title>" shall have done status "<doneStatus>"
+    Then the todo with title "<title>" shall have done status "<doneStatus>"
     Examples:
 
       | title       | doneStatus |
