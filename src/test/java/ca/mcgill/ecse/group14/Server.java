@@ -51,7 +51,7 @@ public class Server {
         try {
             get(BASE_URL + "/shutdown");
         } catch (Exception e) {
-            e.printStackTrace();
+            // suppress
         }
         stop();
         System.out.println("   shutdown.");
@@ -71,7 +71,7 @@ public class Server {
 
         if(!started) {
             System.out.println("Server has not been started!");
-            return 0;
+            return 1;
         }
 
         try {

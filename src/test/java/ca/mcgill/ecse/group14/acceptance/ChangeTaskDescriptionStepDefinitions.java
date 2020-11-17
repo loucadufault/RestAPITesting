@@ -35,7 +35,7 @@ public class ChangeTaskDescriptionStepDefinitions extends BaseStepDefinitions {
 
     @Given("there exists a todo with title {string} and description {string} in the system")
     public void there_exists_a_todo_with_title_and_description_in_the_system(String title, String description) {
-        if(!Utils.existsTask(title)){
+        if(!Utils.existsTodo(title)){
             JSONObject requestBody = new JSONObject();
             requestBody.put("title", title);
             requestBody.put("description", description);

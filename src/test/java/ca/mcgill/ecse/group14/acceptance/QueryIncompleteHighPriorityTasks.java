@@ -19,7 +19,6 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.junit.Test;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 @RunWith(Cucumber.class)

@@ -19,6 +19,5 @@ public class BaseTest {
     @AfterClass
     public static void teardown() throws InterruptedException {
         Server.stop();
-        Thread.sleep(500);
     }
 }
