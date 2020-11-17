@@ -13,6 +13,7 @@ public class Server {
     public enum ServerStatus {RUNNING, DOWN};
     public static ServerStatus status = ServerStatus.DOWN;
     private static boolean started = false;
+    private static final int DELAY_MS = 2000;
 
     public static void boot() {
         start();
@@ -42,7 +43,7 @@ public class Server {
         started = true;
         System.out.println("   successful.");
         try {
-            Thread.sleep(500);
+            Thread.sleep(DELAY_MS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -58,7 +59,7 @@ public class Server {
         status = ServerStatus.DOWN;
         System.out.println("   stopped.");
         try {
-            Thread.sleep(500);
+            Thread.sleep(DELAY_MS);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -1,21 +1,17 @@
 package ca.mcgill.ecse.group14.acceptance;
 
 import ca.mcgill.ecse.group14.Utils;
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.junit.Cucumber;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import org.json.simple.JSONObject;
 import org.junit.runner.RunWith;
 
 import java.util.List;
 import java.util.Map;
 
-import static ca.mcgill.ecse.group14.Resources.BASE_URL;
 import static org.junit.Assert.*;
 
 @RunWith(Cucumber.class)
