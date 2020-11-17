@@ -12,10 +12,10 @@ Feature:
       | Quality Assurance | false      | Test app    |
 
   Scenario Outline: Normal flow - Update priority of existing todo with assigned priority
-    Given there exists a todo with title <title> in the system
-    Given the todo with title <title> has priority <priority>
-    When the user attempts to update the priority to priority <newPriority> of the todo with title <title>
-    Then the todo with title <title> has priority <newPriority>
+    Given there exists a todo with title "<title>" in the system
+    Given the todo with title "<title>" has priority "<priority>"
+    When the user attempts to update the priority to priority "<newPriority>" of the todo with title "<title>"
+    Then the todo with title "<title>" has priority "<newPriority>"
 
     Examples:
       | title             | priority  | newPriority |
@@ -23,10 +23,10 @@ Feature:
       | Quality Assurance | MEDIUM    | HIGH        |
 
   Scenario Outline: Alternate flow - Update Priority of Existing Todo without Assigned Priority
-    Given there exists a todo with title <title> in the system
-    Given the todo with title <title> is not assigned to a priority
-    When the user attempts to update the priority to priority <newPriority> of the todo with title <title>
-    Then the todo with title <title> has priority <newPriority>
+    Given there exists a todo with title "<title>" in the system
+    Given the todo with title "<title>" is not assigned to a priority
+    When the user attempts to update the priority to priority "<newPriority>" of the todo with title "<title>"
+    Then the todo with title "<title>" has priority "<newPriority>"
 
     Examples:
       | title             | newPriority |
@@ -34,9 +34,9 @@ Feature:
       | Quality Assurance | MEDIUM      |
 
   Scenario Outline: Error flow - Update priority of nonexistent todo
-    Given there does not exist a todo with title <title> in the system
-    When the user attempts to update the priority to priority <newPriority> of the todo with title <title>
-    Then the system shall report the error code <errorCode>
+    Given there does not exist a todo with title "<title>" in the system
+    When the user attempts to update the priority to priority "<newPriority>" of the todo with title "<title>"
+    Then the system shall report the error code "<errorCode>"
 
     Examples:
       | title       | newPriority | errorCode |
