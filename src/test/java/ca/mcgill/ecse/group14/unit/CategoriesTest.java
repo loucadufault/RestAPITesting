@@ -96,7 +96,7 @@ public class CategoriesTest extends BaseTest {
     @Test
     public void testGetTodosOfCategoryWithValidID(){
         int catID = createCategory("catEx");
-        int todoID = createTask("todoEx");
+        int todoID = createTodo("todoEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
@@ -119,7 +119,7 @@ public class CategoriesTest extends BaseTest {
     @Test
     public void testGetTodosOfCategoryWithInvalidID(){
         int catID = createCategory("catEx");
-        int todoID = createTask("todoEx");
+        int todoID = createTodo("todoEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
@@ -292,7 +292,7 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testPostCategoryRelatedToTodoWithValidID(){
-        int todoID = createTask("Project1");
+        int todoID = createTodo("Project1");
         int catID = createCategory("Category1");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
@@ -410,7 +410,7 @@ public class CategoriesTest extends BaseTest {
     @Test
     public void testHeadTodosOfCategoryWithValidID(){
         int catID = createCategory("catEx");
-        int todoID = createTask("todoEx");
+        int todoID = createTodo("todoEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
@@ -433,7 +433,7 @@ public class CategoriesTest extends BaseTest {
     @Test
     public void testHeadTodosOfCategoryWithInvalidID(){
         int catID = createCategory("catEx");
-        int todoID = createTask("todoEx");
+        int todoID = createTodo("todoEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
@@ -672,7 +672,7 @@ public class CategoriesTest extends BaseTest {
     @Test
     public void testDeleteCategoryTodoRelationshipValidIDs(){
         int catID = createCategory("catEx");
-        int todoID = createTask("todoEx");
+        int todoID = createTodo("todoEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
@@ -694,7 +694,7 @@ public class CategoriesTest extends BaseTest {
     @Test
     public void testDeleteCategoryTodoRelationshipValidCatIDandInvalidTodoID(){
         int catID = createCategory("catEx");
-        int todoID = createTask("todoEx");
+        int todoID = createTodo("todoEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
@@ -717,7 +717,7 @@ public class CategoriesTest extends BaseTest {
     @Test
     public void testDeleteCategoryTodoRelationshipInvalidCatIDandValidTodoID(){
         int catID = createCategory("catEx");
-        int todoID = createTask("todoEx");
+        int todoID = createTodo("todoEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
