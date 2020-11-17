@@ -28,7 +28,7 @@ public class Utils {
         assertResponseStatusCode(head(url), statusCode);
     }
 
-    public static int createTodo(String title) {
+    public static int createTask(String title) {
         JSONObject fields = new JSONObject();
         fields.put("title", title);
 
@@ -142,15 +142,15 @@ public class Utils {
         return exists(title, "projects");
     }
 
-    public static void deleteTodo(int id) {
+    public static void deleteTask(int id) {
         delete(id, "todos");
     }
 
-    public static void removeTodo(String title) {
+    public static void removeTask(String title) {
         remove(title, "todos");
     }
 
-    public static boolean existsTodo(String title) {
+    public static boolean existsTask(String title) {
         return exists(title, "todos");
     }
 

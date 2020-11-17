@@ -291,7 +291,7 @@ public class ProjectsTest extends BaseTest {
 
     @Test
     public void test_CreateProjectTaskRelationship() {
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         int projID = createProject("projTitleText");
 
         JSONObject fields = new JSONObject();
@@ -418,7 +418,7 @@ public class ProjectsTest extends BaseTest {
 
     @Test
     public void test_GetProjectTaskRelationship(){
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         int projID = createCategory("projTitleText");
 
         JSONObject fields = new JSONObject();
@@ -510,7 +510,7 @@ public class ProjectsTest extends BaseTest {
 
     @Test
     public void test_DeleteProjectTaskRelationship(){
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         int projID = createProject("projTitleText");
 
         JSONObject fields = new JSONObject();
