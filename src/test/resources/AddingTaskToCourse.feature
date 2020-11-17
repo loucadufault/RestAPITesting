@@ -45,7 +45,7 @@ Scenario Outline: Create a Todo and Add to an Existing Projects Todo List (Alter
             And there does not exist a todo in the system with title <todoTitle>
             When I request to create a todo with title <todoTitle> done status <status> and description <description>
             And I request to add todo <todoTitle> to project <projectTitle>
-            Then a todo is created with title <todoTitle>, done status <status> and description <description>
+            Then a todo is created with title <todoTitle> done status <status> and description <description>
             And the todo <todoTitle> is added to project <projectTitle> todo list
             
             Examples:

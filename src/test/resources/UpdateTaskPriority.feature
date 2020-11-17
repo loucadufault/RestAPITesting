@@ -37,7 +37,7 @@ Feature:
     	Given there exists a todo in the system with title <title>
         And the todo <title> is not assigned to a priority
         When I request to update todo <title> priority to priority <priority>
-		Then the todo <title> will be assigned priority <priority>
+		Then the todo <title> is assigned priority <priority>
         
         Examples:
           |title | priority |
