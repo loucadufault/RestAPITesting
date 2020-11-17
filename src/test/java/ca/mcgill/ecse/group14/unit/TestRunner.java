@@ -9,7 +9,7 @@ import org.junit.runners.Suite;
 import static org.junit.Assert.fail;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ServerTest.class, TodosTest.class, ProjectsTest.class, CategoriesTest.class, DocsTest.class })
+@Suite.SuiteClasses({ServerTest.class, TodosTest.class, ProjectsTest.class, CategoriesTest.class, DocsTest.class})
 public class TestRunner {
     @BeforeClass
     public static void setup() {

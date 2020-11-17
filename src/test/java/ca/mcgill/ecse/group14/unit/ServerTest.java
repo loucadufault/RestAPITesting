@@ -3,12 +3,10 @@ package ca.mcgill.ecse.group14.unit;
 import ca.mcgill.ecse.group14.Resources;
 import ca.mcgill.ecse.group14.Server;
 import io.restassured.RestAssured;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import static ca.mcgill.ecse.group14.Resources.BASE_URL;
-import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.get;
 import static org.junit.Assert.assertEquals;
 
