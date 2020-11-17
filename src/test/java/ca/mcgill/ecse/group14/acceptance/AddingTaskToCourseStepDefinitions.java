@@ -40,9 +40,9 @@ public class AddingTaskToCourseStepDefinitions extends BaseStepDefinitions{
         for (List<String> columns : rows) {
             if (!titles) {
                 JSONObject requestBody = new JSONObject();
-                requestBody.put("title", Boolean.valueOf(columns.get(0)));
+                requestBody.put("title", columns.get(0));
                 requestBody.put("doneStatus", Boolean.valueOf(columns.get(1)));
-                requestBody.put("description", Boolean.valueOf(columns.get(2)));
+                requestBody.put("description", columns.get(2));
                 buildJSONRequest().body(requestBody.toJSONString()).post("/todos");
             }
             titles = false;
