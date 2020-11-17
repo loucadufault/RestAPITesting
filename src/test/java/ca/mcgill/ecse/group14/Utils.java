@@ -111,7 +111,7 @@ public class Utils {
     }
 
     private static void remove(String title, String endpoint) {
-        deleteProject(getFirstId(title, endpoint));
+        delete(getFirstId(title, endpoint), endpoint);
     }
 
     private static Response delete(int id, String endpoint) {
@@ -119,7 +119,7 @@ public class Utils {
     }
 
     public static void deleteProject(int id) {
-        System.out.println(id); delete(id, "projects");
+        delete(id, "projects");
     }
 
     public static void removeProject(String title) { remove(title, "projects"); }
@@ -164,5 +164,14 @@ public class Utils {
 
     public static void existsCategory(String title) {
         exists(title, "categories");
+    }
+
+    public static int countCategories() { return count("categories"); }
+
+    public static void clearData() {
+        post(CLEAR_PATH);
+        assertEquals(0, countProjects());
+        assertEquals(0, countTodos());
+        assertEquals(0, countCategories());
     }
 }
