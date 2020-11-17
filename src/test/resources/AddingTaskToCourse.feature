@@ -20,7 +20,7 @@ Feature: Adding task to course
     Given there exists a todo with title "<todoTitle>" in the system
     Given there exists a project with title "<projectTitle>" in the system
     When the user attempts to add todo with title "<todoTitle>" to project with title "<projectTitle>"
-    Then the todo with title <todoTitle> is added to project with title "<projectTitle>" todo list
+    Then the todo with title "<todoTitle>" is added to project with title "<projectTitle>" todo list
 
     Examples:
       | todoTitle    | projectTitle |
@@ -31,8 +31,8 @@ Feature: Adding task to course
     Given there exists a project with title "<projectTitle>" in the system
     Given there does not exist a todo with title "<todoTitle>" in the system
     When the user attempts to create a todo with title "<todoTitle>" and done status "<status>" and description "<description>"
-    When the user attempts to add todo "<todoTitle>" to project "<projectTitle>"
-    Then a todo is created with title "<todoTitle>" and done status <status> and description "<description>"
+    When the user attempts to add todo with title "<todoTitle>" to project with title "<projectTitle>"
+    Then a todo is created with title "<todoTitle>" and done status "<status>" and description "<description>"
     Then the todo with title "<todoTitle>" is added to project with title "<projectTitle>" todo list
 
     Examples:
@@ -43,7 +43,7 @@ Feature: Adding task to course
   Scenario Outline: Error flow - Add a todo to a nonexistent projects todo list
     Given there exists a todo with title "<todoTitle>" in the system
     Given there does not exist a project with title "<projectTitle>" in the system
-    When the user attempts to add todo with title "<todoTitle>" to project with title <projectTitle>
+    When the user attempts to add todo with title "<todoTitle>" to project with title "<projectTitle>"
     Then the system shall report the error code "<errorCode>"
 
     Examples:
