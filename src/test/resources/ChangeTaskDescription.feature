@@ -13,9 +13,9 @@ Feature: Change a task description
       | assignment |                      |
 
   Scenario Outline: Add the description for an existent task (Normal Flow)
-    Given there exists a todo with title <title> and description <description> in the system
-    When the user attempts to change the description to <newDescription> for the todo with title <title>
-    Then the todo with title <title> shall have description <newDescription>
+    Given there exists a todo with title "<title>" and description "<description>" in the system
+    When the user attempts to change the description to "<newDescription>" for the todo with title "<title>"
+    Then the todo with title "<title>" shall have description "<newDescription>"
 
     Examples:
       | title      | description    | newDescription    |
@@ -23,9 +23,9 @@ Feature: Change a task description
       | assignment |                | "On unit testing" |
 
   Scenario Outline: Change the description for an existent task (Alternate Flow)
-    Given there exists a todo with title <title> and description <description> in the system
-    When the user attempts to change the description to <newDescription> for the todo with title <title>
-    Then the todo with title <title> shall have description <newDescription>
+    Given there exists a todo with title "<title>" and description "<description>" in the system
+    When the user attempts to change the description to "<newDescription>" for the todo with title "<title>"
+    Then the todo with title "<title>" shall have description "<newDescription>"
 
     Examples:
       | title    | description         | newDescription     |
@@ -33,9 +33,9 @@ Feature: Change a task description
       | midterm1 | "Very hard midterm!" | "Study earlier!" |
 
   Scenario Outline: Change the description for a nonexistent task (Error Flow)
-    Given there does not exist a todo with title <title> in the system
-    When the user attempts to change the description to <newDescription> for the todo with title <title>
-    Then the system shall report the error code <errorCode>
+    Given there does not exist a todo with title "<title>" in the system
+    When the user attempts to change the description to "<newDescription>" for the todo with title "<title>"
+    Then the system shall report the error code "<errorCode>"
 
     Examples:
       | title       | newDescription | errorCode |
