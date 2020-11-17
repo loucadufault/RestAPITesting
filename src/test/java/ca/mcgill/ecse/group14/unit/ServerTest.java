@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.ConnectException;
 
 import static ca.mcgill.ecse.group14.Resources.BASE_URL;
 import static io.restassured.RestAssured.get;

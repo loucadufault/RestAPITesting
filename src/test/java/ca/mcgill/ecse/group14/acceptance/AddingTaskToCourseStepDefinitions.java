@@ -25,14 +25,6 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(Cucumber.class)
 public class AddingTaskToCourseStepDefinitions extends BaseStepDefinitions{
-    @Before
-    public static void before() {
-        setup();
-    }
-    @After
-    public static void after() throws InterruptedException {
-        teardown();
-    }
     @Given("the following todos exist in the system:")
     public void the_following_todos_exist_in_the_system(DataTable dataTable) {
         List<List<String>> rows = dataTable.asLists(String.class);
