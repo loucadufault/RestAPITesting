@@ -9,10 +9,6 @@ import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
 public class QueryIncompleteHighPriorityTasks {
-    @Given("^the Todo Manager Rest API server is running$")
-    public void the_todo_manager_rest_api_server_is_running() throws Throwable {
-        
-    }
 
     @Given("^there exists a project with title \"([^\"]*)\" in the system$")
     public void there_exists_a_project_with_title_something_in_the_system(String title, String strArg1) throws Throwable {
