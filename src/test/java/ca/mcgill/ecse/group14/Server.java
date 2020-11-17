@@ -12,28 +12,49 @@ public class Server {
     private static Process process;
     public enum ServerStatus {RUNNING, DOWN};
     public static ServerStatus status = ServerStatus.DOWN;
+    private static boolean started = false;
 
     public static void start() {
+        System.out.print("Starting server...");
+        if (status == ServerStatus.RUNNING && ping() == 0) {
+            System.out.println("   already running.");
+            return;
+        }
         final ProcessBuilder processBuilder = new ProcessBuilder("java", "-jar", "runTodoManagerRestAPI-1.5.5.jar");
         try {
             process = processBuilder.start();
         } catch (IOException e) {
             e.printStackTrace();
         }
+        started = true;
+        System.out.println("   successful.");
     }
 
     public static void stop() {
+        System.out.print("Stopping server...");
+        if (status == ServerStatus.DOWN) {
+            System.out.println("   already down.");
+            return;
+        }
         process.destroy();
+        process = null;
         status = ServerStatus.DOWN;
+        System.out.println("   stopped.");
     }
 
     public static void shutdown() {
+        System.out.print("Shutting down server...");
+        if (status == ServerStatus.DOWN) {
+            System.out.println("   already down.");
+            return;
+        }
         try {
             get(BASE_URL + "/shutdown");
         } catch (Exception e) {
-            return;
+            e.printStackTrace();
         }
         stop();
+        System.out.println("   shutdown.");
     }
 
     public static int ping() {
@@ -46,13 +67,20 @@ public class Server {
     }
 
     public static int check() {
-        StringBuilder builder = new StringBuilder();
+        System.out.print("Checking server...");
+
+        if(!started) {
+            System.out.println("Server has not been started!");
+            return 0;
+        }
+
         try {
             final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream())); // consume process stdout
             while (true) {
                 String line = bufferedReader.readLine();
                 if (line != null && line.contains("Running on 4567")) {
                     status = ServerStatus.RUNNING;
+                    System.out.println("   running.");
                     return 0;
                 }
             }
@@ -65,16 +93,17 @@ public class Server {
     }
 
     public static int waitUntilReady() {
+        System.out.print("Waiting for server...");
         final int MAX_PINGS = 10;
         try {
             int pings = 0;
             while (pings < MAX_PINGS) {
                 if (ping() == 0) {
                     status = ServerStatus.RUNNING;
-                    System.out.println("Ready!");
+                    System.out.println("   ready.");
                     return 0;
                 } else {
-                    System.out.println("Not yet ready!");
+                    System.out.print("   not yet ready...");
                     Thread.sleep(200);
                 }
                 pings++;

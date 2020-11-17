@@ -35,7 +35,7 @@ Feature: Mark a task as done
   Scenario Outline: Error flow - Mark nonexistent task as done
     Given there does not exist a todo with title "<title>" in the system
     When the user attempts to set done status to "<doneStatus>" for the todo with title "<title>"
-    Then the system shall report thee error code "<errorCode>"
+    Then the system shall report the error code "<errorCode>"
     Examples:
 
       | title       | errorCode |

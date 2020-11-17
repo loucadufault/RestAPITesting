@@ -238,7 +238,7 @@ public class ProjectsTest extends BaseTest {
         String title = "old";
         int id = createProject(title);
 
-        Response response = getProjectById(id);
+        Response response = Utils.getProject(id);
         response.then().assertThat().statusCode(STATUS_CODE.OK).body(
                 "projects[0].title", equalTo(title));
 
@@ -262,7 +262,7 @@ public class ProjectsTest extends BaseTest {
         String title = "old";
         int id = createProject(title);
 
-        Response response = getProjectById(id);
+        Response response = Utils.getProject(id);
         response.then().assertThat().statusCode(STATUS_CODE.OK).body(
                 "projects[0].title", equalTo(title));
 
@@ -291,7 +291,7 @@ public class ProjectsTest extends BaseTest {
 
     @Test
     public void test_CreateProjectTaskRelationship() {
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         int projID = createProject("projTitleText");
 
         JSONObject fields = new JSONObject();
@@ -368,7 +368,7 @@ public class ProjectsTest extends BaseTest {
         String title = "test";
         int id = createProject(title);
 
-        Response response = getProjectById(id);
+        Response response = Utils.getProject(id);
         response.then().assertThat().body("projects[0].title", equalTo(title));
     }
 
@@ -391,7 +391,7 @@ public class ProjectsTest extends BaseTest {
         createProject("test");
         int id = -1;
 
-        Response response = getProjectById(id);
+        Response response = Utils.getProject(id);
         response.then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
     }
 
@@ -412,13 +412,13 @@ public class ProjectsTest extends BaseTest {
         System.out.println("hello" + createProject("test"));
         int id = NON_EXISTENT_ID;
 
-        Response response = getProjectById(id);
+        Response response = Utils.getProject(id);
         response.then().assertThat().statusCode(STATUS_CODE.NOT_FOUND);
     }
 
     @Test
     public void test_GetProjectTaskRelationship(){
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         int projID = createCategory("projTitleText");
 
         JSONObject fields = new JSONObject();
@@ -454,10 +454,6 @@ public class ProjectsTest extends BaseTest {
                 .get(BASE_URL + "/projects/" + projID + "/categories")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
-    }
-
-    private static Response getProjectById(int id) {
-        return buildJSONRequestWithJSONResponse().when().get("/" + id);
     }
 
     private static int getNumberOfProjects() {
@@ -502,7 +498,7 @@ public class ProjectsTest extends BaseTest {
         int id = createProject("test");
 
         buildJSONRequestWithJSONResponse().when().delete("/" + id).then().assertThat().statusCode(STATUS_CODE.OK);
-        getProjectById(id).then().assertThat().statusCode(STATUS_CODE.NOT_FOUND);
+        Utils.getProject(id).then().assertThat().statusCode(STATUS_CODE.NOT_FOUND);
     }
 
     @Test
@@ -514,7 +510,7 @@ public class ProjectsTest extends BaseTest {
 
     @Test
     public void test_DeleteProjectTaskRelationship(){
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         int projID = createProject("projTitleText");
 
         JSONObject fields = new JSONObject();

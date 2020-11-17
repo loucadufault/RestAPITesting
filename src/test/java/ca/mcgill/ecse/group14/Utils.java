@@ -28,7 +28,7 @@ public class Utils {
         assertResponseStatusCode(head(url), statusCode);
     }
 
-    public static int createTodo(String title) {
+    public static int createTask(String title) {
         JSONObject fields = new JSONObject();
         fields.put("title", title);
 
@@ -48,12 +48,18 @@ public class Utils {
         return Integer.parseInt(response.jsonPath().get("id"));
     }
 
+    public static int createProject() {
+        RequestSpecification request = Utils.buildJSONRequestWithJSONResponse();
+        Response response = request.post(BASE_URL + "/projects");
+        return Integer.parseInt(response.jsonPath().get("id"));
+    }
+
     public static int createProject(String title, String description, String completed, String active) {
         JSONObject requestBody = new JSONObject();
         requestBody.put("title", title);
         requestBody.put("description", description);
-        requestBody.put("completedStatus", completed);
-        requestBody.put("activeStatus", active);
+        requestBody.put("completed", Boolean.valueOf(completed));
+        requestBody.put("active", Boolean.valueOf(active));
 
         RequestSpecification request = Utils.buildJSONRequestWithJSONResponse().body(requestBody.toJSONString());
 
@@ -79,7 +85,7 @@ public class Utils {
         return buildJSONRequest().header("Accept", "application/json");
     }
 
-    private static int getFirstId(String title, String endpoint) {
+    public static int getFirstId(String title, String endpoint) {
         Response response = buildJSONRequestWithJSONResponse().when().get(BASE_URL + "/" + endpoint);
         List<Map<String, String>> things = response.jsonPath().getList(endpoint);
         for (Map<String, String> thing : things) {
@@ -96,6 +102,10 @@ public class Utils {
         return things.size();
     }
 
+    private static boolean exists(int id, String endpoint) {
+        return buildJSONRequestWithJSONResponse().when().get(BASE_URL + "/" + endpoint + "/" + String.valueOf(id)).getStatusCode() != STATUS_CODE.NOT_FOUND;
+    }
+
     private static boolean exists(String title, String endpoint) {
         return getFirstId(title, endpoint) != -1;
     }
@@ -105,7 +115,7 @@ public class Utils {
     }
 
     private static Response delete(int id, String endpoint) {
-        return buildJSONRequestWithJSONResponse().when().delete(BASE_URL + endpoint + "/" + id);
+        return buildJSONRequestWithJSONResponse().when().delete(BASE_URL + "/" + endpoint + "/" + id);
     }
 
     public static void deleteProject(int id) {
@@ -120,20 +130,28 @@ public class Utils {
         return count("projects");
     }
 
+    public static Response getProject(int id) {
+        return buildJSONRequestWithJSONResponse().when().get("/" + id);
+    }
+
+    public static boolean existsProject(int id) {
+        return exists(id, "projects");
+    }
+
     public static boolean existsProject(String title) {
         return exists(title, "projects");
     }
 
-    public static void deleteTodo(int id) {
-        delete(id, "todos");
+    public static void deleteTask(int id) {
+        delete(id, "tasks");
     }
 
-    public static void removeTodo(String title) {
-        remove(title, "todos");
+    public static void removeTask(String title) {
+        remove(title, "tasks");
     }
 
-    public static boolean existsTodo(String title) {
-        return exists(title, "todos");
+    public static boolean existsTask(String title) {
+        return exists(title, "tasks");
     }
 
     public static void deleteCategory(int id) {
@@ -147,5 +165,4 @@ public class Utils {
     public static void existsCategory(String title) {
         exists(title, "categories");
     }
-
 }

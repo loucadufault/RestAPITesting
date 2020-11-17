@@ -26,7 +26,7 @@ public class TodosTest extends BaseTest {
      */
     @Test
     public void testHeadTodos() {
-        createTodo("todoTitleText");
+        createTask("todoTitleText");
 
         given()
                 .head(BASE_URL + "/todos")
@@ -139,7 +139,7 @@ public class TodosTest extends BaseTest {
      */
     @Test
     public void testGetTodosValidID() {
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
@@ -154,7 +154,7 @@ public class TodosTest extends BaseTest {
      */
     @Test
     public void testGetTodosInvalidID() {
-        createTodo("todoTitleText");
+        createTask("todoTitleText");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
@@ -168,7 +168,7 @@ public class TodosTest extends BaseTest {
      */
     @Test
     public void testHeadTodosID(){
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
@@ -184,7 +184,7 @@ public class TodosTest extends BaseTest {
     public void testPostTodosID() {
         JSONObject fields = new JSONObject();
         fields.put("title", "todosIDText");
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
@@ -202,7 +202,7 @@ public class TodosTest extends BaseTest {
     public void testPutTodosExistingID() {
         JSONObject fields = new JSONObject();
         fields.put("title", "titleText");
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
@@ -220,7 +220,7 @@ public class TodosTest extends BaseTest {
     public void testPutTodosNonexistentID() {
         JSONObject fields = new JSONObject();
         fields.put("title", "titleText");
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
@@ -235,7 +235,7 @@ public class TodosTest extends BaseTest {
      */
     @Test
     public void testDeleteTodosID() {
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
@@ -249,7 +249,7 @@ public class TodosTest extends BaseTest {
      */
     @Test
     public void testDeleteDeletedTodosID() {
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         given()
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
@@ -266,7 +266,7 @@ public class TodosTest extends BaseTest {
      */
     @Test
     public void testGetTodosCategoriesWithValidID() {
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         int catID = createCategory("catTitleText");
 
         JSONObject fields = new JSONObject();
@@ -292,7 +292,7 @@ public class TodosTest extends BaseTest {
      */
     @Test
     public void testGetTodosCategoriesWithInvalidID() {
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         int catID = createCategory("catTitleText");
 
         JSONObject fields = new JSONObject();
@@ -315,7 +315,7 @@ public class TodosTest extends BaseTest {
      */
     @Test
     public void testHeadTodosCategories() {
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         int catID = createCategory("catTitleText");
 
         JSONObject fields = new JSONObject();
@@ -340,7 +340,7 @@ public class TodosTest extends BaseTest {
      */
     @Test
     public void testPostTodosCategories() {
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         int catID = createCategory("catTitleText");
 
         JSONObject fields = new JSONObject();
@@ -360,7 +360,7 @@ public class TodosTest extends BaseTest {
      */
     @Test
     public void testDeleteTodosCategories() {
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         int catID = createCategory("catTitleText");
 
         JSONObject fields = new JSONObject();
@@ -385,7 +385,7 @@ public class TodosTest extends BaseTest {
      */
     @Test
     public void testGetTodosTasksofWithValidID() {
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         int projID = createProject("projTitleText");
 
         JSONObject fields = new JSONObject();
@@ -409,7 +409,7 @@ public class TodosTest extends BaseTest {
      */
     @Test
     public void testGetTodosTasksofWithInvalidID() {
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         int projID = createProject("projTitleText");
 
         JSONObject fields = new JSONObject();
@@ -432,7 +432,7 @@ public class TodosTest extends BaseTest {
      */
     @Test
     public void testHeadTodosTasksofWithValidID() {
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         int projID = createCategory("projTitleText");
 
         JSONObject fields = new JSONObject();
@@ -455,7 +455,7 @@ public class TodosTest extends BaseTest {
      */
     @Test
     public void testPostTodosTasksof() {
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         int projID = createProject("projTitleText");
 
         JSONObject fields = new JSONObject();
@@ -475,7 +475,7 @@ public class TodosTest extends BaseTest {
      */
     @Test
     public void testDeleteTodosTasksof() {
-        int todoID = createTodo("todoTitleText");
+        int todoID = createTask("todoTitleText");
         int projID = createProject("projTitleText");
 
         JSONObject fields = new JSONObject();
