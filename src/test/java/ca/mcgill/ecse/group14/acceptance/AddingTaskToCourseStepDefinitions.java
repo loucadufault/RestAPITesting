@@ -40,12 +40,6 @@ public class AddingTaskToCourseStepDefinitions {
         throw new io.cucumber.java.PendingException();
     }
 
-    @Given("there exists a project with title {string} in the system")
-    public void there_exists_a_project_with_title_in_the_system(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }
-
     @When("the user attempts to add todo with title {string} to project with title {string}")
     public void the_user_attempts_to_add_todo_with_title_to_project_with_title(String string, String string2) {
         // Write code here that turns the phrase above into concrete actions
