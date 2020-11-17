@@ -40,9 +40,9 @@ public class MarkTaskAsDoneStepDefinitions {
         throw new io.cucumber.java.PendingException();
     }
 
-    @Then("the system shall report thee error code {string}")
-    public void the_system_shall_report_thee_error_code(String string) {
+    /*@Then("the system shall report the error code {string}")
+    public void the_system_shall_report_the_error_code(String string) {
         // Write code here that turns the phrase above into concrete actions
         throw new io.cucumber.java.PendingException();
-    }
+    }*/
 }

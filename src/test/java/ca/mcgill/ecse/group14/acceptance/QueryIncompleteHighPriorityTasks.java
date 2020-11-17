@@ -94,8 +94,8 @@ public class QueryIncompleteHighPriorityTasks extends BaseStepDefinitions {
     }
 
     @Given("there exists a project with title {string} in the system")
-    public void there_exists_a_project_with_title_in_the_system(String string) {
-        //assertNotNull(findTodoByName(selectedTitle));
+    public void there_exists_a_project_with_title_in_the_system(String title) {
+        Utils.existsCategory(title);
     }
 
     @Given("the project with title {string} has active tasks")
