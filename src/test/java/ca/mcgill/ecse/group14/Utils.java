@@ -143,15 +143,15 @@ public class Utils {
     }
 
     public static void deleteTask(int id) {
-        delete(id, "todos");
+        delete(id, "tasks");
     }
 
     public static void removeTask(String title) {
-        remove(title, "todos");
+        remove(title, "tasks");
     }
 
     public static boolean existsTask(String title) {
-        return exists(title, "todos");
+        return exists(title, "tasks");
     }
 
     public static void deleteCategory(int id) {
