@@ -1,5 +1,6 @@
 package ca.mcgill.ecse.group14.acceptance;
 
+import ca.mcgill.ecse.group14.Utils;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.junit.Cucumber;
@@ -10,9 +11,8 @@ import org.junit.runner.RunWith;
 @RunWith(Cucumber.class)
 public class CreateTodoListForClassStepDefinitions {
     @Given("there does not exist a project with title {string} in the system")
-    public void there_does_not_exist_a_project_with_title_in_the_system(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+    public void there_does_not_exist_a_project_with_title_in_the_system(String title) {
+        Utils.removeProject(string);
     }
 
     @When("the user attempts to create a new project with title {string} and description {string} and completed status {string} and active status {string}")

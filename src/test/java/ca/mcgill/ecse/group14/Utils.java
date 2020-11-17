@@ -91,7 +91,7 @@ public class Utils {
         deleteProject(getFirstId(title, endpoint));
     }
 
-    public static Response delete(int id, String endpoint) {
+    private static Response delete(int id, String endpoint) {
         return buildJSONRequestWithJSONResponse().when().delete(BASE_URL + endpoint + "/" + id);
     }
 
@@ -107,10 +107,28 @@ public class Utils {
         return exists(title, "projects");
     }
 
+    public static void deleteTodo(int id) {
+        delete(id, "todos");
+    }
+
     public static void removeTodo(String title) {
         remove(title, "todos");
     }
 
-    public static boolean existsTodo(String title) {return true;}
+    public static boolean existsTodo(String title) {
+        return exists(title, "todos");
+    }
+
+    public static void deleteCategory(int id) {
+        delete(id, "categories");
+    }
+
+    public static void removeCategory(String title) {
+        remove(title, "categories");
+    }
+
+    public static void existsCategory(String title) {
+        exists(title, "categories");
+    }
 
 }
