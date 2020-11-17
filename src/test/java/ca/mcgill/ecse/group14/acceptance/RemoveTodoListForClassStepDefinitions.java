@@ -40,6 +40,7 @@ public class RemoveTodoListForClassStepDefinitions extends BaseStepDefinitions {
     @When("the user attempts to delete the project with title {string}")
     public void the_user_attempts_to_delete_the_project_with_title(String title) {
         projectCount = Utils.countProjects();
+        todoCount = Utils.countTodos();
         Utils.removeProject(title);
     }
 
@@ -55,7 +56,7 @@ public class RemoveTodoListForClassStepDefinitions extends BaseStepDefinitions {
 
     @Then("the the number of tasks in the system shall remain the same")
     public void the_the_number_of_tasks_in_the_system_shall_remain_the_same() {
-        assertEquals(projectCount, Utils.countProjects());
+        assertEquals(todoCount, Utils.countTodos());
     }
 
     @Given("the project with title {string} has the related task with title {string} and done status {string} and description {string}")
@@ -100,7 +101,8 @@ public class RemoveTodoListForClassStepDefinitions extends BaseStepDefinitions {
 
     @When("the user attempts to remove the project with title {string}")
     public void the_user_attempts_to_remove_the_project_with_title(String title) {
-        taskCount = Utils.countTodos();
+        todoCount = Utils.countTodos();
+        projectCount = Utils.countProjects();
         Utils.removeProject(title);
     }
 
