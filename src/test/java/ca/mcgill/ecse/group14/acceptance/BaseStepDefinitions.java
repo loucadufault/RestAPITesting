@@ -12,7 +12,7 @@ public class BaseStepDefinitions {
     static int errorCode;
     static int counter;
     static int projectCount;
-    static int taskCount;
+    static int todoCount;
 
     static void setup() {
         RestAssured.baseURI = Resources.BASE_URL;

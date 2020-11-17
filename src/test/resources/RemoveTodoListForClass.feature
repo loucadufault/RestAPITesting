@@ -7,7 +7,7 @@ Feature: Remove todo list for class
     Given the Todo Manager Rest API server is running
 
   Scenario Outline: Normal Flow - Remove a class (i.e. project) with no related tasks (a.k.a. todos)
-    Given there exists a project with title "<projectTitle>" in the system
+    Given there exists a project with title "<title>" in the system
     Given the project with title "<title>" has no related tasks
     When the user attempts to delete the project with title "<title>"
     Then the project with title "<title>" shall be removed from the system
@@ -23,7 +23,7 @@ Feature: Remove todo list for class
     Given there exists a project with title "<projectTitle>" in the system
     Given the project with title "<projectTitle>" has the related task with title "<taskTitle>" and done status "<taskDoneStatus>" and description "<taskDescription>"
     When the user attempts to remove the project with title "<projectTitle>"
-    Then the project with title "<title>" shall be removed from the system
+    Then the project with title "<projectTitle>" shall be removed from the system
     Then there shall be one less project in the system
     Then the task with title "<taskTitle>" shall be removed from the system
     Then there shall be the same number of projects in the system
