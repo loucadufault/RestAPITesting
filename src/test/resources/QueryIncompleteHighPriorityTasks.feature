@@ -5,88 +5,85 @@ Feature: Query incomplete high priority tasks
 
   Background:
     Given the Todo Manager Rest API server is running
-    And the following priorities are in memory
+    And the following priorities are in the system
       | title  | description           |
-      | Low    | Low Priority Tasks    |
-      | Medium | Medium Priority Tasks |
-      | High   | High Priority Tasks   |
-    And the following projects are in memory
-      | title    | completed | active | description          |
-      | Class A  | false     | false  | Class A description  |
-      | Class B1 | false     | true   | Class B1 description |
-      | Class B2 | false     | true   | Class B2 description |
-      | Class C  | false     | true   | Class C description  |
-      | Class D  | true      | true   | Class D description  |
-    And the following todos are saved under 'Class A'
-      | todoTitle            | todoDoneStatus | todoDescription             | todoPriority |
-      | todo A High prio 1   | false          | todo A High prio 1 descr    | High         |
-      | todo A Medium prio 1 | false          | todo A Medimum prio 1 descr | Medium       |
-      | todo A Medium prio 2 | true           | todo A Medimum prio 2 descr | Medium       |
-      | todo A Low prio 1    | false          | todo A Low prio 1 descr     | Low          |
-      | todo A Low prio 2    | true           | todo A Low prio 2 descr     | Low          |
-    And the following todos are saved under 'Class B1'
-      | todoTitle             | todoDoneStatus | todoDescription              | todoPriority |
-      | todo B1 High prio 1   | false          | todo B1 High prio 1 descr    | High         |
-      | todo B1 High prio 2   | true           | todo B1 High prio 2 descr    | High         |
-      | todo B1 Medium prio 1 | false          | todo B1 Medimum prio 1 descr | Medium       |
-      | todo B1 Medium prio 2 | true           | todo B1 Medimum prio 2 descr | Medium       |
-    And the following todos are saved under 'Class B2'
-      | todoTitle             | todoDoneStatus | todoDescription              | todoPriority |
-      | todo B2 High prio 1   | false          | todo B2 High prio 1 descr    | High         |
-      | todo B2 High prio 2   | false          | todo B2 High prio 2 descr    | High         |
-      | todo B2 Medium prio 1 | false          | todo B2 Medimum prio 1 descr | Medium       |
-      | todo B2 Medium prio 2 | true           | todo B2 Medimum prio 2 descr | Medium       |
-    And the following todos are saved under 'Class C'
-      | todoTitle            | todoDoneStatus | todoDescription             | todoPriority |
-      | todo C High   prio 1 | true           | todo C High prio 1 descr    | High         |
-      | todo C Medium prio 1 | false          | todo C Medimum prio 1 descr | Medium       |
-      | todo C Medium prio 2 | true           | todo C Medimum prio 2 descr | Medium       |
-      | todo C Low prio 1    | false          | todo C Low prio 1 descr     | Low          |
-      | todo C Low prio 2    | true           | todo C Low prio 2 descr     | Low          |
-    And the following todos are saved under 'Class D'
-      | todoTitle | todoDoneStatus | todoDescription | todoPriority |
+      | LOW    | LOW Priority Tasks    |
+      | MEDIUM | MEDIUM Priority Tasks |
+      | HIGH   | HIGH Priority Tasks   |
 
   Scenario Outline: Normal flow - Query incomplete high priority tasks from a project (class) with incomplete high priority tasks
-    Given there exists a project with title "<title>" in the system
-    Given the project with title "<title>" has active tasks
+    Given there exists the following projects in the system
+      | title    | completed | active | description          |
+      | Class B1 | false     | true   | Class B1 description |
+      | Class B2 | false     | true   | Class B2 description |
+    Given there exists the following todos in the system that are saved under "Class B1"
+      | todoTitle             | todoDoneStatus | todoDescription              | todoPriority |
+      | todo B1 HIGH prio 1   | false          | todo B1 HIGH prio 1 descr    | HIGH         |
+      | todo B1 HIGH prio 2   | true           | todo B1 HIGH prio 2 descr    | HIGH         |
+      | todo B1 MEDIUM prio 1 | false          | todo B1 Medimum prio 1 descr | MEDIUM       |
+      | todo B1 MEDIUM prio 2 | true           | todo B1 Medimum prio 2 descr | MEDIUM       |
+    Given there exists the following todos in the system that are saved under "Class B2"
+      | todoTitle             | todoDoneStatus | todoDescription              | todoPriority |
+      | todo B2 HIGH prio 1   | false          | todo B2 HIGH prio 1 descr    | HIGH         |
+      | todo B2 HIGH prio 2   | false          | todo B2 HIGH prio 2 descr    | HIGH         |
+      | todo B2 MEDIUM prio 1 | false          | todo B2 Medimum prio 1 descr | MEDIUM       |
+      | todo B2 MEDIUM prio 2 | true           | todo B2 Medimum prio 2 descr | MEDIUM       |
     When the user attempts to query the incomplete high priority tasks of the project with title "<title>"
-    Then ""<n>"" todos will be returned
+    Then "<n>" todos will be returned
     Examples:
       | title    | n |
       | Class B1 | 1 |
       | Class B2 | 2 |
 
   Scenario Outline: Alternate flow - Query incomplete high priority tasks from a project (class) with no incomplete high priority tasks
-    Given there exists a project with title "<title>" in the system
-    Given the project with title "<title>" has active tasks
+    Given there exists the following projects in the system
+      | title    | completed | active | description          |
+      | Class C  | false     | true   | Class C description  |
+    Given there exists the following todos in the system that are saved under "Class C"
+      | todoTitle            | todoDoneStatus | todoDescription             | todoPriority |
+      | todo C HIGH   prio 1 | true           | todo C HIGH prio 1 descr    | HIGH         |
+      | todo C MEDIUM prio 1 | false          | todo C Medimum prio 1 descr | MEDIUM       |
+      | todo C MEDIUM prio 2 | true           | todo C Medimum prio 2 descr | MEDIUM       |
+      | todo C LOW prio 1    | false          | todo C LOW prio 1 descr     | LOW          |
+      | todo C LOW prio 2    | true           | todo C LOW prio 2 descr     | LOW          |
     When the user attempts to query the incomplete high priority tasks of the project with title "<title>"
-    Then ""<n>"" todos will be returned
+    Then "<n>" todos will be returned
     Examples:
       | title   | n |
       | Class C | 0 |
 
   Scenario Outline: Alternate flow - Query incomplete high priority tasks from an inactive project (class) with incomplete high priority tasks
-    Given there exists a project with title "<title>" in the system
-    Given the project with title "<title>" is inactive
+    Given there exists the following projects in the system
+      | title    | completed | active | description          |
+      | Class A  | false     | false  | Class A description  |
+    Given there exists the following todos in the system that are saved under "Class A"
+      | todoTitle            | todoDoneStatus | todoDescription             | todoPriority |
+      | todo A HIGH prio 1   | false          | todo A HIGH prio 1 descr    | HIGH         |
+      | todo A MEDIUM prio 1 | false          | todo A Medimum prio 1 descr | MEDIUM       |
+      | todo A MEDIUM prio 2 | true           | todo A Medimum prio 2 descr | MEDIUM       |
+      | todo A LOW prio 1    | false          | todo A LOW prio 1 descr     | LOW          |
+      | todo A LOW prio 2    | true           | todo A LOW prio 2 descr     | LOW          |
     When the user attempts to query the incomplete high priority tasks of the project with title "<title>"
-    Then ""<n>"" todos will be returned
+    Then "<n>" todos will be returned
     Examples:
       | title   | n |
       | Class A | 0 |
 
   Scenario Outline: Alternate Flow - Query incomplete high priority tasks from a project (class) with no tasks
-    Given there exists a project with title "<title>" in the system
-    Given the project with title "<title>" has no tasks
+    Given there exists the following projects in the system
+      | title    | completed | active | description          |
+      | Class D  | false     | true   | Class D description  |
+    Given the project with title "<title>" has no active tasks
     When the user attempts to query the incomplete high priority tasks of the project with title "<title>"
-    Then ""<n>"" todos will be returned
+    Then "<n>" todos will be returned
     Examples:
       | title   | n |
       | Class D | 0 |
 
   Scenario Outline: Error Flow - Query incomplete high priority tasks from a nonexistent project (class)
-    Given there exists a project with title "<title>" in the system
+    Given there does not exist the project "<title>" in the system
     When the user attempts to query the incomplete high priority tasks of the project with title "<title>"
-    Then ""<n>"" todos will be returned
+    Then "<n>" todos will be returned
     Examples:
       | title   | n |
       | Class E | 0 | 
