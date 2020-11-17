@@ -1,13 +1,14 @@
 package ca.mcgill.ecse.group14.acceptance;
 
 import ca.mcgill.ecse.group14.Utils;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.junit.Cucumber;
 import io.cucumber.java.en.Then;
 
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import org.json.simple.JSONObject;
 import org.junit.runner.RunWith;
 
@@ -19,6 +20,16 @@ import static org.junit.Assert.*;
 
 @RunWith(Cucumber.class)
 public class CreateTodoListForClassStepDefinitions extends BaseStepDefinitions {
+    @Before
+    public static void before() {
+        setup();
+    }
+
+    @After
+    public static void after() throws InterruptedException {
+        teardown();
+    }
+
     @Given("there does not exist a project with title {string} in the system")
     public void there_does_not_exist_a_project_with_title_in_the_system(String title) {
         Utils.removeProject(title);
