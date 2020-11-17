@@ -1,14 +1,24 @@
 package ca.mcgill.ecse.group14.acceptance;
+import ca.mcgill.ecse.group14.Resources;
+import ca.mcgill.ecse.group14.Utils;
 
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.And;
 import io.cucumber.junit.Cucumber;
+import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
+import org.json.simple.JSONObject;
 import org.junit.runner.RunWith;
 
+import java.util.List;
+
 @RunWith(Cucumber.class)
-public class RemoveTaskStepDefinitions {
+public class RemoveTaskStepDefinitions extends BaseStepDefinitions{
+
     @Given("I am a student")
     public void i_am_a_student() {
         // Write code here that turns the phrase above into concrete actions
@@ -74,4 +84,5 @@ public class RemoveTaskStepDefinitions {
         // Write code here that turns the phrase above into concrete actions
         throw new io.cucumber.java.PendingException();
     }
+
 }

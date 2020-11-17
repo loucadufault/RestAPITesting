@@ -7,8 +7,8 @@ Feature: Change a task description
     Given the Todo Manager Rest API server is running
     Given the following todos exist in the system
       | title      | description          |
-      | project    | "Use Gherkin!"       |
-      | midterm1   | "Very hard midterm!" |
+      | project    | Use Gherkin          |
+      | midterm1   | Very hard midterm    |
       | midterm2   |                      |
       | assignment |                      |
 
@@ -19,8 +19,8 @@ Feature: Change a task description
 
     Examples:
       | title      | description    | newDescription    |
-      | midterm2   |                | "Chapters 1 to 6" |
-      | assignment |                | "On unit testing" |
+      | midterm2   |                | Chapters 1 to 6 |
+      | assignment |                | On unit testing |
 
   Scenario Outline: Change the description for an existent task (Alternate Flow)
     Given there exists a todo with title "<title>" and description "<description>" in the system
@@ -28,9 +28,9 @@ Feature: Change a task description
     Then the todo with title "<title>" shall have description "<newDescription>"
 
     Examples:
-      | title    | description         | newDescription     |
-      | project  | "Use Gherkin!"       | "Use Cucumber!"  |
-      | midterm1 | "Very hard midterm!" | "Study earlier!" |
+      | title    | description       | newDescription     |
+      | project  | Use Gherkin       | Use Cucumber  |
+      | midterm1 | Very hard midterm | Study earlier |
 
   Scenario Outline: Change the description for a nonexistent task (Error Flow)
     Given there does not exist a todo with title "<title>" in the system

@@ -20,18 +20,18 @@ Feature: Remove task
       | projectD  |
 
   Scenario Outline: Normal flow - Remove existent task
-    Given there exists a todo with title "<title>" in the system
+    Given there exists a todo with title "<todoTitle>" in the system
     When the user attempts to remove todo with title "<todoTitle>" from the system
     Then todo with title "<todoTitle>" shall be removed from the system
     Then there shall be 1 less todo in the system
 
     Examples:
-      | title     |
+      | todoTitle     |
       | projectA  |
       | projectC  |
 
   Scenario Outline: Alternate Flow - Remove existent task from a given course
-    Given there exists a todo with title "<title>" in the system
+    Given there exists a todo with title "<todoTitle>" in the system
     And the todo with title "<todoTitle>" is assigned to a project with title "<projectTitle>"
     When I request to remove the todo with title "<todoTitle>" from the project with title "<projectTitle>"
     Then todo with title "<todoTitle>" shall be removed from the system
