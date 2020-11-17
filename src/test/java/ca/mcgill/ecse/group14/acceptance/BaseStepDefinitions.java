@@ -7,8 +7,8 @@ import ca.mcgill.ecse.group14.Server;
 import io.restassured.RestAssured;
 
 public class BaseStepDefinitions {
-    private static int errorCode;
-    private static int counter;
+    static int errorCode;
+    static int counter;
 
     static void setup() {
         RestAssured.baseURI = Resources.BASE_URL;
