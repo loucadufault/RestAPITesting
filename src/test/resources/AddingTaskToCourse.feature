@@ -17,20 +17,19 @@ Background:
             |ECSE200      | false          |  false| A bit harder |
             |ECSE300      | false          |  true | Hardest class|
             
-		Scenario Outline: Add a Todo to a Existing Projects Todo List (Normal Flow)
-        	Given there exists a todo in the system with title <todoTitle>
+Scenario Outline: Add a Todo to a Existing Projects Todo List (Normal Flow)
+        Given there exists a todo in the system with title <todoTitle>
             And there exists a project in the system with title <projectTitle>
             When I request to add todo <todoTitle> to project <projectTitle>
             Then the todo <todoTitle> is added to project <projectTitle> todo list
             
             Examples:
-            
-      |todoTitle  |projectTitle |
-      |Requirements  |ECSE100  |
-      |Development  |ECSE200  |
+            |todoTitle  |projectTitle |
+            |Requirements  |ECSE100  |
+            |Development  |ECSE200  |
 
-        Scenario Outline: Add a Todo to a Non-existent Projects Todo List (Error Flow)
-        	Given there exists a todo in the system with title <todoTitle>
+Scenario Outline: Add a Todo to a Non-existent Projects Todo List (Error Flow)
+        Given there exists a todo in the system with title <todoTitle>
             And there does not exist a project in the system with title <projectTitle>
             When I request to add todo <todoTitle> to project <projectTitle>
 			Then I receive an error code <errorCode>
@@ -40,8 +39,8 @@ Background:
       		|Requirements  |COMP100  |404 |
       		|Development  |FACC100  |404 |
             
-        Scenario Outline: Create a Todo and Add to an Existing Projects Todo List (Alternate Flow)
-        	Given there exists a project in the system with title <projectTitle>
+Scenario Outline: Create a Todo and Add to an Existing Projects Todo List (Alternate Flow)
+        Given there exists a project in the system with title <projectTitle>
             And there does not exist a todo in the system with title <todoTitle>
             When I request to create a todo with title <todoTitle>, done status <status> and description <description>
             And I request to add todo <todoTitle> to project <projectTitle>
@@ -49,8 +48,7 @@ Background:
             And the todo <todoTitle> is added to project <projectTitle> todo list
             
             Examples:
-            
-      |projectTitle  |todoTitle  |status  |description  |
-      |ECSE100  |Deployment  |false  |Deploy app to web  |
-      |ECSE200  |Financing  |false  |Get funds for app creation  |
+            |projectTitle  |todoTitle  |status  |description  |
+            |ECSE100  |Deployment  |false  |Deploy app to web  |
+            |ECSE200  |Financing  |false  |Get funds for app creation  |
 

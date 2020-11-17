@@ -5,8 +5,8 @@ Feature:
     
     Background:
     	Given the Todo Manager Rest API server is running
-        	And I am a student
-            And the following todos exist in the system:
+        And I am a student
+        And the following todos exist in the system:
             |title | doneStatus | description |
             |Requirements | false | Define reqs |
 			|Development | false | Create app |
@@ -16,7 +16,7 @@ Feature:
         
     Scenario Outline: Assign Priority to Existing Task (Normal Flow)
 		Given there exists a todo in the system with title <title>
-		When I request to assign priority <priority> to todo <title>
+        When I request to assign priority <priority> to todo <title>
 		Then the todo <title> will be assigned priority <priority>
         Examples:
       		|title | priority |
@@ -36,7 +36,7 @@ Feature:
       	Given there exists a todo in the system with title <title>
         And the todo <title> is assigned priority <priority1>
         When I request to assign priority <priority2> to todo <title>
-	Then the priority of todo <title> is updated from <priority1> to <priority2>
+	    Then the priority of todo <title> is updated from <priority1> to <priority2>
         Examples:
       		|title | priority1 | priority2 |
             |Requirements | LOW | MEDIUM |
