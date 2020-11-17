@@ -18,6 +18,6 @@ public class BaseStepDefinitions {
     }
 
     static void teardown() throws InterruptedException {
-        Server.shutdown();
+        Server.stop();
     }
 }

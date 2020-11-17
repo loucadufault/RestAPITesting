@@ -14,16 +14,27 @@ public class Server {
     public static ServerStatus status = ServerStatus.DOWN;
     private static boolean started = false;
 
+    public static void boot() {
+        start();
+        assert waitUntilReady() == 0;
+        assert check() == 0;
+    }
+
     public static void start() {
-        System.out.print("Starting server...");
         if (status == ServerStatus.RUNNING && ping() == 0) {
-            System.out.println("   already running.");
+            System.out.println("Server already running.");
             return;
         }
+        System.out.print("Starting server...");
         final ProcessBuilder processBuilder = new ProcessBuilder("java", "-jar", "runTodoManagerRestAPI-1.5.5.jar");
+        if (process != null) {
+            process.destroy();
+        }
         try {
             process = processBuilder.start();
         } catch (IOException e) {
+            process.destroy();
+            process = null;
             e.printStackTrace();
         }
         started = true;
@@ -33,15 +44,21 @@ public class Server {
     public static void stop() {
         System.out.print("Stopping server...");
         if (status == ServerStatus.DOWN) {
-            System.out.println("   already down.");
-            return;
+            System.out.print("   already down, still stopping...");
         }
         process.destroy();
-        process = null;
         status = ServerStatus.DOWN;
         System.out.println("   stopped.");
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
+    /**
+     * @deprecated
+     */
     public static void shutdown() {
         System.out.print("Shutting down server...");
         if (status == ServerStatus.DOWN) {
@@ -49,19 +66,25 @@ public class Server {
             return;
         }
         try {
-            get(BASE_URL + "/shutdown");
-        } catch (Exception e) {
-            // suppress
+            Runtime.getRuntime().exec("curl " + BASE_URL + "/shutdown");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         stop();
         System.out.println("   shutdown.");
     }
 
+    private static void silentPing() throws Exception {
+        get(BASE_URL).then().assertThat().statusCode(STATUS_CODE.OK);
+    }
+
     public static int ping() {
         try {
-            get(BASE_URL);
+            silentPing();
+            System.out.println("   successful");
             return 0;
-        } catch (Exception e){
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
             return 1;
         }
     }
@@ -94,17 +117,20 @@ public class Server {
 
     public static int waitUntilReady() {
         System.out.print("Waiting for server...");
-        final int MAX_PINGS = 10;
+        final int MAX_PINGS = 100;
+        final int SLEEP_MS = 200;
+
+        int pings = 0;
         try {
-            int pings = 0;
             while (pings < MAX_PINGS) {
-                if (ping() == 0) {
+                try {
+                    silentPing();
                     status = ServerStatus.RUNNING;
                     System.out.println("   ready.");
                     return 0;
-                } else {
+                } catch (Exception e) {
                     System.out.print("   not yet ready...");
-                    Thread.sleep(200);
+                    Thread.sleep(SLEEP_MS);
                 }
                 pings++;
             }
@@ -113,6 +139,6 @@ public class Server {
         }
 
         status = ServerStatus.DOWN;
-        return 1;
+        return pings;
     }
 }
