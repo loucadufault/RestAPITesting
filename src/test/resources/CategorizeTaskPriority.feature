@@ -5,7 +5,12 @@ Feature:
 
   Background:
     Given the Todo Manager Rest API server is running
-    And the following todos exist in the system:
+    Given the following categories exist in the system:
+      | title  | description|
+      | LOW    | false      |
+      | MEDIUM | false      |
+      | HIGH   | false      |
+    Given the following todos exist in the system:
       | title             | doneStatus | description |
       | Requirements      | false      | Define reqs |
       | Development       | false      | Create app  |
@@ -14,8 +19,8 @@ Feature:
 
   Scenario Outline: Normal flow - Assign priority to existing task
     Given there exists a todo with title "<title>" in the system
-    When the user attempts to assign priority "<priority>" to todo <title>
-    Then the todo <title> will be have priority "<priority>"
+    When the user attempts to assign priority "<priority>" to todo "<title>"
+    Then the todo "<title>" will be have priority "<priority>"
     Examples:
       | title             | priority |
       | Requirements      | LOW      |
@@ -23,7 +28,7 @@ Feature:
 
   Scenario Outline: Alternate flow - Assign priority to existing task with already assigned priority
     Given there exists a todo with title "<title>" in the system
-    And the todo <title> is assigned priority "<priority1>"
+    And the todo "<title>" is assigned priority "<priority1>"
     When the user attempts to assign priority "<priority2>" to todo "<title>"
     Then the priority of todo "<title>" is updated from "<priority1>" to "<priority2>"
     Examples:
