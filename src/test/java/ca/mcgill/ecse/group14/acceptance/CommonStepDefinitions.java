@@ -1,8 +1,6 @@
 package ca.mcgill.ecse.group14.acceptance;
 
 import ca.mcgill.ecse.group14.Server;
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.junit.Cucumber;
 import org.junit.runner.RunWith;

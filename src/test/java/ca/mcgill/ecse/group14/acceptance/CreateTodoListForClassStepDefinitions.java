@@ -56,8 +56,9 @@ public class CreateTodoListForClassStepDefinitions extends BaseStepDefinitions {
 
     @Then("the project with title {string} and id {string} shall not be created in the system")
     public void the_project_with_title_and_id_shall_not_be_created_in_the_system(String title, String id) {
-        assertTrue(!Utils.existsProject(title));
-        assertTrue(!Utils.existsProject(id));
+        if (Utils.existsProject(id)) {
+            assertTrue(!Utils.getProject(Integer.parseInt(id)).jsonPath().get("title").equals(title));
+        }
     }
 
     @Then("there shall be the same number of projects in the system")
@@ -69,9 +70,9 @@ public class CreateTodoListForClassStepDefinitions extends BaseStepDefinitions {
     public void the_project_with_title_and_description_and_completed_status_and_active_status_shall_be_created_in_the_system(String title, String description, String completed, String active) {
         Response response = Utils.buildJSONRequestWithJSONResponse().when().get(BASE_URL + "/projects");
         List<Map<String, String>> projects = response.jsonPath().getList("projects");
-        System.out.println(completed);
+        System.out.println(active);
         for (Map<String, String> project : projects) {
-            System.out.println("'"+ project.get("completed")+ "'");
+            System.out.println("'"+ project.get("active")+ "'");
             if (project.get("title").equals(title) && project.get("description").equals(description) && project.get("completed").equals(completed) && project.get("active").equals(active)) {
                 return;
             }

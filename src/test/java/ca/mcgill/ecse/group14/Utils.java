@@ -130,6 +130,10 @@ public class Utils {
         return count("projects");
     }
 
+    public static Response getProject(int id) {
+        return buildJSONRequestWithJSONResponse().when().get("/" + id);
+    }
+
     public static boolean existsProject(int id) {
         return exists(id, "projects");
     }
