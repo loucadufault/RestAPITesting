@@ -1,16 +1,11 @@
 package ca.mcgill.ecse.group14.acceptance;
-import ca.mcgill.ecse.group14.Resources;
 import ca.mcgill.ecse.group14.Utils;
 
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.And;
 import io.cucumber.junit.Cucumber;
 import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
 import org.json.simple.JSONObject;
 import org.junit.runner.RunWith;
 
@@ -40,7 +35,7 @@ public class ChangeTaskDescriptionStepDefinitions extends BaseStepDefinitions {
 
     @Given("there exists a todo with title {string} and description {string} in the system")
     public void there_exists_a_todo_with_title_and_description_in_the_system(String title, String description) {
-        if(!Utils.existsTodo(title)){
+        if(!Utils.existsTask(title)){
             JSONObject requestBody = new JSONObject();
             requestBody.put("title", title);
             requestBody.put("description", description);
