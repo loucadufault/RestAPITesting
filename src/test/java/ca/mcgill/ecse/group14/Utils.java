@@ -105,7 +105,7 @@ public class Utils {
     }
 
     private static Response delete(int id, String endpoint) {
-        return buildJSONRequestWithJSONResponse().when().delete(BASE_URL + endpoint + "/" + id);
+        return buildJSONRequestWithJSONResponse().when().delete(BASE_URL + "/" + endpoint + "/" + id);
     }
 
     public static void deleteProject(int id) {
