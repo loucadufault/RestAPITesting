@@ -9,7 +9,7 @@ Feature: Create todo list for class
   Scenario Outline: Normal Flow - Create a new class amd specify all fields (a.k.a. project)
     Given there does not exist a project with title "<title>" in the system
     When the user attempts to create a new project with title "<title>" and description "<description>" and completed status "<completed>" and active status "<active>"
-    Then the project with title "<title>" and description "<description>" and completed status <completedStatus> and active status <activeStatus> shall be created in the system
+    Then the project with title "<title>" and description "<description>" and completed status "<completedStatus>" and active status "<activeStatus>" shall be created in the system
     Then there shall be one more project in the system
 
     Examples:
@@ -18,7 +18,7 @@ Feature: Create todo list for class
       | COMP 251 | algorithms & data   | true      | true   |
       | MATH 240 | discrete math.      | false     | false  |
 
-  Scenario: Alternate flow - Create a new class (a.k.a. project) without specifying any fields
+  Scenario Outline: Alternate flow - Create a new class (a.k.a. project) without specifying any fields
     When the user attempts to create a new project without specifying any fields
     Then the project with title "<title>" and description "<description>" and completed status <completedStatus> and active status <activeStatus> shall be created in the system
     Then there shall be one more project in the system
