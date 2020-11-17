@@ -1,8 +1,10 @@
 Feature: Create todo list for class
-  As a student, I create a to do list for a new class I am taking, so I can manage course work.
+  As a student,
+  I create a to do list for a new class I am taking,
+  so I can manage course work.
 
   Background:
-    Given the Todo Manager ReST API server is running
+    Given the Todo Manager Rest API server is running
 
   Scenario Outline: Normal Flow - Create a new class amd specify all fields (a.k.a. project)
     Given the project with title "<title>" does not exist in the system

@@ -1,5 +1,7 @@
 Feature: Remove todo list for class
-  As a student, I remove a to do list for a class which I am no longer taking, to declutter my schedule.
+  As a student,
+  I remove a to do list for a class which I am no longer taking,
+  to declutter my schedule.
 
   Background:
     Given the Todo Manager Rest API server is running
@@ -27,17 +29,17 @@ Feature: Remove todo list for class
     Then there shall be 1 less todo in the system
 
     Examples:
-    | projectTitle | todoTitle | todoDoneStatus | todoDescription |
-    | ECSE 429     | project B | false          | pickle          |
-    | COMP 252     | Ass 2     | false          | greedy          |
+      | projectTitle | todoTitle | todoDoneStatus | todoDescription |
+      | ECSE 429     | project B | false          | pickle          |
+      | COMP 252     | Ass 2     | false          | greedy          |
 
-    Scenario Outline: Error flow - Remove a class (a.k.a. project) that does not exist
-      Given the project with title "<title>" does not exist in the system
-      When the user attempts to remove the project with title "<title>"
-      Then the system shall report "<error>"
-      Then there shall be the same number of projects in the system
+  Scenario Outline: Error flow - Remove a class (a.k.a. project) that does not exist
+    Given the project with title "<title>" does not exist in the system
+    When the user attempts to remove the project with title "<title>"
+    Then the system shall report "<error>"
+    Then there shall be the same number of projects in the system
 
-      Examples:
+    Examples:
       | title    | error |
       | MATH 240 | blah  |
       | ECSE 223 | blah  |
