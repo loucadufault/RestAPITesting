@@ -12,7 +12,7 @@ Feature: Change a task description
       | midterm2   |                      |
       | assignment |                      |
 
-  Scenario Outline: Add the description for an existent task (Normal Flow)
+  Scenario Outline: Normal Flow - Add the description for an existent task
     Given there exists a todo with title "<title>" and description "<description>" in the system
     When the user attempts to change the description to "<newDescription>" for the todo with title "<title>"
     Then the todo with title "<title>" shall have description "<newDescription>"
@@ -22,7 +22,7 @@ Feature: Change a task description
       | midterm2   |                | Chapters 1 to 6 |
       | assignment |                | On unit testing |
 
-  Scenario Outline: Change the description for an existent task (Alternate Flow)
+  Scenario Outline: Alternate Flow - Change the description for an existent task
     Given there exists a todo with title "<title>" and description "<description>" in the system
     When the user attempts to change the description to "<newDescription>" for the todo with title "<title>"
     Then the todo with title "<title>" shall have description "<newDescription>"
@@ -32,7 +32,7 @@ Feature: Change a task description
       | project  | Use Gherkin       | Use Cucumber  |
       | midterm1 | Very hard midterm | Study earlier |
 
-  Scenario Outline: Change the description for a nonexistent task (Error Flow)
+  Scenario Outline: Error Flow - Change the description for a nonexistent task
     Given there does not exist a todo with title "<title>" in the system
     When the user attempts to change the description to "<newDescription>" for the todo with title "<title>"
     Then the system shall report the error code "<errorCode>"
