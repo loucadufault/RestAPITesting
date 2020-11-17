@@ -5,39 +5,56 @@ import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.And;
 import io.cucumber.junit.Cucumber;
+import org.json.simple.JSONObject;
 import org.junit.runner.RunWith;
+import io.cucumber.datatable.DataTable;
 
+import ca.mcgill.ecse.group14.Utils;
+import java.util.List;
+
+import static io.restassured.RestAssured.*;
+import static org.hamcrest.core.IsEqual.*;
+import static ca.mcgill.ecse.group14.Resources.*;
+import static ca.mcgill.ecse.group14.Utils.*;
 @RunWith(Cucumber.class)
 
-public class AddingTaskToCourseStepDefinitions {
+public class AddingTaskToCourseStepDefinitions extends BaseStepDefinitions{
     @Given("the following todos exist in the system:")
-    public void the_following_todos_exist_in_the_system(io.cucumber.datatable.DataTable dataTable) {
-        // Write code here that turns the phrase above into concrete actions
-        // For automatic transformation, change DataTable to one of
-        // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-        // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-        // Double, Byte, Short, Long, BigInteger or BigDecimal.
-        //
-        // For other transformations you can register a DataTableType.
-        throw new io.cucumber.java.PendingException();
+    public void the_following_todos_exist_in_the_system(DataTable dataTable) {
+        List<List<String>> rows = dataTable.asLists(String.class);
+        boolean titles = true;
+        for (List<String> columns : rows) {
+            if (!titles) {
+                JSONObject requestBody = new JSONObject();
+                requestBody.put("title", columns.get(0));
+                requestBody.put("doneStatus", columns.get(1));
+                requestBody.put("description", columns.get(2));
+                buildJSONRequest().body(requestBody.toJSONString()).post(BASE_URL+"/todos");
+            }
+            titles = false;
+        }
     }
 
     @Given("the following projects exist in the system:")
     public void the_following_projects_exist_in_the_system(io.cucumber.datatable.DataTable dataTable) {
-        // Write code here that turns the phrase above into concrete actions
-        // For automatic transformation, change DataTable to one of
-        // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-        // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-        // Double, Byte, Short, Long, BigInteger or BigDecimal.
-        //
-        // For other transformations you can register a DataTableType.
-        throw new io.cucumber.java.PendingException();
+        List<List<String>> rows = dataTable.asLists(String.class);
+        boolean titles = true;
+        for (List<String> columns : rows) {
+            if (!titles) {
+                JSONObject requestBody = new JSONObject();
+                requestBody.put("title", columns.get(0));
+                requestBody.put("completed", columns.get(1));
+                requestBody.put("active", columns.get(2));
+                requestBody.put("description", columns.get(3));
+                buildJSONRequest().body(requestBody.toJSONString()).post(BASE_URL+"/projects");
+            }
+            titles = false;
+        }
     }
 
     @Given("there exists a todo with title {string} in the system")
     public void there_exists_a_todo_with_title_in_the_system(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
+        if (existsTodo)
     }
 
     @When("the user attempts to add todo with title {string} to project with title {string}")
