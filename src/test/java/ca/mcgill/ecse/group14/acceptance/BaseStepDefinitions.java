@@ -1,13 +1,23 @@
 package ca.mcgill.ecse.group14.acceptance;
 
-import io.cucumber.java.en.Given;
-import io.cucumber.junit.Cucumber;
-import org.junit.runner.RunWith;
 
-@RunWith(Cucumber.class)
+import ca.mcgill.ecse.group14.Resources;
+import ca.mcgill.ecse.group14.Server;
+
+import io.restassured.RestAssured;
+
 public class BaseStepDefinitions {
-    @Given("^the Todo Manager Rest API server is running$")
-    public void the_todo_manager_rest_api_server_is_running() {
+    private static int errorCode;
+    private static int counter;
 
+    static void setup() {
+        RestAssured.baseURI = Resources.BASE_URL;
+        Server.start();
+        Server.waitUntilReady();
+    }
+
+    static void teardown() throws InterruptedException {
+        Server.stop();
+        Thread.sleep(500);
     }
 }

@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
 
-public class AddingTaskToCourseStepDefinitions {
+public class AddingTaskToCourseStepDefinitions extends BaseStepDefinitions {
     @Given("the following todos exist in the system:")
     public void the_following_todos_exist_in_the_system(io.cucumber.datatable.DataTable dataTable) {
         // Write code here that turns the phrase above into concrete actions

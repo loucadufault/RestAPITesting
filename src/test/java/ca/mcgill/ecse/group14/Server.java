@@ -12,6 +12,7 @@ public class Server {
     private static Process process;
     public enum ServerStatus {RUNNING, DOWN};
     public static ServerStatus status = ServerStatus.DOWN;
+    private static boolean started = false;
 
     public static void start() {
         final ProcessBuilder processBuilder = new ProcessBuilder("java", "-jar", "runTodoManagerRestAPI-1.5.5.jar");
@@ -20,10 +21,12 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        started = true;
     }
 
     public static void stop() {
         process.destroy();
+        process = null;
         status = ServerStatus.DOWN;
     }
 
@@ -46,7 +49,11 @@ public class Server {
     }
 
     public static int check() {
-        StringBuilder builder = new StringBuilder();
+        if(!started) {
+            System.out.println("Server has not been started!");
+            return 0;
+        }
+
         try {
             final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream())); // consume process stdout
             while (true) {
