@@ -54,11 +54,6 @@ public class RemoveTodoListForClassStepDefinitions extends BaseStepDefinitions {
         assertEquals(projectCount - 1, Utils.countProjects());
     }
 
-    @Then("the the number of tasks in the system shall remain the same")
-    public void the_the_number_of_tasks_in_the_system_shall_remain_the_same() {
-        assertEquals(todoCount, Utils.countTodos());
-    }
-
     @Given("the project with title {string} has the related task with title {string} and done status {string} and description {string}")
     public void the_project_with_title_has_the_related_task_with_title_and_done_status_and_description(String projectTitle, String taskTitle, String taskDoneStatus, String taskDescription) {
         int id = Utils.getFirstId(projectTitle, "projects");
@@ -74,8 +69,8 @@ public class RemoveTodoListForClassStepDefinitions extends BaseStepDefinitions {
         }
 
         int taskId = -1;
-        response = Utils.buildJSONRequestWithJSONResponse().when().get("/" + "tasks");
-        List<Map<String, String>> tasks = response.jsonPath().getList("tasks");
+        response = Utils.buildJSONRequestWithJSONResponse().when().get("/" + "todos");
+        List<Map<String, String>> tasks = response.jsonPath().getList("todos");
         if (tasks != null) {
             for (Map<String, String> task : tasks) {
                 if (task.get("title").equals(taskTitle) && task.get("description").equals(taskDescription) && task.get("doneStatus").equals(taskDoneStatus)) {
@@ -87,10 +82,11 @@ public class RemoveTodoListForClassStepDefinitions extends BaseStepDefinitions {
         if (taskId == -1) {
             JSONObject requestBody = new JSONObject();
             requestBody.put("title", taskTitle);
-            requestBody.put("doneStatus", taskDoneStatus);
+            requestBody.put("doneStatus", Boolean.valueOf(taskDoneStatus));
             requestBody.put("description", taskDescription);
 
             response = Utils.buildJSONRequestWithJSONResponse().body(requestBody.toJSONString()).post("/todos");
+            System.out.println(response.asString());
             taskId = Integer.parseInt(response.jsonPath().get("id"));
         }
 
@@ -106,13 +102,8 @@ public class RemoveTodoListForClassStepDefinitions extends BaseStepDefinitions {
         Utils.removeProject(title);
     }
 
-    @Then("the task with title {string} shall be removed from the system")
-    public void the_task_with_title_shall_be_removed_from_the_system(String title) {
-        assertTrue(!Utils.existsTodo(title));
+    @Then("the todo with title {string} shall not be removed from the system")
+    public void the_todo_with_title_shall_not_be_removed_from_the_system(String title) {
+        assertTrue(Utils.existsTodo(title));
     }
-
-//    @Then("there shall be one less task in the system")
-//    public void there_shall_be_less_task_in_the_system() {
-//        assertEquals(taskCount - 1, Utils.countTodos());
-//    }
 }
