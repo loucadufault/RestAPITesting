@@ -8,12 +8,12 @@ import io.cucumber.junit.Cucumber;
 import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
-public class RemoveTaskStepDefinition {
+public class RemoveTaskStepDefinitions {
 
-    @Given("^the Todo Manager Rest API server is running$")
+    /*@Given("^the Todo Manager Rest API server is running$")
     public void the_todo_manager_rest_api_server_is_running() throws Throwable {
 
-    }
+    }*/
 
     @Given("^todo with title (.+) exists$")
     public void todo_with_title_exists(String todotitle) throws Throwable {
