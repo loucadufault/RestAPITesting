@@ -41,45 +41,45 @@ Feature: Query incomplete tasks
     And the following todos are saved under 'Class D'
       | todoTitle | todoDoneStatus | todoDescription |
 
-  Scenario Outline: Queury imcomplete tasks from a project (class) with incomplete tasks (Normal Flow)
-    Given that <title> is a project in memory
-    And that <title> has active tasks
-    When I request the incomplete High priority tasks of the project titled <projectTitle>
+  Scenario Outline: Normal flow - Query incomplete tasks from a project (class) with incomplete tasks
+    Given there exists a project with title <string> in the system
+    Given the project with title <title> has active tasks
+    When the user attempts to query the incomplete high priority tasks of the project with title <title>
     Then <n> todos will be returned
     Examples:
       | title    | n |
       | Class B1 | 1 |
       | Class B2 | 2 |
 
-  Scenario Outline: Queury imcomplete tasks from a project (class) with no incomplete tasks (Alternate Flow)
-    Given that <title> is a project in memory
-    And that <title> has no active tasks
-    When I request the incomplete High priority tasks of the project titled <projectTitle>
+  Scenario Outline: Alternate flow - Query incomplete tasks from a project (class) with no incomplete tasks
+    Given there exists a project with title <string> in the system
+    Given the project with title <title> has no active tasks
+    When the user attempts to query the incomplete high priority tasks of the project with title <title>
     Then <n> todos will be returned
     Examples:
       | title   | n |
       | Class C | 0 |
 
-  Scenario Outline: Queury imcomplete tasks from an unactive project (class) with incomplete tasks (Alternate Flow)
-    Given that <title> is an unactive project in memory
-    When I request the incomplete tasks of the project titled <projectTitle>
+  Scenario Outline: Alternate flow - Query incomplete tasks from an inactive project (class) with incomplete tasks
+    Given there exists a project with title <string> in the system
+    When the user attempts to query the incomplete high priority tasks of the project with title <title>
     Then <n> todos will be returned
     Examples:
       | title   | n |
       | Class A | 0 |
 
-  Scenario Outline: Queury imcomplete tasks from a project (class) with no tasks (Alternate Flow)
-    Given that <title> is a project in memory
-    And that <title> has no tasks
-    When I request the incomplete tasks of the project titled <projectTitle>
+  Scenario Outline: Alternate flow - Query incomplete tasks from a project (class) with no tasks
+    Given there exists a project with title <string> in the system
+    Given the project with title <title> has no active tasks
+    When the user attempts to query the incomplete high priority tasks of the project with title <title>
     Then <n> todos will be returned
     Examples:
       | title   | n |
       | Class D | 0 |
 
-  Scenario Outline: Queury imcomplete tasks from a non-existant project (class) (Error Flow)
-    Given that <title> is not a project in memory
-    When I request the incomplete tasks of the project titled <projectTitle>
+  Scenario Outline: Error flow - Query incomplete tasks from a nonexistant project (class)
+    Given there does not exist a project with title <string> in the system
+    When the user attempts to query the incomplete high priority tasks of the project with title <title>
     Then <n> todos will be returned
     Examples:
       | title   | n |

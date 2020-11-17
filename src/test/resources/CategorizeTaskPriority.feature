@@ -5,7 +5,6 @@ Feature:
 
   Background:
     Given the Todo Manager Rest API server is running
-    And I am a student
     And the following todos exist in the system:
       | title             | doneStatus | description |
       | Requirements      | false      | Define reqs |
@@ -13,31 +12,30 @@ Feature:
       | Quality Assurance | false      | Test app    |
 
 
-  Scenario Outline: Assign Priority to Existing Task (Normal Flow)
-    Given there exists a todo in the system with title <title>
-    When I request to assign priority <priority> to todo <title>
-    Then the todo <title> will be assigned priority <priority>
+  Scenario Outline: Normal flow - Assign priority to existing task
+    Given there exists a todo with title <title> in the system
+    When the user attempts to assign priority <priority> to todo <title>
+    Then the todo <title> will be have priority <priority>
     Examples:
       | title             | priority |
       | Requirements      | LOW      |
       | Quality Assurance | MEDIUM   |
 
-  Scenario Outline: Assign Priority to Non-Existing Task (Error Flow)
-    Given there does not exist a todo in the system with title <title>
-    When I request to assign priority <priority> to todo <title>
-    Then I receive an error code <errorCode>
-    Examples:
-      | title       | priority | errorCode |
-      | Deployment  | HIGH     | 404       |
-      | Brain-Storm | MEDIUM   | 404       |
-
-  Scenario Outline: Assign Priority to Existing Task With Already Assigned Priority (Alternate Flow)
-    Given there exists a todo in the system with title <title>
+  Scenario Outline: Alternate flow - Assign priority to existing task with already assigned priority
+    Given there exists a todo with title <title> in the system
     And the todo <title> is assigned priority <priority1>
-    When I request to assign priority <priority2> to todo <title>
+    When the user attempts to assign priority <priority2> to todo <title>
     Then the priority of todo <title> is updated from <priority1> to <priority2>
     Examples:
       | title             | priority1 | priority2 |
       | Requirements      | LOW       | MEDIUM    |
       | Quality Assurance | MEDIUM    | HIGH      |
-        
+
+  Scenario Outline: Error flow - Assign priority to nonexistent task
+    Given there does not exist a todo with title <title> in the system
+    When the user attempts to assign priority <priority> to todo <title>
+    Then the system shall report the error code "<errorCode>"
+    Examples:
+      | title       | priority | errorCode |
+      | Deployment  | HIGH     | 404       |
+      | Brain-Storm | MEDIUM   | 404       |

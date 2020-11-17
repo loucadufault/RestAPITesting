@@ -21,7 +21,7 @@ Feature: Remove todo list for class
 
   Scenario Outline: Alternate flow - Remove a class (a.k.a. project) with a related task (a.k.a. todo)
     Given the project with title "<projectTitle>" exists in the system
-    Given the project with title "<projectTitle>" has the related todo with title "<todoTitle>" and doneStatus "<todoDoneStatus>" and description "<todoDescription>"
+    Given the project with title "<projectTitle>" has the related todo with title "<todoTitle>" and done status "<todoDoneStatus>" and description "<todoDescription>"
     When the user attempts to remove the project with title "<projectTitle>"
     Then the project with title "<title>" shall be removed from the system
     Then there shall be 1 less project in the system

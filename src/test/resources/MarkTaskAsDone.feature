@@ -5,41 +5,37 @@ Feature: Mark a task as done
 
   Background:
     Given the Todo Manager Rest API server is running
-    And I am a student
     And the following todos exist in the system:
-
       | title       | doneStatus |
       | project     | false      |
       | assignmentA | false      |
       | assignmentB | true       |
       | midterm     | true       |
 
-  Scenario Outline: Mark uncompleted task as done (Normal Flow)
-    Given todo with title <title> exists
-    And todo with title <title> has doneStatus set to false
-    When I request to set doneStatus of todo with title <title> to true
-    Then doneStatus of todo with title <title> is set to true
+  Scenario Outline: Normal flow - Mark uncompleted task as done
+    Given there exists a todo with title <title> and done status <doneStatus> in the system
+    When user attempts to set done status to <doneStatus> for the todo with title <title>
+    Then the todo with title <title> shall have done status <doneStatus>
     Examples:
 
       | title       | doneStatus |
       | assignmentA | false      |
       | project     | false      |
 
-  Scenario Outline: Mark completed task as done (Alternate Flow)
-    Given todo with title <title> exists
-    And todo with title <title> has doneStatus set to true
-    When I request to set doneStatus of todo with title <title> to true
-    Then todo with title <title> will not be modified
+  Scenario Outline: Alternate flow - Mark completed task as done
+    Given there exists a todo with title <title> and done status <doneStatus> in the system
+    When the user attempts to set done status to <doneStatus> for the todo with title <title>
+    Then todo with title <title> shall have done status <doneStatus>
     Examples:
 
       | title       | doneStatus |
       | assignmentB | true       |
       | midterm     | true       |
 
-  Scenario Outline: Mark nonexistent task as done (Error Flow)
-    Given todo with title <title> does not exist
-    When I request to set doneStatus of todo with title <title> to true
-    Then I will receive an error code <errorCode>
+  Scenario Outline: Error flow - Mark nonexistent task as done
+    Given there does not exist a todo with title <title> in the system
+    When the user attempts to set done status to <doneStatus> for the todo with title <title>
+    Then the system shall report thee error code <errorCode>
     Examples:
 
       | title       | errorCode |
