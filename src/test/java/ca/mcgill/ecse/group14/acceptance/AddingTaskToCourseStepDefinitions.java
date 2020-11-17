@@ -27,17 +27,13 @@ import static org.junit.Assert.assertEquals;
 public class AddingTaskToCourseStepDefinitions extends BaseStepDefinitions{
     @Given("the following todos exist in the system:")
     public void the_following_todos_exist_in_the_system(DataTable dataTable) {
-        List<List<String>> rows = dataTable.asLists(String.class);
-        boolean titles = true;
-        for (List<String> columns : rows) {
-            if (!titles) {
-                JSONObject requestBody = new JSONObject();
-                requestBody.put("title", columns.get(0));
-                requestBody.put("doneStatus", Boolean.valueOf(columns.get(1)));
-                requestBody.put("description", columns.get(2));
-                buildJSONRequest().body(requestBody.toJSONString()).post("/todos");
-            }
-            titles = false;
+        List<Map<String, String>> rows = dataTable.asMaps();
+        for (Map<String, String> columns : rows) {
+            JSONObject requestBody = new JSONObject();
+            requestBody.put("title", columns.get("title"));
+            requestBody.put("doneStatus", Boolean.valueOf(columns.get("doneStatus")));
+            requestBody.put("description", columns.get("description"));
+            buildJSONRequest().body(requestBody.toJSONString()).post("/todos");
         }
     }
 
