@@ -20,7 +20,7 @@ Feature: Categorize Task Priority
   Scenario Outline: Normal flow - Assign priority to existing task
     Given there exists a todo with title "<title>" in the system
     When the user attempts to assign priority "<priority>" to todo "<title>"
-    Then the todo "<title>" will be have priority "<priority>"
+    Then the todo "<title>" will have priority "<priority>"
     Examples:
       | title             | priority |
       | Requirements      | LOW      |

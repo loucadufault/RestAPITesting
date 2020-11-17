@@ -113,7 +113,7 @@ public class Utils {
     }
 
     private static void remove(String title, String endpoint) {
-        delete(getFirstId(title, endpoint), endpoint);
+        delete(getFirstId(title, endpoint), endpoint).asString();
     }
 
     private static Response delete(int id, String endpoint) {

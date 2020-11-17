@@ -48,14 +48,15 @@ public class CategorizeTaskPriorityStepDefinitions extends BaseStepDefinitions {
         }
         JSONObject requestBody = new JSONObject();
         requestBody.put("id", priorityId);
-        buildJSONRequest().body(requestBody.toJSONString()).post("/todos/"+ todoId+"/categories");
+        Response response = buildJSONRequest().body(requestBody.toJSONString()).post("/todos/"+ todoId+"/categories");
+        errorCode = response.getStatusCode();
     }
 
-    @Then("the todo {string} will be have priority {string}")
-    public void the_todo_will_be_have_priority(String todoTitle, String priority) {
-        int todoID = getFirstId(todoTitle, "todos");
+    @Then("the todo {string} will have priority {string}")
+    public void the_todo_will_have_priority(String todoTitle, String priority) {
+        int todoId = getFirstId(todoTitle, "todos");
         List<Map<String,String>> priorList = buildJSONRequestWithJSONResponse().when()
-                .get("/todos/"+todoID+"/categories")
+                .get("/todos/"+todoId+"/categories")
                 .jsonPath()
                 .getList("categories");
         for (Map<String, String> thing : priorList) {
