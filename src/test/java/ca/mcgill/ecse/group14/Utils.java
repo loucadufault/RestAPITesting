@@ -130,6 +130,21 @@ public class Utils {
         return count("projects");
     }
 
+    public static int getTasksofProject(String projectTitle) {
+        /*int id = getFirstId(projectTitle, "projects");
+        JSONObject requestBody = new JSONObject();
+
+        buildJSONRequest().get(Resources.BASE_URL+"/projects/" + id + "/tasks").getBody().as(JSONArray);
+        return Unirest.get("/projects/" + id + "/tasks").asJson().getBody().getObject().getJSONArray("todos");
+
+         */
+    }
+
+    public static int countTasksofProject() {
+        return count("tasks");
+    }
+
+
     public static Response getProject(int id) {
         return buildJSONRequestWithJSONResponse().when().get("/" + id);
     }
