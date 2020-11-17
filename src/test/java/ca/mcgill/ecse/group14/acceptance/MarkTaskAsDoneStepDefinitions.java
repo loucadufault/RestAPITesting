@@ -30,20 +30,21 @@ public class MarkTaskAsDoneStepDefinitions extends BaseStepDefinitions{
     }
 
     @When("the user attempts to set done status to {string} for the todo with title {string}")
-    public void the_user_attempts_to_set_done_status_to_for_the_todo_with_title(String doneStatus, String title) {
+    public void the_user_attempts_to_set_done_status_to_for_the_todo_with_title(String newDoneStatus, String title) {
         int todoID = Utils.getFirstId(title,"todos");
         JSONObject requestBody = new JSONObject();
         requestBody.put("title", title);
-        requestBody.put("doneStatus", Boolean.parseBoolean(doneStatus));
-        Utils.buildJSONRequestWithJSONResponse().body(requestBody.toJSONString()).put(BASE_URL + "/todos/" + todoID);
+        requestBody.put("doneStatus", Boolean.parseBoolean(newDoneStatus));
+        Response response = Utils.buildJSONRequestWithJSONResponse().body(requestBody.toJSONString()).put(BASE_URL + "/todos/" + todoID);
+        errorCode = response.statusCode();
     }
 
     @Then("the todo with title {string} shall have done status {string}")
-    public void the_todo_with_title_shall_have_done_status(String title, String doneStatus) {
+    public void the_todo_with_title_shall_have_done_status(String title, String newDoneStatus) {
         Response response = Utils.buildJSONRequestWithJSONResponse().when().get(BASE_URL + "/todos");
         List<Map<String, String>> todos = response.jsonPath().getList("todos");
         for (Map<String, String> todo : todos) {
-            if (todo.get("title").equals(title) && todo.get("doneStatus").equals(Boolean.parseBoolean(doneStatus))) {
+            if (todo.get("title").equals(title) && todo.get("doneStatus").equals(newDoneStatus)) {
                 return;
             }
         }
