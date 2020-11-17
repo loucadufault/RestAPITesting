@@ -1,4 +1,4 @@
-Feature:
+Feature: Categorize Task Priority
   As a student,
   I categorize tasks as HIGH, MEDIUM or LOW priority,
   so i can better manage my time.
@@ -28,7 +28,7 @@ Feature:
 
   Scenario Outline: Alternate flow - Assign priority to existing task with already assigned priority
     Given there exists a todo with title "<title>" in the system
-    And the todo "<title>" is assigned priority "<priority1>"
+    Given the todo "<title>" is assigned priority "<priority1>"
     When the user attempts to assign priority "<priority2>" to todo "<title>"
     Then the priority of todo "<title>" is updated from "<priority1>" to "<priority2>"
     Examples:
