@@ -10,12 +10,14 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.And;
 import io.cucumber.junit.Cucumber;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 import org.json.simple.JSONObject;
 import org.junit.runner.RunWith;
 
 import java.util.List;
 import java.util.Map;
 
+import static ca.mcgill.ecse.group14.Resources.BASE_URL;
 import static ca.mcgill.ecse.group14.Utils.*;
 import static org.junit.Assert.assertEquals;
 
@@ -23,16 +25,13 @@ import static org.junit.Assert.assertEquals;
 public class CategorizeTaskPriorityStepDefinitions extends BaseStepDefinitions {
     @Given("the following categories exist in the system:")
     public void the_following_categories_exist_in_the_system(DataTable dataTable) {
-        List<List<String>> rows = dataTable.asLists(String.class);
+        List<Map<String,String>> rows = dataTable.asMaps();
         boolean titles = true;
-        for (List<String> columns : rows) {
-            if (!titles) {
-                JSONObject requestBody = new JSONObject();
-                requestBody.put("title", Boolean.valueOf(columns.get(0)));
-                requestBody.put("description", Boolean.valueOf(columns.get(1)));
-                buildJSONRequest().body(requestBody.toJSONString()).post("/categories");
-            }
-            titles = false;
+        for (Map<String,String> columns : rows) {
+            JSONObject requestBody = new JSONObject();
+            requestBody.put("title", columns.get("title"));
+            requestBody.put("description", columns.get("description"));
+            buildJSONRequest().body(requestBody.toJSONString()).post("/categories");
         }
     }
 
@@ -43,14 +42,13 @@ public class CategorizeTaskPriorityStepDefinitions extends BaseStepDefinitions {
         List<Map<String,String>> prior = buildJSONRequestWithJSONResponse().when()
                 .get("/todos/"+todoId+"/categories").jsonPath().getList("categories");
         if (prior != null){
-            for (Map<String, String> ity: prior) {
-                deleteCategory(Integer.parseInt(ity.get("id")));
+            for (Map<String,String> p : prior) {
+                buildJSONRequest().delete("/todos/" + todoId + "/categories/"+p.get("id"));
             }
         }
         JSONObject requestBody = new JSONObject();
-        requestBody.put("id", Integer.valueOf(priorityId));
-        Response response = buildJSONRequest().body(requestBody.toJSONString()).post("/todos/"+
-                todoId+"/categories");
+        requestBody.put("id", priorityId);
+        buildJSONRequest().body(requestBody.toJSONString()).post("/todos/"+ todoId+"/categories");
     }
 
     @Then("the todo {string} will be have priority {string}")
@@ -60,8 +58,11 @@ public class CategorizeTaskPriorityStepDefinitions extends BaseStepDefinitions {
                 .get("/todos/"+todoID+"/categories")
                 .jsonPath()
                 .getList("categories");
-        String prior = priorList.get(0).get("title");
-        assertEquals(priority, prior);
+        for (Map<String, String> thing : priorList) {
+            if (thing.get("title").equals(priority)) {
+                return;
+            }
+        }
     }
 
     @Given("the todo {string} is assigned priority {string}")
@@ -70,8 +71,7 @@ public class CategorizeTaskPriorityStepDefinitions extends BaseStepDefinitions {
         int todoId = getFirstId(todoTitle, "todos");
         JSONObject requestBody = new JSONObject();
         requestBody.put("id", Integer.valueOf(priorityId));
-        Response response = buildJSONRequest().body(requestBody.toJSONString()).post("/todos/"+
-                todoId+"/categories");
+        buildJSONRequest().body(requestBody.toJSONString()).post("/todos/" + todoId + "/categories");
     }
 
     @Then("the priority of todo {string} is updated from {string} to {string}")
@@ -81,7 +81,10 @@ public class CategorizeTaskPriorityStepDefinitions extends BaseStepDefinitions {
                 .get("/todos/"+todoID+"/categories")
                 .jsonPath()
                 .getList("categories");
-        String prior = priorList.get(0).get("title");
-        assertEquals(priority2, prior);
+        for (Map<String, String> thing : priorList) {
+            if (thing.get("title").equals(priority2)) {
+                return;
+            }
+        }
     }
 }
