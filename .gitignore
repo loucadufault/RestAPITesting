@@ -3,6 +3,9 @@
 *.iml
 *.iws
 
+# Eclipse
+.settings/
+
 # Mac
 .DS_Store
 
