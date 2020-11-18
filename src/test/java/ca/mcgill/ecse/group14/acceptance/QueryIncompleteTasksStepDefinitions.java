@@ -15,7 +15,7 @@ import java.util.Map;
 import static ca.mcgill.ecse.group14.Utils.*;
 
 @RunWith(Cucumber.class)
-public class QueryIncompleteTasks extends BaseStepDefinitions {
+public class QueryIncompleteTasksStepDefinitions extends BaseStepDefinitions {
 
     @When("the user attempts to query the incomplete tasks of the project with title {string}")
     public void the_user_attempts_to_query_the_incomplete_tasks_of_the_project_with_title(String title) {

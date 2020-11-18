@@ -26,7 +26,7 @@ import static ca.mcgill.ecse.group14.Utils.*;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Cucumber.class)
-public class QueryIncompleteHighPriorityTasks extends BaseStepDefinitions {
+public class QueryIncompleteHighPriorityTasksStepDefinitions extends BaseStepDefinitions {
 
 
     @Given("the following priorities are in the system")
