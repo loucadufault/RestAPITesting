@@ -73,12 +73,15 @@ public class AddingTaskToCourseStepDefinitions extends BaseStepDefinitions{
     @Then("the todo with title {string} is added to project with title {string} todo list")
     public void the_todo_with_title_is_added_to_project_with_title_todo_list(String todoTitle, String projTitle) {
         int projID = getFirstId(projTitle, "projects");
-        todoCount = buildJSONRequestWithJSONResponse().when()
+        List<Map<String,String>> things = buildJSONRequestWithJSONResponse().when()
                 .get("/projects/"+projID+"/tasks")
                 .jsonPath()
-                .getList("todos")
-                .size();
-        assertEquals(1,todoCount);
+                .getList("todos");
+        for (Map<String, String> thing : things) {
+            if (thing.get("title").equals(todoTitle)) {
+                return;
+            }
+        }
     }
 
     @Given("there does not exist a todo with title {string} in the system")
