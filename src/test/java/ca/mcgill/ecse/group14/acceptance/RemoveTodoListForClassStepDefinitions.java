@@ -34,7 +34,6 @@ public class RemoveTodoListForClassStepDefinitions extends BaseStepDefinitions {
         for (Map<String, String> task: tasks) {
             Utils.deleteTodo(Integer.parseInt(task.get("id")));
         }
-//        System.out.println(Utils.buildJSONRequestWithJSONResponse().when().get("/projects/" + String.valueOf(id) + "/tasks").jsonPath().get("tasks").toString());
     }
 
     @When("the user attempts to delete the project with title {string}")
@@ -86,7 +85,6 @@ public class RemoveTodoListForClassStepDefinitions extends BaseStepDefinitions {
             requestBody.put("description", taskDescription);
 
             response = Utils.buildJSONRequestWithJSONResponse().body(requestBody.toJSONString()).post("/todos");
-            System.out.println(response.asString());
             taskId = Integer.parseInt(response.jsonPath().get("id"));
         }
 

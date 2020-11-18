@@ -1,13 +1,9 @@
 package ca.mcgill.ecse.group14.acceptance;
-import ca.mcgill.ecse.group14.Resources;
-import ca.mcgill.ecse.group14.Utils;
 
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
+import ca.mcgill.ecse.group14.Utils;
 import io.cucumber.java.en.Given;
-import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.And;
+import io.cucumber.java.en.When;
 import io.cucumber.junit.Cucumber;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -17,7 +13,6 @@ import org.junit.runner.RunWith;
 import java.util.List;
 import java.util.Map;
 
-import static ca.mcgill.ecse.group14.Resources.BASE_URL;
 import static org.junit.Assert.*;
 
 @RunWith(Cucumber.class)
@@ -30,7 +25,7 @@ public class RemoveTaskStepDefinitions extends BaseStepDefinitions{
             if (!titles) {
                 JSONObject requestBody = new JSONObject();
                 requestBody.put("title", columns.get(0));
-                Utils.buildJSONRequest().body(requestBody.toJSONString()).post(BASE_URL+"/projects");
+                Utils.buildJSONRequest().body(requestBody.toJSONString()).post("/projects");
             }
             titles = false;
         }
@@ -47,7 +42,7 @@ public class RemoveTaskStepDefinitions extends BaseStepDefinitions{
                 JSONObject fields = new JSONObject();
                 fields.put("id", todoID);
                 RequestSpecification request = Utils.buildJSONRequest().body(fields.toJSONString());
-                request.post(BASE_URL+"/projects/" + projId + "/tasks");
+                request.post("/projects/" + projId + "/tasks");
             }
             titles = false;
         }
@@ -67,7 +62,7 @@ public class RemoveTaskStepDefinitions extends BaseStepDefinitions{
     @Given("the todo with title {string} is assigned to a project with title {string}")
     public void the_todo_with_title_is_assigned_to_a_project_with_title(String todoTitle, String projectTitle) {
         int projId = Utils.getFirstId(projectTitle, "projects");
-        Response response = Utils.buildJSONRequestWithJSONResponse().when().get(BASE_URL + "/projects/" + projId + "/tasks");
+        Response response = Utils.buildJSONRequestWithJSONResponse().when().get("/projects/" + projId + "/tasks");
         List<Map<String, String>> things = response.jsonPath().getList("todos");
         for (Map<String, String> thing : things) {
             if (thing.get("title").equals(todoTitle)) {
@@ -79,7 +74,7 @@ public class RemoveTaskStepDefinitions extends BaseStepDefinitions{
         JSONObject fields = new JSONObject();
         fields.put("id", todoID);
         RequestSpecification request = Utils.buildJSONRequest().body(fields.toJSONString());
-        request.post(BASE_URL+"/projects/" + projId + "/tasks");
+        request.post("/projects/" + projId + "/tasks");
     }
 
     @When("the user attempts to remove the todo with title {string} from the project with title {string}")
@@ -87,25 +82,24 @@ public class RemoveTaskStepDefinitions extends BaseStepDefinitions{
         todoCount = Utils.countTodos();
         int todoID = Utils.getFirstId(todoTitle, "todos");
         int projID = Utils.getFirstId(projTitle, "projects");
-        Utils.buildJSONRequestWithJSONResponse().when().delete(BASE_URL + "/projects/" + projID + "/tasks/" + todoID);
+        Utils.buildJSONRequestWithJSONResponse().when().delete("/projects/" + projID + "/tasks/" + todoID);
     }
 
     @Then("todo with title {string} shall no longer be associated with the project with title {string}")
     public void todo_with_title_shall_no_longer_be_associated_with_the_project_with_title(String todoTitle, String projTitle) {
         int projID = Utils.getFirstId(projTitle, "projects");
-        Response response = Utils.buildJSONRequestWithJSONResponse().when().get(BASE_URL + "/projects/" + projID + "/tasks");
+        Response response = Utils.buildJSONRequestWithJSONResponse().when().get("/projects/" + projID + "/tasks");
         List<Map<String, String>> todos = response.jsonPath().getList("todos"); //
         for (Map<String, String> todo : todos) {
             if (todo.get("title").equals(todoTitle)) {
                 fail();
             }
         }
-        return;
     }
 
     @Then("there shall be the same number of todos in the system")
     public void there_shall_be_the_same_number_of_todos_in_the_system() {
-        assertEquals(todoCount,Utils.countTodos());
+        assertEquals(todoCount, Utils.countTodos());
     }
 
     @Then("there shall be one less todo in the system")

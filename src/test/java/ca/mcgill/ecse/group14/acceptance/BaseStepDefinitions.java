@@ -6,8 +6,6 @@ import ca.mcgill.ecse.group14.Server;
 import ca.mcgill.ecse.group14.Utils;
 import io.restassured.RestAssured;
 
-import java.net.ConnectException;
-
 public class BaseStepDefinitions {
     static int errorCode;
     static int counter;

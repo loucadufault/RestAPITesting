@@ -1,23 +1,13 @@
 package ca.mcgill.ecse.group14.acceptance;
 
-import ca.mcgill.ecse.group14.Utils;
 import ca.mcgill.ecse.group14.Resources;
-import io.cucumber.java.After;
-import io.cucumber.java.Before;
+import ca.mcgill.ecse.group14.Utils;
 import io.cucumber.java.en.Given;
-import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.And;
+import io.cucumber.java.en.When;
 import io.cucumber.junit.Cucumber;
 import org.json.simple.JSONObject;
 import org.junit.runner.RunWith;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import io.restassured.response.*;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import org.junit.Test;
 
 import java.util.List;
 import java.util.Map;
@@ -27,8 +17,6 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith(Cucumber.class)
 public class QueryIncompleteHighPriorityTasksStepDefinitions extends BaseStepDefinitions {
-
-
     @Given("the following priorities are in the system")
     public void the_following_priorities_are_in_the_system(io.cucumber.datatable.DataTable dataTable) {
         List<List<String>> rows = dataTable.asLists(String.class);
@@ -39,15 +27,12 @@ public class QueryIncompleteHighPriorityTasksStepDefinitions extends BaseStepDef
                 JSONObject requestBody = new JSONObject();
                 requestBody.put("title", row.get(0));
                 requestBody.put("description", row.get(1));
-                Response response = buildJSONRequest().body(requestBody.toJSONString()).post("/categories");
-//                errorCode = response.getStatusCode();
-//                System.out.println(errorCode);
+                buildJSONRequest().body(requestBody.toJSONString()).post("/categories");
             }
             else{
                 hasSeenTitleRow = true;
             }
         }
-//        System.out.println("Done Priorities");
     }
 
     @Given("there exists the following projects in the system")
@@ -60,11 +45,8 @@ public class QueryIncompleteHighPriorityTasksStepDefinitions extends BaseStepDef
             requestBody.put("completed", Boolean.valueOf(row.get("completed")));
             requestBody.put("active", Boolean.valueOf(row.get("active")));
             requestBody.put("description", row.get("description"));
-            Response response = buildJSONRequest().body(requestBody.toJSONString()).post("/projects");
-//            errorCode = response.getStatusCode();
-//            System.out.println(errorCode);
+            buildJSONRequest().body(requestBody.toJSONString()).post("/projects");
         }
-//        System.out.println("Done Proj");
     }
 
     @Given("there exists the following todos in the system that are saved under {string}")
@@ -91,10 +73,7 @@ public class QueryIncompleteHighPriorityTasksStepDefinitions extends BaseStepDef
 
                 requestBody = new JSONObject();
                 requestBody.put("id",Integer.toString(projectId));
-                Response response = buildJSONRequest().body(requestBody.toJSONString()).post(Resources.BASE_URL+"/todos/"+todoId+"/tasksof");
-
-//                errorCode = response.getStatusCode();
-//                System.out.println(errorCode);
+                buildJSONRequest().body(requestBody.toJSONString()).post(Resources.BASE_URL+"/todos/"+todoId+"/tasksof");
             }
             else{
                 hasSeenTitleRow = true;
@@ -135,34 +114,29 @@ public class QueryIncompleteHighPriorityTasksStepDefinitions extends BaseStepDef
 
             }
         }
-        return;
     }
 
     @Then("{string} todos will be returned")
     public void todos_will_be_returned(String number) {
-        // Write code here that turns the phrase above into concrete actions
-        int n = Integer.parseInt(number);
-        assertEquals(n,counter);
-
+        assertEquals(Integer.parseInt(number), counter);
     }
 
     @Given("the project with title {string} has no active tasks")
     public void the_project_with_title_has_no_active_tasks(String title) {
         int id = getFirstId(title, "projects");
-        boolean hasActiveTask = false;
         List<Map<String,String>> taskList = buildJSONRequestWithJSONResponse().when()
                 .get("/projects/"+id+"/tasks")
                 .jsonPath()
                 .getList("categories");
 
-        if (taskList == null)
+        if (taskList == null) {
             return;
+        }
         for (Map<String, String> thing : taskList) {
             if (thing.get("todoDoneStatus").equals("true")) {
                 Utils.removeTodo(thing.get("title"));
             }
         }
-
     }
 
     @Given("there does not exist the project {string} in the system")

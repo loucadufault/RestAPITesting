@@ -13,13 +13,9 @@ import org.json.simple.JSONObject;
 import org.junit.runner.RunWith;
 import io.cucumber.datatable.DataTable;
 
-import ca.mcgill.ecse.group14.Utils;
 import java.util.List;
 import java.util.Map;
 
-import static io.restassured.RestAssured.*;
-import static org.hamcrest.core.IsEqual.*;
-import static ca.mcgill.ecse.group14.Resources.*;
 import static ca.mcgill.ecse.group14.Utils.*;
 import static org.junit.Assert.assertEquals;
 
@@ -67,7 +63,6 @@ public class AddingTaskToCourseStepDefinitions extends BaseStepDefinitions{
         Response response = buildJSONRequest().body(requestBody.toJSONString()).post("/projects/"+
                 projId+"/tasks");
         errorCode = response.getStatusCode();
-        System.out.println(errorCode);
     }
 
     @Then("the todo with title {string} is added to project with title {string} todo list")

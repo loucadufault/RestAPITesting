@@ -17,7 +17,6 @@ import static org.junit.Assert.fail;
 
 @RunWith(Cucumber.class)
 public class ChangeTaskDescriptionStepDefinitions extends BaseStepDefinitions {
-
     @Given("the following todos exist in the system")
     public void the_following_todos_exist_in_the_system(io.cucumber.datatable.DataTable dataTable) {
         List<List<String>> rows = dataTable.asLists(String.class);

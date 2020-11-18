@@ -7,8 +7,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.junit.Cucumber;
 import org.junit.runner.RunWith;
 
-import java.net.ConnectException;
-
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Cucumber.class)

@@ -4,7 +4,6 @@ import ca.mcgill.ecse.group14.Utils;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
-import io.cucumber.java.en.And;
 import io.cucumber.junit.Cucumber;
 import io.restassured.response.Response;
 import org.json.simple.JSONObject;
@@ -13,19 +12,17 @@ import org.junit.runner.RunWith;
 import java.util.List;
 import java.util.Map;
 
-import static ca.mcgill.ecse.group14.Resources.BASE_URL;
 import static org.junit.Assert.fail;
 
 @RunWith(Cucumber.class)
 public class MarkTaskAsDoneStepDefinitions extends BaseStepDefinitions{
-
     @Given("there exists a todo with title {string} and done status {string} in the system")
     public void there_exists_a_todo_with_title_and_done_status_in_the_system(String title, String doneStatus) {
         if(!Utils.existsTodo(title)){
             JSONObject requestBody = new JSONObject();
             requestBody.put("title", title);
             requestBody.put("doneStatus", Boolean.parseBoolean(doneStatus));
-            Utils.buildJSONRequestWithJSONResponse().body(requestBody.toJSONString()).post(BASE_URL + "/todos");
+            Utils.buildJSONRequestWithJSONResponse().body(requestBody.toJSONString()).post("/todos");
         }
     }
 
@@ -35,13 +32,13 @@ public class MarkTaskAsDoneStepDefinitions extends BaseStepDefinitions{
         JSONObject requestBody = new JSONObject();
         requestBody.put("title", title);
         requestBody.put("doneStatus", Boolean.parseBoolean(newDoneStatus));
-        Response response = Utils.buildJSONRequestWithJSONResponse().body(requestBody.toJSONString()).put(BASE_URL + "/todos/" + todoID);
+        Response response = Utils.buildJSONRequestWithJSONResponse().body(requestBody.toJSONString()).put("/todos/" + todoID);
         errorCode = response.statusCode();
     }
 
     @Then("the todo with title {string} shall have done status {string}")
     public void the_todo_with_title_shall_have_done_status(String title, String newDoneStatus) {
-        Response response = Utils.buildJSONRequestWithJSONResponse().when().get(BASE_URL + "/todos");
+        Response response = Utils.buildJSONRequestWithJSONResponse().when().get("/todos");
         List<Map<String, String>> todos = response.jsonPath().getList("todos");
         for (Map<String, String> todo : todos) {
             if (todo.get("title").equals(title) && todo.get("doneStatus").equals(newDoneStatus)) {
@@ -50,10 +47,4 @@ public class MarkTaskAsDoneStepDefinitions extends BaseStepDefinitions{
         }
         fail();
     }
-
-    /*@Then("the system shall report the error code {string}")
-    public void the_system_shall_report_the_error_code(String string) {
-        // Write code here that turns the phrase above into concrete actions
-        throw new io.cucumber.java.PendingException();
-    }*/
 }
