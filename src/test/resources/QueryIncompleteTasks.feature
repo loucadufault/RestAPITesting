@@ -27,8 +27,8 @@ Feature: Query incomplete tasks
     Then "<n>" todos will be returned
     Examples:
       | title    | n |
-      | Class B1 | 1 |
-      | Class B2 | 2 |
+      | Class B1 | 2 |
+      | Class B2 | 3 |
 
   Scenario Outline: Alternate flow - Query incomplete tasks from a project (class) with no incomplete tasks
     Given there exists the following projects in the system
@@ -37,9 +37,9 @@ Feature: Query incomplete tasks
     Given there exists the following todos in the system that are saved under "Class C"
       | todoTitle            | todoDoneStatus | todoDescription             |
       | todo C HIGH   prio 1 | true           | todo C HIGH prio 1 descr    |
-      | todo C MEDIUM prio 1 | false          | todo C Medimum prio 1 descr |
+      | todo C MEDIUM prio 1 | true           | todo C Medimum prio 1 descr |
       | todo C MEDIUM prio 2 | true           | todo C Medimum prio 2 descr |
-      | todo C LOW prio 1    | false          | todo C LOW prio 1 descr     |
+      | todo C LOW prio 1    | true           | todo C LOW prio 1 descr     |
       | todo C LOW prio 2    | true           | todo C LOW prio 2 descr     |
     Given the project with title "<title>" has no active tasks
     When the user attempts to query the incomplete tasks of the project with title "<title>"
