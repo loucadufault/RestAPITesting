@@ -1,5 +1,6 @@
 package ca.mcgill.ecse.group14.unit;
 import ca.mcgill.ecse.group14.Utils;
+import io.restassured.response.Response;
 import org.junit.*;
 import org.json.simple.JSONObject;
 
@@ -15,7 +16,7 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testGetCategories() {
-        Utils.assertGETStatusCode(BASE_URL + "/categories", STATUS_CODE.OK);
+        Utils.assertGETStatusCode( "/categories", STATUS_CODE.OK);
     }
 
     /*
@@ -24,10 +25,8 @@ public class CategoriesTest extends BaseTest {
     @Test
     public void testGetCategoryWithValidID(){
         int catID = createCategory("catEx");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .get(BASE_URL+"/categories/"+String.valueOf(catID))
+        Utils.buildJSONRequestWithJSONResponse()
+                .get("/categories/"+String.valueOf(catID))
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK)
                 .body("categories[0].title",equalTo("catEx"));
@@ -39,10 +38,8 @@ public class CategoriesTest extends BaseTest {
     @Test
     public void testGetCategoryWithInvalidID(){
         int catID = createCategory("catEx");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .get(BASE_URL+"/categories/ABC")
+        Utils.buildJSONRequest()
+                .get("/categories/ABC")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -57,15 +54,11 @@ public class CategoriesTest extends BaseTest {
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(projID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .get(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects")
+                .post("/categories/"+String.valueOf(catID)+"/projects");
+        Utils.buildJSONRequest()
+                .get("/categories/"+String.valueOf(catID)+"/projects")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
     }
@@ -81,15 +74,11 @@ public class CategoriesTest extends BaseTest {
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(projID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/" + String.valueOf(catID) + "/projects");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .get(BASE_URL+"/categories/100/projects")
+                .post("/categories/" + String.valueOf(catID) + "/projects");
+        Utils.buildJSONRequest()
+                .get("/categories/100/projects")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -103,15 +92,11 @@ public class CategoriesTest extends BaseTest {
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .get(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects")
+                .post("/categories/"+String.valueOf(catID)+"/projects");
+        Utils.buildJSONRequest()
+                .get("/categories/"+String.valueOf(catID)+"/projects")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
     }
@@ -128,15 +113,11 @@ public class CategoriesTest extends BaseTest {
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .get(BASE_URL+"/categories/ABC/projects")
+                .post("/categories/"+String.valueOf(catID)+"/projects");
+        Utils.buildJSONRequest()
+                .get("/categories/ABC/projects")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -146,10 +127,8 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testPostCategoryNoBody(){
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .post(BASE_URL+"/categories")
+        Utils.buildJSONRequest()
+                .post("/categories")
                 .then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
     }
 
@@ -163,11 +142,9 @@ public class CategoriesTest extends BaseTest {
         JSONObject body = new JSONObject();
         body.put("title",title);
         body.put("description",description);
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequestWithJSONResponse()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories")
+                .post("/categories")
                 .then()
                 .assertThat().statusCode(STATUS_CODE.CREATED)
                 .body("title",equalTo(title))
@@ -182,11 +159,9 @@ public class CategoriesTest extends BaseTest {
         String title = "catTest";
         JSONObject body = new JSONObject();
         body.put("title",title);
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequestWithJSONResponse()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories")
+                .post("/categories")
                 .then()
                 .assertThat().statusCode(STATUS_CODE.CREATED)
                 .body("title",equalTo(title))
@@ -201,11 +176,9 @@ public class CategoriesTest extends BaseTest {
         String description = "catTest";
         JSONObject body = new JSONObject();
         body.put("description",description);
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories")
+                .post("/categories")
                 .then()
                 .assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
     }
@@ -221,11 +194,9 @@ public class CategoriesTest extends BaseTest {
         body.put("title",title);
         body.put("description",description);
         int categoryID = createCategory("categoryTest");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequestWithJSONResponse()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/"+String.valueOf(categoryID))
+                .post("/categories/"+String.valueOf(categoryID))
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK)
                 .body("title",equalTo("catTest"))
@@ -245,11 +216,9 @@ public class CategoriesTest extends BaseTest {
         body.put("description",description);
 
         int categoryID = createCategory("categoryTest");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .get(BASE_URL+"/category/"+"5")
+                .get("/category/"+"5")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -264,11 +233,9 @@ public class CategoriesTest extends BaseTest {
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(projID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects")
+                .post("/categories/"+String.valueOf(catID)+"/projects")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.CREATED);
     }
@@ -279,15 +246,13 @@ public class CategoriesTest extends BaseTest {
     @Test
     public void testPostCategoryRelatedToProjectWithInvalidID(){
         int projID = createProject("Project1");
-        int catID = createCategory("Category1");
+        createCategory("Category1");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(projID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/100/projects")
+                .post("/categories/100/projects")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -302,11 +267,9 @@ public class CategoriesTest extends BaseTest {
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/"+catID+"/todos")
+                .post("/categories/"+catID+"/todos")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.CREATED);
     }
@@ -317,15 +280,13 @@ public class CategoriesTest extends BaseTest {
     @Test
     public void testPostCategoryRelatedToTodoWithInvalidID(){
         int todoID = createProject("Project1");
-        int catID = createCategory("Category1");
+        createCategory("Category1");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/100/projects")
+                .post("/categories/100/projects")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -335,7 +296,7 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testHeadCategories(){
-        assertHEADStatusCode(BASE_URL+"/categories", STATUS_CODE.OK);
+        assertHEADStatusCode("/categories", STATUS_CODE.OK);
     }
 
     /*
@@ -344,10 +305,8 @@ public class CategoriesTest extends BaseTest {
     @Test
     public void testHeadCategoriesWithValidID(){
         int catID = createCategory("catEx");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .head(BASE_URL+"/categories/"+String.valueOf(catID))
+        Utils.buildJSONRequest()
+                .head("/categories/"+String.valueOf(catID))
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
     }
@@ -356,11 +315,9 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testHeadCategoriesWithInvalidID(){
-        int catID = createCategory("catEx");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .head(BASE_URL+"/categories/ABC")
+        createCategory("catEx");
+        Utils.buildJSONRequest()
+                .head("/categories/ABC")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -374,15 +331,13 @@ public class CategoriesTest extends BaseTest {
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(projID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects");
-        given()
+                .post("/categories/"+String.valueOf(catID)+"/projects");
+        Utils.buildJSONRequest()
                 .header("Content-Type", "application/json")
                 .header("Accept","application/json")
-                .head(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects")
+                .head("/categories/"+String.valueOf(catID)+"/projects")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
     }
@@ -398,15 +353,11 @@ public class CategoriesTest extends BaseTest {
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(projID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .head(BASE_URL+"/categories/ABC/projects")
+                .post("/categories/"+String.valueOf(catID)+"/projects");
+        Utils.buildJSONRequest()
+                .head("/categories/ABC/projects")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -421,15 +372,11 @@ public class CategoriesTest extends BaseTest {
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .head(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects")
+                .post("/categories/"+String.valueOf(catID)+"/projects");
+        Utils.buildJSONRequest()
+                .head("/categories/"+String.valueOf(catID)+"/projects")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
     }
@@ -446,15 +393,11 @@ public class CategoriesTest extends BaseTest {
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/"+String.valueOf(catID)+"/todos");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .head(BASE_URL+"/categories/ABC/todos")
+                .post("/categories/"+String.valueOf(catID)+"/todos");
+        Utils.buildJSONRequest()
+                .head("/categories/ABC/todos")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -471,11 +414,9 @@ public class CategoriesTest extends BaseTest {
         body.put("description",description);
 
         int catID = createCategory("initial");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequestWithJSONResponse()
                 .body(body.toJSONString())
-                .put(BASE_URL+"/categories/"+String.valueOf(catID))
+                .put("/categories/"+String.valueOf(catID))
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK)
                 .body("title",equalTo(title))
@@ -494,11 +435,9 @@ public class CategoriesTest extends BaseTest {
         body.put("description",description);
 
         int catID = createCategory("initial");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .put(BASE_URL+"/categories/ABC")
+                .put("/categories/ABC")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -513,11 +452,9 @@ public class CategoriesTest extends BaseTest {
         body.put("title",title);
 
         int catID = createCategory("initial");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequestWithJSONResponse()
                 .body(body.toJSONString())
-                .put(BASE_URL+"/categories/"+String.valueOf(catID))
+                .put("/categories/"+String.valueOf(catID))
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK)
                 .body("title",equalTo(title));
@@ -533,11 +470,9 @@ public class CategoriesTest extends BaseTest {
         body.put("description",description);
 
         int catID = createCategory("initial");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .put(BASE_URL+"/categories/"+String.valueOf(catID))
+                .put("/categories/"+String.valueOf(catID))
                 .then().assertThat()
                 .statusCode(STATUS_CODE.BAD_REQUEST);
     }
@@ -548,10 +483,8 @@ public class CategoriesTest extends BaseTest {
     @Test
     public void testPutCategoryWithValidIDAndTitleDescription(){
         int catID = createCategory("initial");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .put(BASE_URL+"/categories/"+String.valueOf(catID))
+        Utils.buildJSONRequest()
+                .put("/categories/"+String.valueOf(catID))
                 .then().assertThat()
                 .statusCode(STATUS_CODE.BAD_REQUEST);
     }
@@ -562,10 +495,8 @@ public class CategoriesTest extends BaseTest {
     @Test
     public void testDeleteCategoryWithValidID(){
         int catID = createCategory("initial");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .delete(BASE_URL+"/categories/"+String.valueOf(catID))
+        Utils.buildJSONRequest()
+                .delete("/categories/"+String.valueOf(catID))
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
     }
@@ -575,11 +506,9 @@ public class CategoriesTest extends BaseTest {
      */
     @Test
     public void testDeleteCategoryWithInvalidID(){
-        int catID = createCategory("initial");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .delete(BASE_URL+"/categories/ABC")
+        createCategory("initial");
+        Utils.buildJSONRequest()
+                .delete("/categories/ABC")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -594,15 +523,11 @@ public class CategoriesTest extends BaseTest {
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(projID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .delete(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects/"+String.valueOf(projID))
+                .post("/categories/"+String.valueOf(catID)+"/projects");
+        Utils.buildJSONRequest()
+                .delete("/categories/"+String.valueOf(catID)+"/projects/"+String.valueOf(projID))
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
     }
@@ -616,15 +541,11 @@ public class CategoriesTest extends BaseTest {
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(projID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .delete(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects/ABC")
+                .post("/categories/"+String.valueOf(catID)+"/projects");
+        Utils.buildJSONRequest()
+                .delete("/categories/"+String.valueOf(catID)+"/projects/ABC")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -641,15 +562,11 @@ public class CategoriesTest extends BaseTest {
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(projID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .delete(BASE_URL+"/categories/ABC/projects/"+String.valueOf(projID))
+                .post("/categories/"+String.valueOf(catID)+"/projects");
+        Utils.buildJSONRequest()
+                .delete("/categories/ABC/projects/"+String.valueOf(projID))
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -664,15 +581,11 @@ public class CategoriesTest extends BaseTest {
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(projID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .delete(BASE_URL+"/categories/ABC/projects/ABC")
+                .post("/categories/"+String.valueOf(catID)+"/projects");
+        Utils.buildJSONRequest()
+                .delete("/categories/ABC/projects/ABC")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -687,15 +600,11 @@ public class CategoriesTest extends BaseTest {
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/"+catID+"/todos");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .delete(BASE_URL+"/categories/"+catID+"/todos/"+todoID)
+                .post("/categories/"+catID+"/todos");
+        Utils.buildJSONRequest()
+                .delete("/categories/"+catID+"/todos/"+todoID)
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
     }
@@ -709,39 +618,32 @@ public class CategoriesTest extends BaseTest {
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .delete(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects/ABC")
+                .post("/categories/"+String.valueOf(catID)+"/projects");
+        Utils.buildJSONRequest()
+                .delete("/categories/"+String.valueOf(catID)+"/projects/ABC")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
 
-    /*
-    Test DELETE /categories/:id/projects/:id with invalid ID for category and valid ID for to-do
+    /**
+     * Test DELETE /categories/:id/projects/:id with invalid ID for category and valid ID for to-do
      */
     @Test
-    public void testDeleteCategoryTodoRelationshipInvalidCatIDandValidTodoID(){
+    public void testDeleteCategoryTodoRelationshipInvalidCatIDAndValidTodoID(){
         int catID = createCategory("catEx");
         int todoID = createTodo("todoEx");
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequestWithJSONResponse()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .delete(BASE_URL+"/categories/ABC/projects/"+String.valueOf(todoID))
-                .then().assertThat()
+                .post("/categories/" + String.valueOf(catID) + "/projects");
+        Response response = Utils.buildJSONRequestWithJSONResponse()
+                .delete("/categories/ABC/projects/"+String.valueOf(todoID));
+        System.out.println(response.asString());
+        response.then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
 
@@ -755,15 +657,11 @@ public class CategoriesTest extends BaseTest {
         JSONObject body = new JSONObject();
         body.put("id",String.valueOf(todoID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
+        Utils.buildJSONRequest()
                 .body(body.toJSONString())
-                .post(BASE_URL+"/categories/"+String.valueOf(catID)+"/projects");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept","application/json")
-                .delete(BASE_URL+"/categories/ABC/projects/ABC")
+                .post("/categories/"+String.valueOf(catID)+"/projects");
+        Utils.buildJSONRequest()
+                .delete("/categories/ABC/projects/ABC")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -780,7 +678,7 @@ public class CategoriesTest extends BaseTest {
                 .header("Content-Type", "application/xml")
                 .header("Accept", "application/xml")
                 .body(payload.toString()).when()
-                .post(BASE_URL+"/categories")
+                .post("/categories")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.CREATED);
     }
@@ -793,11 +691,9 @@ public class CategoriesTest extends BaseTest {
         StringBuilder payload = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         payload.append("<todo>").append("<title>>" + "titleText" + "<</title>").append("</todo>");
 
-        given()
-                .header("Content-Type", "application/xml")
-                .header("Accept", "application/xml")
+        Utils.buildJSONRequest()
                 .body(payload.toString()).when()
-                .post(BASE_URL+"/categories")
+                .post("/categories")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.BAD_REQUEST);
     }

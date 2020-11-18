@@ -1,5 +1,6 @@
 package ca.mcgill.ecse.group14.unit;
 
+import ca.mcgill.ecse.group14.Utils;
 import io.restassured.http.ContentType;
 import io.restassured.path.xml.XmlPath;
 import io.restassured.response.Response;
@@ -20,10 +21,8 @@ public class DocsTest extends BaseTest {
      */
     @Test
     public void testDocumentationLoaded(){
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
-                .get(BASE_URL+"/docs")
+        Utils.buildJSONRequest()
+                .get("/docs")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
     }
@@ -33,13 +32,8 @@ public class DocsTest extends BaseTest {
      */
     @Test
     public void testDocumentationHTML(){
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json");
-        Response r = given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
-                .get(BASE_URL+"/docs")
+        Response r = Utils.buildJSONRequest()
+                .get("/docs")
                 .then()
                 .contentType(ContentType.HTML)
                 .extract()

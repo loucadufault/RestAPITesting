@@ -118,7 +118,7 @@ public class Utils {
     }
 
     public static Response getProject(int id) {
-        return buildJSONRequestWithJSONResponse().when().get("/" + id);
+        return buildJSONRequestWithJSONResponse().when().get(BASE_URL + "/projects/" + id);
     }
 
     public static boolean existsProject(int id) {

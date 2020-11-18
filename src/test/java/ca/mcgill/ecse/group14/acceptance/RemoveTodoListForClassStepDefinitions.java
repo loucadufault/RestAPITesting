@@ -12,7 +12,6 @@ import org.junit.runner.RunWith;
 import java.util.List;
 import java.util.Map;
 
-import static ca.mcgill.ecse.group14.Resources.BASE_URL;
 import static org.junit.Assert.*;
 
 @RunWith(Cucumber.class)

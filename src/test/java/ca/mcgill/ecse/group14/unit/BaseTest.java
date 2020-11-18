@@ -7,13 +7,11 @@ import io.restassured.RestAssured;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
-import java.net.ConnectException;
-
 public class BaseTest {
     static final boolean CI = Boolean.valueOf(System.getenv("CI"));
 
     @BeforeClass
-    public static void setup() throws ConnectException {
+    public static void setup() {
         RestAssured.baseURI = Resources.BASE_URL;
         if (Server.ping() == 0) {
             return;
@@ -23,7 +21,7 @@ public class BaseTest {
     }
 
     @AfterClass
-    public static void teardown() throws InterruptedException {
+    public static void teardown() {
         Utils.clearData();
     }
 }

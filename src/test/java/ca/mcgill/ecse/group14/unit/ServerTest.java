@@ -5,6 +5,7 @@ import ca.mcgill.ecse.group14.Server;
 import io.restassured.RestAssured;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static ca.mcgill.ecse.group14.Resources.BASE_URL;
@@ -12,7 +13,8 @@ import static io.restassured.RestAssured.get;
 import static org.junit.Assert.assertEquals;
 
 public class ServerTest {
-    public ServerTest() {
+    @BeforeClass
+    public static void setup() {
         RestAssured.baseURI = BASE_URL;
     }
 
@@ -39,10 +41,12 @@ public class ServerTest {
         assertEquals(0, Server.waitUntilReady());
         get().then().assertThat().statusCode(Resources.STATUS_CODE.OK);
     }
+
     @Test
     public void test_CanPing() {
         assertEquals(0, Server.ping());
     }
+
     @Test
     public void test_CanStop() {
         Server.stop();

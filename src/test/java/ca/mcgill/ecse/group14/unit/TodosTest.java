@@ -19,7 +19,7 @@ public class TodosTest extends BaseTest {
      */
     @Test
     public void testGetTodosStatusCode() {
-        assertGETStatusCode(BASE_URL + "/todos", STATUS_CODE.OK);
+        assertGETStatusCode("/todos", STATUS_CODE.OK);
     }
 
     /**
@@ -30,7 +30,7 @@ public class TodosTest extends BaseTest {
         createTodo("todoTitleText");
 
         given()
-                .head(BASE_URL + "/todos")
+                .head("/todos")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
     }
@@ -43,11 +43,9 @@ public class TodosTest extends BaseTest {
         JSONObject fields = new JSONObject();
         fields.put("title", "titleText");
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+        buildJSONRequestWithJSONResponse()
                 .body(fields.toJSONString())
-                .post(BASE_URL + "/todos")
+                .post( "/todos")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.CREATED)
                 .body("title", equalTo("titleText"));
@@ -61,11 +59,9 @@ public class TodosTest extends BaseTest {
         JSONObject fields = new JSONObject();
         fields.put("title", "");
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+        buildJSONRequest()
                 .body(fields.toJSONString())
-                .post(BASE_URL + "/todos")
+                .post( "/todos")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.BAD_REQUEST);
     }
@@ -75,10 +71,8 @@ public class TodosTest extends BaseTest {
      */
     @Test
     public void testPostTodosWithNoFields() {
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
-                .post(BASE_URL + "/todos")
+        buildJSONRequest()
+                .post("/todos")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.BAD_REQUEST);
     }
@@ -93,11 +87,9 @@ public class TodosTest extends BaseTest {
         JSONObject fields = new JSONObject();
         fields.put("title", 4.0f);
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+        buildJSONRequest()
                 .body(fields.toJSONString())
-                .post(BASE_URL + "/todos")
+                .post("/todos")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.BAD_REQUEST);
     }
@@ -114,7 +106,7 @@ public class TodosTest extends BaseTest {
                 .header("Content-Type", "application/xml")
                 .header("Accept", "application/xml")
                 .body(payload.toString()).when()
-                .post(BASE_URL+"/todos")
+                .post("/todos")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.CREATED);
     }
@@ -131,7 +123,7 @@ public class TodosTest extends BaseTest {
                 .header("Content-Type", "application/xml")
                 .header("Accept", "application/xml")
                 .body(payload.toString()).when()
-                .post(BASE_URL+"/todos")
+                .post("/todos")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.BAD_REQUEST);
     }
@@ -142,10 +134,8 @@ public class TodosTest extends BaseTest {
     @Test
     public void testGetTodosValidID() {
         int todoID = createTodo("todoTitleText");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
-                .get(BASE_URL + "/todos/" + todoID)
+        buildJSONRequestWithJSONResponse()
+                .get("/todos/" + todoID)
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK)
                 .body("todos[0].title", equalTo("todoTitleText"));
@@ -157,10 +147,8 @@ public class TodosTest extends BaseTest {
     @Test
     public void testGetTodosInvalidID() {
         createTodo("todoTitleText");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
-                .get(BASE_URL + "/todos/" + "A")
+        buildJSONRequest()
+                .get( "/todos/" + "A")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -171,10 +159,8 @@ public class TodosTest extends BaseTest {
     @Test
     public void testHeadTodosID(){
         int todoID = createTodo("todoTitleText");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
-                .head(BASE_URL + "/todos/" + todoID)
+        buildJSONRequest()
+                .head("/todos/" + todoID)
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
     }
@@ -187,11 +173,9 @@ public class TodosTest extends BaseTest {
         JSONObject fields = new JSONObject();
         fields.put("title", "todosIDText");
         int todoID = createTodo("todoTitleText");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+        buildJSONRequestWithJSONResponse()
                 .body(fields.toJSONString())
-                .post(BASE_URL + "/todos/" + todoID)
+                .post("/todos/" + todoID)
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK)
                 .body("title", equalTo("todosIDText"));
@@ -205,11 +189,9 @@ public class TodosTest extends BaseTest {
         JSONObject fields = new JSONObject();
         fields.put("title", "titleText");
         int todoID = createTodo("todoTitleText");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+        buildJSONRequestWithJSONResponse()
                 .body(fields.toJSONString())
-                .put(BASE_URL + "/todos/" + todoID)
+                .put("/todos/" + todoID)
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK)
                 .body("title", equalTo("titleText"));
@@ -223,11 +205,9 @@ public class TodosTest extends BaseTest {
         JSONObject fields = new JSONObject();
         fields.put("title", "titleText");
         int todoID = createTodo("todoTitleText");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+        buildJSONRequest()
                 .body(fields.toJSONString())
-                .put(BASE_URL + "/todos/" + "-1")
+                .put("/todos/" + "-1")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -238,10 +218,8 @@ public class TodosTest extends BaseTest {
     @Test
     public void testDeleteTodosID() {
         int todoID = createTodo("todoTitleText");
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
-                .delete(BASE_URL + "/todos/" + todoID)
+        buildJSONRequest()
+                .delete("/todos/" + todoID)
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
     }
@@ -253,12 +231,10 @@ public class TodosTest extends BaseTest {
     public void testDeleteDeletedTodosID() {
         int todoID = createTodo("todoTitleText");
         given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
-                .delete(BASE_URL + "/todos/" + todoID);
+                .delete("/todos/" + todoID);
 
         given()
-                .delete(BASE_URL+"/todos/"+todoID)
+                .delete("/todos/"+todoID)
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -274,16 +250,14 @@ public class TodosTest extends BaseTest {
         JSONObject fields = new JSONObject();
         fields.put("id", String.valueOf(catID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+        buildJSONRequest()
                 .body(fields.toJSONString())
-                .post(BASE_URL + "/todos/" + todoID + "/categories")
+                .post( "/todos/" + todoID + "/categories")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.CREATED);
 
         given()
-                .get(BASE_URL + "/todos/" + todoID + "/categories")
+                .get( "/todos/" + todoID + "/categories")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
     }
@@ -302,14 +276,12 @@ public class TodosTest extends BaseTest {
         JSONObject fields = new JSONObject();
         fields.put("id", String.valueOf(catID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+        buildJSONRequest()
                 .body(fields.toJSONString())
-                .post(BASE_URL + "/todos/" + todoID + "/categories");
+                .post("/todos/" + todoID + "/categories");
 
         given()
-                .get(BASE_URL + "/todos/ABC/categories")
+                .get("/todos/ABC/categories")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -325,16 +297,14 @@ public class TodosTest extends BaseTest {
         JSONObject fields = new JSONObject();
         fields.put("id", String.valueOf(catID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+        buildJSONRequest()
                 .body(fields.toJSONString())
-                .post(BASE_URL + "/todos/" + todoID + "/categories")
+                .post("/todos/" + todoID + "/categories")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.CREATED);
 
         given()
-                .head(BASE_URL + "/todos/" + todoID + "/categories")
+                .head("/todos/" + todoID + "/categories")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
     }
@@ -350,11 +320,9 @@ public class TodosTest extends BaseTest {
         JSONObject fields = new JSONObject();
         fields.put("id", String.valueOf(catID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+        buildJSONRequest()
                 .body(fields.toJSONString())
-                .post(BASE_URL + "/todos/" + todoID + "/categories")
+                .post("/todos/" + todoID + "/categories")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.CREATED);
     }
@@ -370,16 +338,14 @@ public class TodosTest extends BaseTest {
         JSONObject fields = new JSONObject();
         fields.put("id", String.valueOf(catID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+        buildJSONRequest()
                 .body(fields.toJSONString())
-                .post(BASE_URL + "/todos/" + todoID + "/categories")
+                .post("/todos/" + todoID + "/categories")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.CREATED);
 
         given()
-                .delete(BASE_URL + "/todos/" + todoID + "/categories/" + catID)
+                .delete("/todos/" + todoID + "/categories/" + catID)
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
     }
@@ -395,14 +361,12 @@ public class TodosTest extends BaseTest {
         JSONObject fields = new JSONObject();
         fields.put("id", String.valueOf(projID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+        buildJSONRequest()
                 .body(fields.toJSONString())
-                .post(BASE_URL + "/todos/" + todoID + "/tasksof");
+                .post("/todos/" + todoID + "/tasksof");
 
         given()
-                .get(BASE_URL + "/todos/" + todoID + "/tasksof")
+                .get("/todos/" + todoID + "/tasksof")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
     }
@@ -420,14 +384,12 @@ public class TodosTest extends BaseTest {
         JSONObject fields = new JSONObject();
         fields.put("id", String.valueOf(projID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+        buildJSONRequest()
                 .body(fields.toJSONString())
-                .post(BASE_URL + "/todos/" + todoID + "/tasksof");
+                .post("/todos/" + todoID + "/tasksof");
 
         given()
-                .get(BASE_URL + "/todos/ABC/tasksof")
+                .get("/todos/ABC/tasksof")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -443,14 +405,12 @@ public class TodosTest extends BaseTest {
         JSONObject fields = new JSONObject();
         fields.put("id", String.valueOf(projID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+        buildJSONRequest()
                 .body(fields.toJSONString())
-                .post(BASE_URL + "/todos/" + todoID + "/tasksof");
+                .post("/todos/" + todoID + "/tasksof");
 
         given()
-                .head(BASE_URL + "/todos/" + todoID + "/tasksof")
+                .head("/todos/" + todoID + "/tasksof")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
     }
@@ -466,11 +426,9 @@ public class TodosTest extends BaseTest {
         JSONObject fields = new JSONObject();
         fields.put("id", String.valueOf(projID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+        buildJSONRequest()
                 .body(fields.toJSONString())
-                .post(BASE_URL + "/todos/" + todoID + "/tasksof")
+                .post("/todos/" + todoID + "/tasksof")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.CREATED);
     }
@@ -486,14 +444,12 @@ public class TodosTest extends BaseTest {
         JSONObject fields = new JSONObject();
         fields.put("id", String.valueOf(projID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+        buildJSONRequest()
                 .body(fields.toJSONString())
-                .post(BASE_URL + "/todos/" + todoID + "/categories");
+                .post("/todos/" + todoID + "/categories");
 
         given()
-                .delete(BASE_URL + "/todos/" + todoID + "/categories/" + projID)
+                .delete("/todos/" + todoID + "/categories/" + projID)
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
     }

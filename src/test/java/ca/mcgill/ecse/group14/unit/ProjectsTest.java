@@ -4,6 +4,7 @@ import ca.mcgill.ecse.group14.Utils;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.*;
+import io.restassured.specification.RequestSpecification;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -30,10 +31,6 @@ public class ProjectsTest extends BaseTest {
 
     private static int NON_EXISTENT_ID = 99999;
 
-    public ProjectsTest() {
-        RestAssured.baseURI = BASE_URL + "/projects";
-    }
-
     ////////////////////////////////////////////////////////////////////////////////
     // POST
     ////////////////////////////////////////////////////////////////////////////////
@@ -51,7 +48,7 @@ public class ProjectsTest extends BaseTest {
         stringBuilder.append("</project>");
 
         given().header("Content-Type", "application/xml").header("Accept", "application/json").body(stringBuilder.toString())
-                .when().post()
+                .when().post("/projects")
                 .then().assertThat().statusCode(STATUS_CODE.CREATED).body(
                         "title", equalTo(title),
                 "description", equalTo(description),
@@ -72,7 +69,7 @@ public class ProjectsTest extends BaseTest {
         stringBuilder.append("</project>");
 
         given().header("Content-Type", "application/json").header("Accept", "application/json").body(stringBuilder.toString())
-                .when().post()
+                .when().post("/projects")
                 .then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
     }
 
@@ -89,7 +86,7 @@ public class ProjectsTest extends BaseTest {
                 malformedJSONString.substring(0, 10) +
                 ": \" : garbled\"{{" +
                 malformedJSONString.substring(10).replaceFirst("\"", "'");
-        buildJSONRequest().body(malformedJSONString).when().post().then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
+        buildJSONRequest().body(malformedJSONString).when().post("/projects").then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
     }
 
     @Test
@@ -99,7 +96,7 @@ public class ProjectsTest extends BaseTest {
         JSONObject requestBody = new JSONObject();
         requestBody.put("title", title);
 
-        Response response = given().body(requestBody.toJSONString()).when().post();
+        Response response = given().body(requestBody.toJSONString()).when().post("/projects");
 
         assertHasDefaultValues(response);
         assertHasTitle(response, title);
@@ -113,7 +110,7 @@ public class ProjectsTest extends BaseTest {
         requestBody.put("description", description);
 
         buildJSONRequestWithJSONResponse().body(requestBody.toJSONString())
-                .when().post()
+                .when().post("/projects")
                 .then().assertThat().statusCode(STATUS_CODE.CREATED).body(
                 "title", equalTo(DEFAULT_TITLE),
                 "completed", equalTo(String.valueOf(DEFAULT_COMPLETED)),
@@ -135,7 +132,7 @@ public class ProjectsTest extends BaseTest {
         requestBody.put("completed", completed);
 
         buildJSONRequestWithJSONResponse().body(requestBody.toJSONString())
-                .when().post()
+                .when().post("/projects")
                 .then().assertThat().statusCode(STATUS_CODE.CREATED).body("title", equalTo(title),
                 "completed", equalTo(String.valueOf(completed)),
                 "active", equalTo(String.valueOf(active)),
@@ -144,7 +141,7 @@ public class ProjectsTest extends BaseTest {
 
     @Test
     public void test_CreateProject_NoValues() {
-        Response response = buildJSONRequest().when().post();
+        Response response = buildJSONRequest().when().post("/projects");
         assertHasDefaultValues(response);
         assertHasTitle(response, "");
     }
@@ -156,7 +153,7 @@ public class ProjectsTest extends BaseTest {
         JSONObject requestBody = new JSONObject();
         requestBody.put("title", title);
 
-        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post();
+        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post("/projects");
         response.then().assertThat().statusCode(STATUS_CODE.CREATED);
         assertHasDefaultValues(response);
         assertHasTitle(response, title);
@@ -169,7 +166,7 @@ public class ProjectsTest extends BaseTest {
         JSONObject requestBody = new JSONObject();
         requestBody.put("description", description);
 
-        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post();
+        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post("/projects");
         response.then().assertThat().statusCode(STATUS_CODE.CREATED);
         assertHasDefaultValues(response);
         response.then().assertThat().body("title", equalTo(String.valueOf(description)));
@@ -186,7 +183,7 @@ public class ProjectsTest extends BaseTest {
         JSONObject requestBody = new JSONObject();
         requestBody.put("title", title);
 
-        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post();
+        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post("/projects");
         response.then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
     }
 
@@ -196,7 +193,7 @@ public class ProjectsTest extends BaseTest {
 
         JSONObject requestBody = new JSONObject();
         requestBody.put("completed", completed);
-        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post();
+        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post("/projects");
         response.then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
         assertHasErrorMessage(response, "Failed Validation: completed should be BOOLEAN");
     }
@@ -207,7 +204,7 @@ public class ProjectsTest extends BaseTest {
 
         JSONObject requestBody = new JSONObject();
         requestBody.put("active", active);
-        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post();
+        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post("/projects");
         response.then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
         assertHasErrorMessage(response, "Failed Validation: active should be BOOLEAN");
     }
@@ -220,7 +217,7 @@ public class ProjectsTest extends BaseTest {
         JSONObject requestBody = new JSONObject();
         requestBody.put("active", active);
         requestBody.put("completed", completed);
-        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post();
+        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post("/projects");
         response.then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
         assertHasErrorMessage(response, "Failed Validation: active should be BOOLEAN, completed should be BOOLEAN");
     }
@@ -230,7 +227,7 @@ public class ProjectsTest extends BaseTest {
         int id = 25;
         JSONObject requestBody = new JSONObject();
         requestBody.put("id", id);
-        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post();
+        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post("/projects");
         response.then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
         assertHasErrorMessage(response, "Invalid Creation: Failed Validation: Not allowed to create with id");
     }
@@ -252,7 +249,7 @@ public class ProjectsTest extends BaseTest {
         requestBody.put("description", description);
 
         buildJSONRequestWithJSONResponse().body(requestBody.toJSONString())
-                .when().post("/" + id)
+                .when().post("/projects/" + id)
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK).body(
                         "title", equalTo(newTitle),
@@ -276,7 +273,7 @@ public class ProjectsTest extends BaseTest {
         requestBody.put("description", description);
 
         buildJSONRequestWithJSONResponse().body(requestBody.toJSONString())
-                .when().post("/" + NON_EXISTENT_ID)
+                .when().post("/projects/" + NON_EXISTENT_ID)
                 .then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }
@@ -286,7 +283,7 @@ public class ProjectsTest extends BaseTest {
         int id = -25;
         JSONObject requestBody = new JSONObject();
         requestBody.put("id", id);
-        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post();
+        Response response = buildJSONRequest().body(requestBody.toJSONString()).when().post("/projects");
         response.then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
         assertHasErrorMessage(response, "Invalid Creation: Failed Validation: Not allowed to create with id");
     }
@@ -299,11 +296,9 @@ public class ProjectsTest extends BaseTest {
         JSONObject fields = new JSONObject();
         fields.put("id", String.valueOf(todoID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+        Utils.buildJSONRequest()
                 .body(fields.toJSONString())
-                .post(BASE_URL + "/projects/" + projID + "/tasks")
+                .post("/projects/" + projID + "/tasks")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.CREATED);
     }
@@ -320,7 +315,7 @@ public class ProjectsTest extends BaseTest {
                 .header("Content-Type", "application/json")
                 .header("Accept", "application/json")
                 .body(fields.toJSONString())
-                .post(BASE_URL + "/projects/" + projID + "/categories")
+                .post("/projects/" + projID + "/categories")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.CREATED);
     }
@@ -346,7 +341,7 @@ public class ProjectsTest extends BaseTest {
 
     @Test
     public void test_GetAllProjects_StatusCodeOK() {
-        buildJSONRequestWithJSONResponse().when().get().then().assertThat().statusCode(STATUS_CODE.OK).contentType(ContentType.JSON);
+        buildJSONRequestWithJSONResponse().when().get("/projects").then().assertThat().statusCode(STATUS_CODE.OK).contentType(ContentType.JSON);
     }
 
     @Test
@@ -358,7 +353,7 @@ public class ProjectsTest extends BaseTest {
         createProject(title1);
         createProject(title2);
 
-        Response response = buildJSONRequestWithJSONResponse().when().get();
+        Response response = buildJSONRequestWithJSONResponse().when().get("/projects");
         response.then()
                 .assertThat().statusCode(STATUS_CODE.OK)
                 .body("projects.size()", equalTo(2),
@@ -380,7 +375,7 @@ public class ProjectsTest extends BaseTest {
         int id = createProject(title);
 
         String response = given().header("Content-Type", "application/json").header("Accept", "application/xml")
-                .when().get("/" + id).asString();
+                .when().get("/projects/" + id).asString();
 
         assert response.contains("<title>" + title + "</title>");
     }
@@ -406,36 +401,43 @@ public class ProjectsTest extends BaseTest {
         assumeTrue(!CI); // skip this test when run on the CI
         String id = "invalid id";
 
-        Response response = buildJSONRequestWithJSONResponse().when().get("/" + id);
-        response.then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
+        buildJSONRequestWithJSONResponse().when().get("/projects/" + id).then().assertThat().statusCode(STATUS_CODE.BAD_REQUEST);
     }
 
     @Test
     public void test_GetProject_ValidNonexistentId() {
         int id = NON_EXISTENT_ID;
 
-        Response response = Utils.getProject(id);
-        response.then().assertThat().statusCode(STATUS_CODE.NOT_FOUND);
+        Utils.getProject(id).then().assertThat().statusCode(STATUS_CODE.NOT_FOUND);
     }
 
     @Test
     public void test_GetProjectTaskRelationship(){
         int todoID = createTodo("todoTitleText");
-        int projID = createCategory("projTitleText");
+        int projID = createProject("projTitleText");
+
+        JSONObject requestParams = new JSONObject();
+        requestParams.put("title", "foo");
+
+        RequestSpecification request = buildJSONRequestWithJSONResponse().body(requestParams.toJSONString());
+
+        Response response = request.post( "/projects/" + "projects");
+        System.out.println(countProjects());
 
         JSONObject fields = new JSONObject();
-        fields.put("id", String.valueOf(todoID));
+        fields.put("id", todoID);
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+        Utils.buildJSONRequestWithJSONResponse()
                 .body(fields.toJSONString())
-                .post(BASE_URL + "/projects/" + projID + "/tasks");
+                .post("/projects/" + projID + "/tasks");
 
-        given()
-                .get(BASE_URL + "/projects/" + projID + "/tasks")
-                .then().assertThat()
-                .statusCode(STATUS_CODE.OK);
+        Response r = given()
+                .get("/projects/" + projID + "/tasks");
+        System.out.println(buildJSONRequest().get(BASE_URL + "/projects").asString());
+        System.out.println(r.statusCode());
+//        r
+//                .then().assertThat()
+//                .statusCode(STATUS_CODE.OK);
     }
 
     @Test
@@ -446,20 +448,18 @@ public class ProjectsTest extends BaseTest {
         JSONObject fields = new JSONObject();
         fields.put("id", String.valueOf(catID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+        Utils.buildJSONRequest()
                 .body(fields.toJSONString())
-                .post(BASE_URL + "/projects/" + projID + "/categories");
+                .post("/projects/" + projID + "/categories");
 
         given()
-                .get(BASE_URL + "/projects/" + projID + "/categories")
+                .get("/projects/" + projID + "/categories")
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
     }
 
     private static int getNumberOfProjects() {
-        return buildJSONRequestWithJSONResponse().when().get().then().assertThat().extract().response().path("projects.size()");
+        return buildJSONRequestWithJSONResponse().when().get("/projects").then().assertThat().extract().response().path("projects.size()");
     }
 
     @Test
@@ -489,17 +489,14 @@ public class ProjectsTest extends BaseTest {
 
     @Test
     public void test_Delete_RootPath() {
-        int id = createProject("test");
-
-        Response response = buildJSONRequestWithJSONResponse().when().delete();
-        response.then().assertThat().statusCode(STATUS_CODE.NOT_ALLOWED);
+        buildJSONRequestWithJSONResponse().when().delete("/projects").then().assertThat().statusCode(STATUS_CODE.NOT_ALLOWED);
     }
 
     @Test
     public void test_DeleteProject_ExistingId() {
         int id = createProject("test");
 
-        buildJSONRequestWithJSONResponse().when().delete("/" + id).then().assertThat().statusCode(STATUS_CODE.OK);
+        buildJSONRequestWithJSONResponse().when().delete("/projects/" + id).then().assertThat().statusCode(STATUS_CODE.OK);
         Utils.getProject(id).then().assertThat().statusCode(STATUS_CODE.NOT_FOUND);
     }
 
@@ -507,7 +504,7 @@ public class ProjectsTest extends BaseTest {
     public void test_DeleteProject_NonexistentId() {
         createProject("test");
         int id = NON_EXISTENT_ID;
-        buildJSONRequestWithJSONResponse().when().delete("/" + id).then().assertThat().statusCode(STATUS_CODE.NOT_FOUND);
+        buildJSONRequestWithJSONResponse().when().delete("/projects/" + id).then().assertThat().statusCode(STATUS_CODE.NOT_FOUND);
     }
 
     @Test
@@ -518,14 +515,12 @@ public class ProjectsTest extends BaseTest {
         JSONObject fields = new JSONObject();
         fields.put("id", String.valueOf(todoID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+        Utils.buildJSONRequest()
                 .body(fields.toJSONString())
-                .post(BASE_URL + "/projects/" + projID + "/tasks");
+                .post("/projects/" + projID + "/tasks");
 
         given()
-                .delete(BASE_URL + "/projects/" + projID + "/tasks/" + todoID)
+                .delete("/projects/" + projID + "/tasks/" + todoID)
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
     }
@@ -538,21 +533,19 @@ public class ProjectsTest extends BaseTest {
         JSONObject fields = new JSONObject();
         fields.put("id", String.valueOf(catID));
 
-        given()
-                .header("Content-Type", "application/json")
-                .header("Accept", "application/json")
+        Utils.buildJSONRequest()
                 .body(fields.toJSONString())
-                .post(BASE_URL + "/projects/" + projID + "/categories");
+                .post("/projects/" + projID + "/categories");
 
         given()
-                .delete(BASE_URL + "/projects/" + projID + "/categories/" + catID)
+                .delete("/projects/" + projID + "/categories/" + catID)
                 .then().assertThat()
                 .statusCode(STATUS_CODE.OK);
     }
 
     private void deleteAllProjects() {
         while (getNumberOfProjects() != 0) {
-            Utils.deleteProject(Integer.parseInt(buildJSONRequestWithJSONResponse().when().get().then().assertThat().extract().response().path("projects[0].id")));
+            Utils.deleteProject(Integer.parseInt(buildJSONRequestWithJSONResponse().when().get("/projects").then().assertThat().extract().response().path("projects[0].id")));
         }
     }
 
