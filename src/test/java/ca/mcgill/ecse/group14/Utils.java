@@ -4,6 +4,7 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.json.simple.JSONObject;
 
+import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Map;
 
@@ -157,9 +158,11 @@ public class Utils {
     public static int countCategories() { return count("categories"); }
 
     public static void clearData() {
+        System.out.print("Clearing server data...");
         post(BASE_URL + "/"+ CLEAR_PATH);
         assertEquals(0, countProjects());
         assertEquals(0, countTodos());
         assertEquals(0, countCategories());
+        System.out.println("   done.");
     }
 }

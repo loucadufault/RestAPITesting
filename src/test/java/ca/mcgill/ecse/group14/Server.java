@@ -89,8 +89,9 @@ public class Server {
 
     public static int ping() {
         try {
+            System.out.print("Pinging...");
             silentPing();
-            System.out.println("   successful");
+            System.out.println("   successful.");
             return 0;
         } catch (Exception e) {
             System.out.println(e.getMessage());

@@ -6,7 +6,7 @@ Feature: Create todo list for class
   Background:
     Given the Todo Manager Rest API server is running
 
-  Scenario Outline: Normal Flow - Create a new class amd specify all fields (a.k.a. project)
+  Scenario Outline: Normal Flow - Create a new class and specify all fields (a.k.a. project)
     Given there does not exist a project with title "<title>" in the system
     When the user attempts to create a new project with title "<title>" and description "<description>" and completed status "<completed>" and active status "<active>"
     Then the project with title "<title>" and description "<description>" and completed status "<completed>" and active status "<active>" shall be created in the system
