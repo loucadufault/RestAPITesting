@@ -1,18 +1,13 @@
 package ca.mcgill.ecse.group14;
 
-import static ca.mcgill.ecse.group14.Resources.*;
-
-import io.restassured.RestAssured;
-import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONArray;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static ca.mcgill.ecse.group14.Resources.*;
 import static io.restassured.RestAssured.*;
 import static org.junit.Assert.assertEquals;
 
@@ -29,24 +24,22 @@ public class Utils {
         assertResponseStatusCode(head(url), statusCode);
     }
 
-    public static int createTodo(String title) {
-        JSONObject fields = new JSONObject();
-        fields.put("title", title);
-
-        RequestSpecification request = buildJSONRequestWithJSONResponse().body(fields.toJSONString());
-
-        Response response = request.post(BASE_URL+"/todos");
-        return Integer.parseInt(response.jsonPath().get("id"));
-    }
-
-    public static int createProject(String title) {
+    private static int create(String title, String endpoint) {
         JSONObject requestParams = new JSONObject();
         requestParams.put("title", title);
 
         RequestSpecification request = buildJSONRequestWithJSONResponse().body(requestParams.toJSONString());
 
-        Response response = request.post(BASE_URL+"/projects");
+        Response response = request.post(BASE_URL + "/" + endpoint);
         return Integer.parseInt(response.jsonPath().get("id"));
+    }
+
+    public static int createTodo(String title) {
+        return create(title, "todos");
+    }
+
+    public static int createProject(String title) {
+        return create(title, "projects");
     }
 
     public static int createProject() {
@@ -69,13 +62,7 @@ public class Utils {
     }
 
     public static int createCategory(String title) {
-        JSONObject fields = new JSONObject();
-        fields.put("title", title);
-
-        RequestSpecification request = buildJSONRequestWithJSONResponse().body(fields.toJSONString());
-
-        Response response = request.post(BASE_URL+"/categories");
-        return Integer.parseInt(response.jsonPath().get("id"));
+        return create(title, "categories");
     }
 
     public static RequestSpecification buildJSONRequest() {
@@ -89,7 +76,6 @@ public class Utils {
     public static int getFirstId(String title, String endpoint) {
         Response response = buildJSONRequestWithJSONResponse().when().get(BASE_URL + "/" + endpoint);
         List<Map<String, String>> things = response.jsonPath().getList(endpoint);
-        System.out.println(things);
         for (Map<String, String> thing : things) {
             if (thing.get("title").equals(title)) {
                 return Integer.parseInt(thing.get("id"));
@@ -129,7 +115,6 @@ public class Utils {
     public static int countProjects() {
         return count("projects");
     }
-
 
     public static Response getProject(int id) {
         return buildJSONRequestWithJSONResponse().when().get("/" + id);

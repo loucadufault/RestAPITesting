@@ -1,19 +1,15 @@
 package ca.mcgill.ecse.group14.unit;
 
-import ca.mcgill.ecse.group14.Server;
 import io.restassured.http.ContentType;
-import org.junit.*;
-
-import static ca.mcgill.ecse.group14.Resources.*;
-
-import org.junit.Test;
-
 import io.restassured.path.xml.XmlPath;
 import io.restassured.response.Response;
+import org.junit.Assert;
+import org.junit.Test;
 
+import static ca.mcgill.ecse.group14.Resources.BASE_URL;
+import static ca.mcgill.ecse.group14.Resources.STATUS_CODE;
+import static io.restassured.RestAssured.given;
 import static io.restassured.path.xml.XmlPath.CompatibilityMode.HTML;
-
-import static io.restassured.RestAssured.*;
 
 
 public class DocsTest extends BaseTest {

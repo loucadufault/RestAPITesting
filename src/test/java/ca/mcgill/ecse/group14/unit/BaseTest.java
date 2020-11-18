@@ -4,11 +4,10 @@ import ca.mcgill.ecse.group14.Resources;
 import ca.mcgill.ecse.group14.Server;
 import ca.mcgill.ecse.group14.Utils;
 import io.restassured.RestAssured;
-import org.junit.*;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 
 import java.net.ConnectException;
-
-import static ca.mcgill.ecse.group14.Resources.*;
 
 public class BaseTest {
     @BeforeClass

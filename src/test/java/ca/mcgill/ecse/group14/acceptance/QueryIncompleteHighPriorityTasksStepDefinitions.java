@@ -79,7 +79,6 @@ public class QueryIncompleteHighPriorityTasksStepDefinitions extends BaseStepDef
                 hasSeenTitleRow = true;
             }
         }
-        System.out.println("Done tasks");
     }
 
     @When("the user attempts to query the incomplete high priority tasks of the project with title {string}")
