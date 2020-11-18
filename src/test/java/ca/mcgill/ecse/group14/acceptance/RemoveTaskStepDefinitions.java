@@ -51,7 +51,8 @@ public class RemoveTaskStepDefinitions extends BaseStepDefinitions{
     @When("the user attempts to remove todo with title {string} from the system")
     public void the_user_attempts_to_remove_todo_with_title_from_the_system(String title) {
         todoCount = Utils.countTodos();
-        Utils.removeTodo(title);
+        int id = Utils.getFirstId(title, "todos");
+        errorCode = Utils.buildJSONRequestWithJSONResponse().when().delete("/todos/" + id).getStatusCode();
     }
 
     @Then("todo with title {string} shall be removed from the system")
@@ -82,7 +83,7 @@ public class RemoveTaskStepDefinitions extends BaseStepDefinitions{
         todoCount = Utils.countTodos();
         int todoID = Utils.getFirstId(todoTitle, "todos");
         int projID = Utils.getFirstId(projTitle, "projects");
-        Utils.buildJSONRequestWithJSONResponse().when().delete("/projects/" + projID + "/tasks/" + todoID);
+        errorCode = Utils.buildJSONRequestWithJSONResponse().when().delete("/projects/" + projID + "/tasks/" + todoID).getStatusCode();
     }
 
     @Then("todo with title {string} shall no longer be associated with the project with title {string}")

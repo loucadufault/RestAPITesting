@@ -13,6 +13,10 @@ public class BaseStepDefinitions {
     static int todoCount;
 
     static void setup() {
+        errorCode = -1;
+        counter = -1;
+        projectCount = -1;
+        todoCount = -1;
         RestAssured.baseURI = Resources.BASE_URL;
         if (Server.ping() == 0) {
             return;
@@ -21,7 +25,7 @@ public class BaseStepDefinitions {
         Server.waitUntilReady();
     }
 
-    static void teardown() throws InterruptedException {
+    static void teardown() {
         Utils.clearData();
     }
 }

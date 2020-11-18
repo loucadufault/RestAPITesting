@@ -48,7 +48,7 @@ public class ChangeTaskDescriptionStepDefinitions extends BaseStepDefinitions {
         JSONObject requestBody = new JSONObject();
         requestBody.put("title", title);
         requestBody.put("description", newDescription);
-        Utils.buildJSONRequestWithJSONResponse().body(requestBody.toJSONString()).put(BASE_URL + "/todos/" + todoID);
+        errorCode = Utils.buildJSONRequestWithJSONResponse().body(requestBody.toJSONString()).put(BASE_URL + "/todos/" + todoID).getStatusCode();
     }
 
     @Then("the todo with title {string} shall have description {string}")

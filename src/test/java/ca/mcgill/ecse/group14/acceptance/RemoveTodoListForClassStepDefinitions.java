@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import java.util.List;
 import java.util.Map;
 
+import static ca.mcgill.ecse.group14.Resources.BASE_URL;
 import static org.junit.Assert.*;
 
 @RunWith(Cucumber.class)
@@ -97,7 +98,8 @@ public class RemoveTodoListForClassStepDefinitions extends BaseStepDefinitions {
     public void the_user_attempts_to_remove_the_project_with_title(String title) {
         todoCount = Utils.countTodos();
         projectCount = Utils.countProjects();
-        Utils.removeProject(title);
+        int id = Utils.getFirstId(title, "projects");
+        errorCode = Utils.buildJSONRequestWithJSONResponse().when().delete("/projects/" + id).getStatusCode();
     }
 
     @Then("the todo with title {string} shall not be removed from the system")

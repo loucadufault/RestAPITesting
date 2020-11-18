@@ -99,9 +99,4 @@ public class AddingTaskToCourseStepDefinitions extends BaseStepDefinitions{
     public void a_todo_is_created_with_title_and_done_status_and_description(String title, String status, String description) {
         existsTodo(title);
     }
-
-    @Then("the system shall report the error code {string}")
-    public void the_system_shall_report_the_error_code(String code) {
-        assertEquals(Integer.parseInt(code), errorCode);
-    }
 }
