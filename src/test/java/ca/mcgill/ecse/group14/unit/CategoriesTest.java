@@ -642,7 +642,6 @@ public class CategoriesTest extends BaseTest {
                 .post("/categories/" + String.valueOf(catID) + "/projects");
         Response response = Utils.buildJSONRequestWithJSONResponse()
                 .delete("/categories/ABC/projects/"+String.valueOf(todoID));
-        System.out.println(response.asString());
         response.then().assertThat()
                 .statusCode(STATUS_CODE.NOT_FOUND);
     }

@@ -416,14 +416,6 @@ public class ProjectsTest extends BaseTest {
         int todoID = createTodo("todoTitleText");
         int projID = createProject("projTitleText");
 
-        JSONObject requestParams = new JSONObject();
-        requestParams.put("title", "foo");
-
-        RequestSpecification request = buildJSONRequestWithJSONResponse().body(requestParams.toJSONString());
-
-        Response response = request.post( "/projects/" + "projects");
-        System.out.println(countProjects());
-
         JSONObject fields = new JSONObject();
         fields.put("id", todoID);
 
@@ -431,13 +423,10 @@ public class ProjectsTest extends BaseTest {
                 .body(fields.toJSONString())
                 .post("/projects/" + projID + "/tasks");
 
-        Response r = given()
-                .get("/projects/" + projID + "/tasks");
-        System.out.println(buildJSONRequest().get(BASE_URL + "/projects").asString());
-        System.out.println(r.statusCode());
-//        r
-//                .then().assertThat()
-//                .statusCode(STATUS_CODE.OK);
+        given()
+                .get("/projects/" + projID + "/tasks")
+                .then().assertThat()
+                .statusCode(STATUS_CODE.OK);
     }
 
     @Test
