@@ -10,6 +10,8 @@ import org.junit.BeforeClass;
 import java.net.ConnectException;
 
 public class BaseTest {
+    static final boolean CI = Boolean.valueOf(System.getenv("CI"));
+
     @BeforeClass
     public static void setup() throws ConnectException {
         RestAssured.baseURI = Resources.BASE_URL;
