@@ -9,15 +9,16 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.ClassRule;
 import org.junit.Rule;
-import org.junit.rules.TestName;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
 
+import java.util.*;
+
 public class BaseTest {
     protected static final Logger logger = LogManager.getLogger();
-    private static long startTimeMillis;
+    protected static final List<int[]> transactionTimeByObjectCount = new ArrayList<int[]>();
+    protected static int objectCount = 0;
 
     @Rule
     public TestWatcher watchman = new TestWatcher() {
@@ -43,10 +44,23 @@ public class BaseTest {
 
     @AfterClass
     public static void teardown() {
+        for (int[] entry : transactionTimeByObjectCount) {
+            String s = Arrays.toString(entry);
+            s = s.substring(1,s.length()-1);
+            System.out.println(s);
+        }
         Utils.clearData();
     }
 
-    protected static void logTransactionTime(Response response, Resources.RequestMethod requestMethod) {
-        logger.info("'{}' transaction took {} ms with {} total objects.", requestMethod.toString(), response.getTime(), Utils.countAllObjects());
+    protected static void logTransactionTime(Response response) {
+//        int objectCount = Utils.countAllObjects(); // very expensive
+        int transactionTime = (int) response.getTime();
+        transactionTimeByObjectCount.add(new int[] {objectCount, transactionTime});
+        logger.info("transaction took {} ms with {} total objects.", transactionTime, objectCount);
+    }
+
+    protected void clearObjects() {
+        Utils.clearData();
+        objectCount = 0;
     }
 }
