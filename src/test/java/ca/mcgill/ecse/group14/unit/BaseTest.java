@@ -53,7 +53,7 @@ public class BaseTest {
 
     @AfterClass
     public static void teardown() {
-        Server.stop();
+        Server.shutdown();
         Utils.clearData();
     }
 
