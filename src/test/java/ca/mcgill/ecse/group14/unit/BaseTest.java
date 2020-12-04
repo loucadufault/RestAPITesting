@@ -49,11 +49,11 @@ public class BaseTest {
         }
         @Override
         protected void succeeded(Description description) {
-            logger.info("Test '{}' succeeded in {} ms.", description.getMethodName(), getElapsedTime());
+            logger.info("'{}' Test '{}' succeeded in {} ms.", description.getClassName(), description.getMethodName(), getElapsedTime());
         }
         @Override
         protected void failed(Throwable e, Description description) {
-            logger.error("Test '{}' failed with '{}': '{}' in {} ms.", description.getMethodName(), e.getClass().getSimpleName(), e.getMessage().replaceAll("\\R", " ↵ "), getElapsedTime());
+            logger.error("'{}' Test '{}' failed with '{}': '{}' in {} ms.", description.getClassName(), description.getMethodName(), e.getClass().getSimpleName(), e.getMessage().replaceAll("\\R", " ↵ "), getElapsedTime());
         }
     };
 }
