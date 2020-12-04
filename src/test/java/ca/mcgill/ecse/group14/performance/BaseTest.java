@@ -15,6 +15,9 @@ import org.junit.runner.Description;
 
 import java.util.*;
 
+import static io.restassured.config.ConnectionConfig.connectionConfig;
+import static io.restassured.config.HttpClientConfig.httpClientConfig;
+
 public class BaseTest {
     protected static final Logger logger = LogManager.getLogger();
     protected static final List<int[]> transactionTimeByObjectCount = new ArrayList<int[]>();
@@ -35,6 +38,8 @@ public class BaseTest {
     @BeforeClass
     public static void setup() {
         RestAssured.baseURI = Resources.BASE_URL;
+//        RestAssured.config = RestAssured.config().connectionConfig(connectionConfig().closeIdleConnectionsAfterEachResponse());
+//        RestAssured.config = RestAssured.config().httpClient(httpClientConfig().reuseHttpClientInstance());
         if (Server.ping() == 0) {
             return;
         }
