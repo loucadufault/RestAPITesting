@@ -191,7 +191,6 @@ public class Utils {
 
     public static Response createPopulatedTodo() {
         RequestSpecification request = buildJSONRequestWithJSONResponse().body(populateTodoRequestBody().toJSONString());
-
         return request.post(BASE_URL + "/todos");
     }
 
@@ -205,21 +204,23 @@ public class Utils {
         int id = Integer.parseInt(createPopulatedTodo().jsonPath().get("id"));
         return buildJSONRequestWithJSONResponse()
                 .body(populateTodoRequestBody().toJSONString())
-                .put("/todos/"+ id);
+                .put(BASE_URL + "/todos/"+ id);
     }
 
     public static Response deletePopulatedTodo() {
         int id = Integer.parseInt(createPopulatedTodo().jsonPath().get("id"));
-        return buildJSONRequestWithJSONResponse().delete("/todos/" + id);
+        return buildJSONRequestWithJSONResponse().delete(BASE_URL + "/todos/" + id);
     }
 
-    public static Response createPopulatedCategory() {
+    private static JSONObject populateCategoryRequestBody() {
         JSONObject requestBody = new JSONObject();
         requestBody.put("title", randomString());
         requestBody.put("description", randomString());
+        return requestBody;
+    }
 
-        RequestSpecification request = Utils.buildJSONRequestWithJSONResponse().body(requestBody.toJSONString());
-
+    public static Response createPopulatedCategory() {
+        RequestSpecification request = Utils.buildJSONRequestWithJSONResponse().body(populateCategoryRequestBody().toJSONString());
         return request.post(BASE_URL + "/categories");
     }
     public static void createPopulatedCategories(int n) {
@@ -228,21 +229,47 @@ public class Utils {
         }
     }
 
+    public static Response changePopulatedCategory() {
+        int id = Integer.parseInt(createPopulatedCategory().jsonPath().get("id"));
+        return buildJSONRequestWithJSONResponse()
+                .body(populateCategoryRequestBody().toJSONString())
+                .put(BASE_URL + "/categories/"+ id);
+    }
 
-    public static Response createPopulatedProject() {
+    public static Response deletePopulateCategory() {
+        int id = Integer.parseInt(createPopulatedCategory().jsonPath().get("id"));
+        return buildJSONRequestWithJSONResponse().delete(BASE_URL + "/categories/" + id);
+    }
+
+    private static JSONObject populateProjectRequestBody() {
         JSONObject requestBody = new JSONObject();
         requestBody.put("title", randomString());
         requestBody.put("description", randomString());
         requestBody.put("completed", randomBoolean());
         requestBody.put("active", randomBoolean());
+        return requestBody;
+    }
 
-        RequestSpecification request = Utils.buildJSONRequestWithJSONResponse().body(requestBody.toJSONString());
-
+    public static Response createPopulatedProject() {
+        RequestSpecification request = Utils.buildJSONRequestWithJSONResponse().body(populateProjectRequestBody().toJSONString());
         return request.post(BASE_URL + "/projects");
     }
+
     public static void createPopulatedProjects(int n) {
         for (int i=0; i<n; i++) {
             createPopulatedProject();
         }
+    }
+
+    public static Response changePopulateProject() {
+        int id = Integer.parseInt(createPopulatedProject().jsonPath().get("id"));
+        return buildJSONRequestWithJSONResponse()
+                .body(populateProjectRequestBody().toJSONString())
+                .put(BASE_URL + "/projects/"+ id);
+    }
+
+    public static Response deletePopulatedProject() {
+        int id = Integer.parseInt(createPopulatedProject().jsonPath().get("id"));
+        return buildJSONRequestWithJSONResponse().delete(BASE_URL + "/projects/" + id);
     }
 }
