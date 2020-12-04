@@ -7,6 +7,8 @@ import org.json.simple.JSONObject;
 import java.sql.SQLOutput;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
 import static ca.mcgill.ecse.group14.Resources.*;
 import static io.restassured.RestAssured.*;
@@ -91,6 +93,10 @@ public class Utils {
         return things.size();
     }
 
+    public static int countAllObjects() {
+        return countTodos() + countProjects() + countCategories();
+    }
+
     private static boolean exists(int id, String endpoint) {
         return buildJSONRequestWithJSONResponse().when().get(BASE_URL + "/" + endpoint + "/" + String.valueOf(id)).getStatusCode() != STATUS_CODE.NOT_FOUND;
     }
@@ -157,12 +163,86 @@ public class Utils {
 
     public static int countCategories() { return count("categories"); }
 
+
+
     public static void clearData() {
-        System.out.print("Clearing server data...");
         post(BASE_URL + "/"+ CLEAR_PATH);
         assertEquals(0, countProjects());
         assertEquals(0, countTodos());
         assertEquals(0, countCategories());
-        System.out.println("   done.");
+    }
+
+    private static String randomString() {
+        return UUID.randomUUID().toString();
+    }
+
+    private static boolean randomBoolean() {
+        Random rd = new Random();
+        return rd.nextBoolean();
+    }
+
+    private static JSONObject populateTodoRequestBody() {
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("title", randomString());
+        requestBody.put("description", randomString());
+        requestBody.put("doneStatus", randomBoolean());
+        return requestBody;
+    }
+
+    public static Response createPopulatedTodo() {
+        RequestSpecification request = buildJSONRequestWithJSONResponse().body(populateTodoRequestBody().toJSONString());
+
+        return request.post(BASE_URL + "/todos");
+    }
+
+    public static void createPopulatedTodos(int n) {
+        for (int i=0; i<n; i++) {
+            createPopulatedTodo();
+        }
+    }
+
+    public static Response changePopulatedTodo() {
+        int id = Integer.parseInt(createPopulatedTodo().jsonPath().get("id"));
+        return buildJSONRequestWithJSONResponse()
+                .body(populateTodoRequestBody().toJSONString())
+                .put("/todos/"+ id);
+    }
+
+    public static Response deletePopulatedTodo() {
+        int id = Integer.parseInt(createPopulatedTodo().jsonPath().get("id"));
+        return buildJSONRequestWithJSONResponse().delete("/todos/" + id);
+    }
+
+    public static Response createPopulatedCategory() {
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("title", randomString());
+        requestBody.put("description", randomString());
+
+        RequestSpecification request = Utils.buildJSONRequestWithJSONResponse().body(requestBody.toJSONString());
+
+        return request.post(BASE_URL + "/categories");
+    }
+    public static void createPopulatedCategories(int n) {
+        for (int i=0; i<n; i++) {
+            createPopulatedCategory();
+        }
+    }
+
+
+    public static Response createPopulatedProject() {
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("title", randomString());
+        requestBody.put("description", randomString());
+        requestBody.put("completed", randomBoolean());
+        requestBody.put("active", randomBoolean());
+
+        RequestSpecification request = Utils.buildJSONRequestWithJSONResponse().body(requestBody.toJSONString());
+
+        return request.post(BASE_URL + "/projects");
+    }
+    public static void createPopulatedProjects(int n) {
+        for (int i=0; i<n; i++) {
+            createPopulatedProject();
+        }
     }
 }
